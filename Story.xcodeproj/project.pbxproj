@@ -14,7 +14,25 @@
 		C39BA0A01CC6CAD200A4D3EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C39BA09E1CC6CAD200A4D3EB /* Main.storyboard */; };
 		C39BA0A21CC6CAD200A4D3EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */; };
 		C39BA0A51CC6CAD200A4D3EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C39BA0A31CC6CAD200A4D3EB /* LaunchScreen.storyboard */; };
+		C39BA0AD1CC6CD3400A4D3EB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C39BA0AC1CC6CD3400A4D3EB /* MapKit.framework */; };
+		C39BA0C21CC81ECF00A4D3EB /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0C11CC81ECE00A4D3EB /* Model.swift */; };
+		C39BA0C51CC81FB700A4D3EB /* DayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0C41CC81FB700A4D3EB /* DayView.swift */; };
+		C39BA0D51CC8219E00A4D3EB /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0D41CC8219E00A4D3EB /* UIColor.swift */; };
+		C39BA0D71CC8227100A4D3EB /* TripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0D61CC8227100A4D3EB /* TripView.swift */; };
+		C39BA0D91CC823FA00A4D3EB /* TripStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0D81CC823FA00A4D3EB /* TripStore.swift */; };
+		C39BA0E11CC82D7A00A4D3EB /* StoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0E01CC82D7A00A4D3EB /* StoryTests.swift */; };
+		C39BA0EE1CC8335D00A4D3EB /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0ED1CC8335D00A4D3EB /* ImageStore.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C39BA0E31CC82D7A00A4D3EB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C39BA08B1CC6CAD200A4D3EB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C39BA0921CC6CAD200A4D3EB;
+			remoteInfo = Story;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		C39BA0931CC6CAD200A4D3EB /* Story.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Story.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -26,10 +44,28 @@
 		C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C39BA0A41CC6CAD200A4D3EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C39BA0A61CC6CAD200A4D3EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C39BA0AC1CC6CD3400A4D3EB /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		C39BA0C11CC81ECE00A4D3EB /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
+		C39BA0C41CC81FB700A4D3EB /* DayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayView.swift; sourceTree = "<group>"; };
+		C39BA0D41CC8219E00A4D3EB /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		C39BA0D61CC8227100A4D3EB /* TripView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripView.swift; sourceTree = "<group>"; };
+		C39BA0D81CC823FA00A4D3EB /* TripStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripStore.swift; sourceTree = "<group>"; };
+		C39BA0DE1CC82D7A00A4D3EB /* StoryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = StoryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39BA0E01CC82D7A00A4D3EB /* StoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryTests.swift; sourceTree = "<group>"; };
+		C39BA0E21CC82D7A00A4D3EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C39BA0ED1CC8335D00A4D3EB /* ImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		C39BA0901CC6CAD200A4D3EB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C39BA0AD1CC6CD3400A4D3EB /* MapKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C39BA0DB1CC82D7A00A4D3EB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -42,7 +78,9 @@
 		C39BA08A1CC6CAD200A4D3EB = {
 			isa = PBXGroup;
 			children = (
+				C39BA0AC1CC6CD3400A4D3EB /* MapKit.framework */,
 				C39BA0951CC6CAD200A4D3EB /* Story */,
+				C39BA0DF1CC82D7A00A4D3EB /* StoryTests */,
 				C39BA0941CC6CAD200A4D3EB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -51,6 +89,7 @@
 			isa = PBXGroup;
 			children = (
 				C39BA0931CC6CAD200A4D3EB /* Story.app */,
+				C39BA0DE1CC82D7A00A4D3EB /* StoryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,6 +97,9 @@
 		C39BA0951CC6CAD200A4D3EB /* Story */ = {
 			isa = PBXGroup;
 			children = (
+				C39BA0D31CC8219400A4D3EB /* Utils */,
+				C39BA0C31CC81FA400A4D3EB /* View */,
+				C39BA0C01CC81EB900A4D3EB /* Model */,
 				C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */,
 				C39BA0981CC6CAD200A4D3EB /* RootViewController.swift */,
 				C39BA09A1CC6CAD200A4D3EB /* DataViewController.swift */,
@@ -68,6 +110,42 @@
 				C39BA0A61CC6CAD200A4D3EB /* Info.plist */,
 			);
 			path = Story;
+			sourceTree = "<group>";
+		};
+		C39BA0C01CC81EB900A4D3EB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C39BA0C11CC81ECE00A4D3EB /* Model.swift */,
+				C39BA0D81CC823FA00A4D3EB /* TripStore.swift */,
+				C39BA0ED1CC8335D00A4D3EB /* ImageStore.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		C39BA0C31CC81FA400A4D3EB /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C39BA0C41CC81FB700A4D3EB /* DayView.swift */,
+				C39BA0D61CC8227100A4D3EB /* TripView.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		C39BA0D31CC8219400A4D3EB /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				C39BA0D41CC8219E00A4D3EB /* UIColor.swift */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
+		C39BA0DF1CC82D7A00A4D3EB /* StoryTests */ = {
+			isa = PBXGroup;
+			children = (
+				C39BA0E01CC82D7A00A4D3EB /* StoryTests.swift */,
+				C39BA0E21CC82D7A00A4D3EB /* Info.plist */,
+			);
+			path = StoryTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -90,6 +168,24 @@
 			productReference = C39BA0931CC6CAD200A4D3EB /* Story.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C39BA0DD1CC82D7A00A4D3EB /* StoryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C39BA0E51CC82D7A00A4D3EB /* Build configuration list for PBXNativeTarget "StoryTests" */;
+			buildPhases = (
+				C39BA0DA1CC82D7A00A4D3EB /* Sources */,
+				C39BA0DB1CC82D7A00A4D3EB /* Frameworks */,
+				C39BA0DC1CC82D7A00A4D3EB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C39BA0E41CC82D7A00A4D3EB /* PBXTargetDependency */,
+			);
+			name = StoryTests;
+			productName = StoryTests;
+			productReference = C39BA0DE1CC82D7A00A4D3EB /* StoryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -101,6 +197,15 @@
 				TargetAttributes = {
 					C39BA0921CC6CAD200A4D3EB = {
 						CreatedOnToolsVersion = 7.3;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
+					};
+					C39BA0DD1CC82D7A00A4D3EB = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = C39BA0921CC6CAD200A4D3EB;
 					};
 				};
 			};
@@ -118,6 +223,7 @@
 			projectRoot = "";
 			targets = (
 				C39BA0921CC6CAD200A4D3EB /* Story */,
+				C39BA0DD1CC82D7A00A4D3EB /* StoryTests */,
 			);
 		};
 /* End PBXProject section */
@@ -133,6 +239,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C39BA0DC1CC82D7A00A4D3EB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -141,13 +254,35 @@
 			buildActionMask = 2147483647;
 			files = (
 				C39BA0991CC6CAD200A4D3EB /* RootViewController.swift in Sources */,
+				C39BA0D51CC8219E00A4D3EB /* UIColor.swift in Sources */,
+				C39BA0C51CC81FB700A4D3EB /* DayView.swift in Sources */,
+				C39BA0EE1CC8335D00A4D3EB /* ImageStore.swift in Sources */,
+				C39BA0D71CC8227100A4D3EB /* TripView.swift in Sources */,
+				C39BA0D91CC823FA00A4D3EB /* TripStore.swift in Sources */,
 				C39BA09D1CC6CAD200A4D3EB /* ModelController.swift in Sources */,
 				C39BA09B1CC6CAD200A4D3EB /* DataViewController.swift in Sources */,
+				C39BA0C21CC81ECF00A4D3EB /* Model.swift in Sources */,
 				C39BA0971CC6CAD200A4D3EB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C39BA0DA1CC82D7A00A4D3EB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C39BA0E11CC82D7A00A4D3EB /* StoryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C39BA0E41CC82D7A00A4D3EB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C39BA0921CC6CAD200A4D3EB /* Story */;
+			targetProxy = C39BA0E31CC82D7A00A4D3EB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		C39BA09E1CC6CAD200A4D3EB /* Main.storyboard */ = {
@@ -276,6 +411,30 @@
 			};
 			name = Release;
 		};
+		C39BA0E61CC82D7A00A4D3EB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = StoryTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Story.app/Story";
+			};
+			name = Debug;
+		};
+		C39BA0E71CC82D7A00A4D3EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = StoryTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Story.app/Story";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -295,6 +454,16 @@
 				C39BA0AB1CC6CAD200A4D3EB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C39BA0E51CC82D7A00A4D3EB /* Build configuration list for PBXNativeTarget "StoryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C39BA0E61CC82D7A00A4D3EB /* Debug */,
+				C39BA0E71CC82D7A00A4D3EB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
