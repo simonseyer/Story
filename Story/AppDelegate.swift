@@ -15,7 +15,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
+        self.window?.backgroundColor = UIColor.whiteColor()
+        
+        // Demo trip
+        let image = ImageStore.storeImage(UIImage(named: "cinque")!)!
+        let day1 = Day(date: NSDate(), image: image, text: "Lorem ipsum I")
+        let day2 = Day(date: NSDate(), image: image, text: "Lorem ipsum II")
+        let trip = Trip(identifier: NSUUID().UUIDString, name: "Lorem", days: [day1, day2])
+        
+        self.window?.rootViewController = TripViewController(model: trip)
+        self.window?.makeKeyAndVisible()
+        
+        
         return true
     }
 

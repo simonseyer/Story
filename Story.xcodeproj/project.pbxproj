@@ -7,11 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C37EAE531CC9794A003F487D /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE521CC9794A003F487D /* TripViewController.swift */; };
+		C37EAE551CC97E6E003F487D /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE541CC97E6E003F487D /* DayViewController.swift */; };
+		C37EAE571CC97E8A003F487D /* TripPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE561CC97E8A003F487D /* TripPageViewController.swift */; };
 		C39BA0971CC6CAD200A4D3EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */; };
-		C39BA0991CC6CAD200A4D3EB /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0981CC6CAD200A4D3EB /* RootViewController.swift */; };
-		C39BA09B1CC6CAD200A4D3EB /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA09A1CC6CAD200A4D3EB /* DataViewController.swift */; };
-		C39BA09D1CC6CAD200A4D3EB /* ModelController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA09C1CC6CAD200A4D3EB /* ModelController.swift */; };
-		C39BA0A01CC6CAD200A4D3EB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C39BA09E1CC6CAD200A4D3EB /* Main.storyboard */; };
 		C39BA0A21CC6CAD200A4D3EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */; };
 		C39BA0A51CC6CAD200A4D3EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C39BA0A31CC6CAD200A4D3EB /* LaunchScreen.storyboard */; };
 		C39BA0AD1CC6CD3400A4D3EB /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C39BA0AC1CC6CD3400A4D3EB /* MapKit.framework */; };
@@ -35,12 +34,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C37EAE521CC9794A003F487D /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
+		C37EAE541CC97E6E003F487D /* DayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayViewController.swift; sourceTree = "<group>"; };
+		C37EAE561CC97E8A003F487D /* TripPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripPageViewController.swift; sourceTree = "<group>"; };
 		C39BA0931CC6CAD200A4D3EB /* Story.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Story.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C39BA0981CC6CAD200A4D3EB /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		C39BA09A1CC6CAD200A4D3EB /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
-		C39BA09C1CC6CAD200A4D3EB /* ModelController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModelController.swift; sourceTree = "<group>"; };
-		C39BA09F1CC6CAD200A4D3EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C39BA0A41CC6CAD200A4D3EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C39BA0A61CC6CAD200A4D3EB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -75,6 +73,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C37EAE511CC9791F003F487D /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				C37EAE521CC9794A003F487D /* TripViewController.swift */,
+				C37EAE541CC97E6E003F487D /* DayViewController.swift */,
+				C37EAE561CC97E8A003F487D /* TripPageViewController.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
 		C39BA08A1CC6CAD200A4D3EB = {
 			isa = PBXGroup;
 			children = (
@@ -97,14 +105,11 @@
 		C39BA0951CC6CAD200A4D3EB /* Story */ = {
 			isa = PBXGroup;
 			children = (
+				C37EAE511CC9791F003F487D /* Controller */,
 				C39BA0D31CC8219400A4D3EB /* Utils */,
 				C39BA0C31CC81FA400A4D3EB /* View */,
 				C39BA0C01CC81EB900A4D3EB /* Model */,
 				C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */,
-				C39BA0981CC6CAD200A4D3EB /* RootViewController.swift */,
-				C39BA09A1CC6CAD200A4D3EB /* DataViewController.swift */,
-				C39BA09C1CC6CAD200A4D3EB /* ModelController.swift */,
-				C39BA09E1CC6CAD200A4D3EB /* Main.storyboard */,
 				C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */,
 				C39BA0A31CC6CAD200A4D3EB /* LaunchScreen.storyboard */,
 				C39BA0A61CC6CAD200A4D3EB /* Info.plist */,
@@ -235,7 +240,6 @@
 			files = (
 				C39BA0A51CC6CAD200A4D3EB /* LaunchScreen.storyboard in Resources */,
 				C39BA0A21CC6CAD200A4D3EB /* Assets.xcassets in Resources */,
-				C39BA0A01CC6CAD200A4D3EB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,16 +257,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C39BA0991CC6CAD200A4D3EB /* RootViewController.swift in Sources */,
 				C39BA0D51CC8219E00A4D3EB /* UIColor.swift in Sources */,
 				C39BA0C51CC81FB700A4D3EB /* DayView.swift in Sources */,
+				C37EAE571CC97E8A003F487D /* TripPageViewController.swift in Sources */,
 				C39BA0EE1CC8335D00A4D3EB /* ImageStore.swift in Sources */,
 				C39BA0D71CC8227100A4D3EB /* TripView.swift in Sources */,
 				C39BA0D91CC823FA00A4D3EB /* TripStore.swift in Sources */,
-				C39BA09D1CC6CAD200A4D3EB /* ModelController.swift in Sources */,
-				C39BA09B1CC6CAD200A4D3EB /* DataViewController.swift in Sources */,
+				C37EAE531CC9794A003F487D /* TripViewController.swift in Sources */,
 				C39BA0C21CC81ECF00A4D3EB /* Model.swift in Sources */,
 				C39BA0971CC6CAD200A4D3EB /* AppDelegate.swift in Sources */,
+				C37EAE551CC97E6E003F487D /* DayViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,14 +289,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		C39BA09E1CC6CAD200A4D3EB /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C39BA09F1CC6CAD200A4D3EB /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C39BA0A31CC6CAD200A4D3EB /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
