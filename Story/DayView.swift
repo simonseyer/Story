@@ -45,13 +45,16 @@ class DayView: UIView {
         textView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
         textView.topAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: textViewYMargin).active = true
         textView.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: -textViewYMargin).active = true
+        textView.heightAnchor.constraintGreaterThanOrEqualToConstant(30).active = true
     }
     
     private func setupView() {
+        clipsToBounds = true
         backgroundColor = UIColor(hexValue: backgroundColorCode)
         
         imageView.contentMode = .ScaleAspectFill
         
+        textView.numberOfLines = 0
         textView.font = UIFont(name: textFontName, size: textFontSize)
         textView.textAlignment = .Justified
     }

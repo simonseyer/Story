@@ -45,6 +45,17 @@ class TripView: UIView {
     }
     
     private func setupView() {
+        backgroundColor = UIColor(hexValue: 0xFAF8F8)
+    }
+    
+    func setDayView(dayView: UIView) {
+        dayView.translatesAutoresizingMaskIntoConstraints = false
         
+        dayContainerView.addSubview(dayView)
+        
+        dayView.leftAnchor.constraintEqualToAnchor(dayContainerView.leftAnchor).active = true
+        dayView.bottomAnchor.constraintEqualToAnchor(dayContainerView.bottomAnchor).active = true
+        dayView.rightAnchor.constraintEqualToAnchor(dayContainerView.rightAnchor).active = true
+        dayView.topAnchor.constraintEqualToAnchor(dayContainerView.topAnchor).active = true
     }
 }
