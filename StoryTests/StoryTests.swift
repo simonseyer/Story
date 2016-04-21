@@ -23,8 +23,8 @@ class StoryTests: XCTestCase {
         super.tearDown()
     }
     
-    func testModelStore() {
-        let day = Day(date: NSDate(), image: "test", text: "test", latitude: 0, longitude: 0)
+    func testTripStore() {
+        let day = Day(date: NSDate(), image: Image(name: "test", latitude: 0, longitude: 0), text: "test")
         let trip = Trip(identifier: NSUUID().UUIDString, name: "Trip Test", days: [day])
         
         let store = TripStore()
@@ -41,6 +41,24 @@ class StoryTests: XCTestCase {
         
         let tripII = trips[0]
         XCTAssertEqual(trip, tripII)
+        XCTAssertEqual(trip.days.count, 1)
+        
+        guard trip.days.count > 0 else { return }
+        
+        let dayII = trip.days[0]
+        XCTAssertEqual(day, dayII)
+    }
+    
+    func testImageStore() {
+        let image = UIImage(named: "cinque")
+        
+        let imageRef = ImageStore.storeImage(image!)
+        
+        XCTAssertNotNil(imageRef)
+        guard let ref = imageRef else { return }
+        
+        let imageII = ImageStore.loadImage(ref)
+        XCTAssertEqual(image?.size, imageII?.size)
     }
     
 }

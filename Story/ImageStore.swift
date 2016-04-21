@@ -13,31 +13,27 @@ public class ImageStore {
     
     private static let basePath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
     
-    public static func loadImage(day: Day) -> UIImage? {
-        let imageURL = NSURL(string: basePath)?.URLByAppendingPathComponent(day.image)
+    public static func loadImage(image: Image) -> UIImage? {
+        let imageURL = NSURL(string: basePath)?.URLByAppendingPathComponent(image.name)
         if let url = imageURL {
-            if let imageData = NSData(contentsOfURL: url) {
-                return UIImage(data: imageData)
+            do {
+                return UIImage(data: try NSData(contentsOfFile: url.absoluteString, options: NSDataReadingOptions()))
+            } catch let e as NSError {
+                print("Error: \(e)")
             }
         }
         return nil
     }
     
-    public static func createDay(date: NSDate, text: String, image: UIImage) -> Day? {
+    public static func storeImage(image: UIImage) -> Image? {
         let imageData = UIImagePNGRepresentation(image)
-        let imageName = NSUUID().UUIDString
+        let imageName = "\(NSUUID().UUIDString).png"
         let imageURL = NSURL(string: basePath)?.URLByAppendingPathComponent(imageName)
         
-        if let url = imageURL, data = imageData {
-            do {
-                try data.writeToURL(url, options: NSDataWritingOptions.init(rawValue: 0))
-                
-                // TODO: read location out of metadata
-                
-                return Day(date: date, image: imageName, text: text, latitude: 0, longitude: 0)
-            } catch {
-                
-            }
+        if let url = imageURL, data = imageData where data.writeToFile(url.absoluteString, atomically: false) {
+            // TODO: read location out of metadata
+            
+            return Image(name: imageName, latitude: 0, longitude: 0)
         }
         return nil
     }

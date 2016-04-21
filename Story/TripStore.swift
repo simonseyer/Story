@@ -82,7 +82,7 @@ extension Day {
             let text = dict["text"] as? String,
             let latitude = dict["latitude"] as? Float64,
             let longitude = dict["longitude"] as? Float64 {
-            return Day(date: date, image: image, text: text, latitude: latitude, longitude: longitude)
+            return Day(date: date, image: Image(name: image, latitude: latitude, longitude: longitude), text: text)
         }
         return nil
     }
@@ -90,10 +90,10 @@ extension Day {
     func toDictionary() -> [String : AnyObject] {
         return [
             "date" : date,
-            "image" : image,
+            "image" : image.name,
             "text" : text,
-            "latitude" : latitude,
-            "longitude" : longitude
+            "latitude" : image.latitude,
+            "longitude" : image.longitude
         ]
     }
     
