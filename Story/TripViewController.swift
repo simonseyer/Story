@@ -17,7 +17,7 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     var statusBarHidden = false
     
     let pageViewController: TripPageViewController
-    let statusBarAnimationDuration = 0.25
+    let statusBarAnimationDuration = 0.4
     
     init(model: Trip) {
         self.model = model
@@ -41,7 +41,7 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         pageViewController.didMoveToParentViewController(self)
         tripView?.setDayView(pageViewController.view)
         
-        configureNavigationController()
+        configureNavigationController(true)
         
         pageViewController.delegate = self
 
@@ -51,18 +51,28 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         }
     }
     
-    private func configureNavigationController() {
-        self.navigationItem.title = model.name
-        
-        self.navigationController?.hidesBarsOnTap = true
-        self.automaticallyAdjustsScrollViewInsets = false
-        self.navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(didTap))
+    override func viewWillDisappear(animated: Bool) {
+        configureNavigationController(false)
     }
+    
+    
     
 }
 
-// Status Bar Handling
+// Status & Navigation Bar Handling
 extension TripViewController {
+    
+    private func configureNavigationController(configure: Bool) {
+        navigationController?.hidesBarsOnTap = configure
+        automaticallyAdjustsScrollViewInsets = !configure
+        navigationController?.setNavigationBarHidden(configure, animated: true)
+        didTap()
+        
+        if configure {
+            navigationItem.title = model.name
+            navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(didTap))
+        }
+    }
     
     func didTap() {
         statusBarHidden = !statusBarHidden
