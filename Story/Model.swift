@@ -10,15 +10,15 @@ import Foundation
 
 public struct Day {
     
-    let date: NSDate
-    let image: Image
     let text: String
+    let image: Image
 
 }
 
 public struct Image {
     
     let name: String
+    let date: NSDate
     let latitude: Float64
     let longitude: Float64
     
@@ -36,7 +36,6 @@ extension Day : Equatable {}
 
 public func ==(lhs: Day, rhs: Day) -> Bool {
     return
-        lhs.date == rhs.date &&
         lhs.image == rhs.image &&
         lhs.text == rhs.text
 }
@@ -45,6 +44,7 @@ extension Image : Equatable {}
 
 public func ==(lhs: Image, rhs: Image) -> Bool {
     return
+            lhs.date == rhs.date &&
             lhs.name == rhs.name &&
             lhs.latitude == rhs.latitude &&
             lhs.longitude == rhs.longitude

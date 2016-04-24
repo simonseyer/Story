@@ -33,7 +33,7 @@ public class ImageStore {
         if let url = imageURL, data = imageData where data.writeToFile(url.absoluteString, atomically: false) {
             // TODO: read location out of metadata
             
-            return Image(name: imageName, latitude: 0, longitude: 0)
+            return Image(name: imageName, date: NSDate(), latitude: 0, longitude: 0)
         }
         return nil
     }

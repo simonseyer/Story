@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         // Demo trip
         let image = ImageStore.storeImage(UIImage(named: "cinque")!)!
-        let day1 = Day(date: NSDate(), image: image, text: "Lorem ipsum I")
-        let day2 = Day(date: NSDate(), image: image, text: "Lorem ipsum II")
+        let day1 = Day(text: "Lorem ipsum I", image: image)
+        let day2 = Day(text: "Lorem ipsum II", image: image)
         let trip = Trip(identifier: NSUUID().UUIDString, name: "Lorem", days: [day1, day2])
         
         self.window?.rootViewController = TripViewController(model: trip)
