@@ -113,8 +113,7 @@ extension TripViewController {
         let day = DayAnnotation(day: dayModel)
         if let mapView = tripView?.mapView {
             let viewRegion = MKCoordinateRegionMakeWithDistance(day.coordinate, 500, 500)
-            let region = mapView.regionThatFits(viewRegion)
-            mapView.setRegion(region, animated: animated)
+            mapView.setRegion(viewRegion, animated: animated)
         }
     }
     
