@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 public class TripStore {
     
@@ -51,6 +52,19 @@ public class TripStore {
         NSUserDefaults.standardUserDefaults().setValue(nil, forKey: userDefaultsTripKey)
     }
     
+}
+
+extension TripStore {
+    
+    func loadDemoDataIfNeeded() {
+        if trips.count == 0 {
+            let image = ImageStore.storeImage(UIImage(named: "cinque")!)!
+            let day1 = Day(text: "Lorem ipsum I", image: image)
+            let day2 = Day(text: "Lorem ipsum II", image: image)
+            let trip = Trip(identifier: NSUUID().UUIDString, name: "Lorem", days: [day1, day2])
+            storeTrip(trip)
+        }
+    }
 }
 
 extension Trip {

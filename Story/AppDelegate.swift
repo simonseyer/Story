@@ -12,22 +12,18 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    private let tripStore = TripStore()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.backgroundColor = UIColor.whiteColor()
         
-        // Demo trip
-        let image = ImageStore.storeImage(UIImage(named: "cinque")!)!
-        let day1 = Day(text: "Lorem ipsum I", image: image)
-        let day2 = Day(text: "Lorem ipsum II", image: image)
-        let trip = Trip(identifier: NSUUID().UUIDString, name: "Lorem", days: [day1, day2])
+        tripStore.load()
+        tripStore.loadDemoDataIfNeeded()
         
-        self.window?.rootViewController = TripViewController(model: trip)
+        self.window?.rootViewController = TripViewController(model: tripStore.trips[0])
         self.window?.makeKeyAndVisible()
-        
         
         return true
     }
@@ -38,6 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
+        tripStore.save()
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
