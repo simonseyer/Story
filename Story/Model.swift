@@ -19,8 +19,8 @@ public struct Image {
     
     let name: String
     let date: NSDate
-    let latitude: Float
-    let longitude: Float
+    let latitude: Double
+    let longitude: Double
     
 }
 

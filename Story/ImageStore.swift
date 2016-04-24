@@ -60,13 +60,13 @@ extension ImageStore {
         return dateFormatter.dateFromString(dateString)
     }
     
-    static func getImageLocation(imageData: NSData) -> (latitude: Float, longitude: Float)? {
+    static func getImageLocation(imageData: NSData) -> (latitude: Double, longitude: Double)? {
         guard let gpsInfo = getImageGPSMetadata(imageData) else {
             return nil
         }
         
-        guard let latitude = gpsInfo[kCGImagePropertyGPSLatitude as String] as? Float,
-              let longitude = gpsInfo[kCGImagePropertyGPSLongitude as String] as? Float else {
+        guard let latitude = gpsInfo[kCGImagePropertyGPSLatitude as String] as? Double,
+              let longitude = gpsInfo[kCGImagePropertyGPSLongitude as String] as? Double else {
             return nil
         }
         

@@ -95,8 +95,8 @@ extension Day {
         if  let date = dict["date"] as? NSDate,
             let image = dict["image"] as? String,
             let text = dict["text"] as? String,
-            let latitude = dict["latitude"] as? Float,
-            let longitude = dict["longitude"] as? Float {
+            let latitude = dict["latitude"] as? Double,
+            let longitude = dict["longitude"] as? Double {
             return Day(text: text, image: Image(name: image, date: date, latitude: latitude, longitude: longitude))
         }
         return nil
