@@ -11,30 +11,29 @@ import UIKit
 
 public class ImageStore {
     
-    private static let basePath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+    private static let basePath = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
     
     public static func loadImage(image: Image) -> UIImage? {
-        let imageURL = NSURL(string: basePath)?.URLByAppendingPathComponent(image.name)
-        if let url = imageURL {
-            do {
-                return UIImage(data: try NSData(contentsOfFile: url.absoluteString, options: NSDataReadingOptions()))
-            } catch let e as NSError {
-                print("Error: \(e)")
-            }
+        let imageURL = basePath.URLByAppendingPathComponent(image.name)
+        if let imageData = NSData(contentsOfURL: imageURL) {
+            return UIImage(data: imageData)
         }
         return nil
     }
     
-    public static func storeImage(image: UIImage) -> Image? {
-        let imageData = UIImagePNGRepresentation(image)
-        let imageName = "\(NSUUID().UUIDString).png"
-        let imageURL = NSURL(string: basePath)?.URLByAppendingPathComponent(imageName)
+    public static func storeImage(image: NSURL) -> Image? {
+        guard let pathExtension = image.pathExtension else { return nil }
+        let imageName = "\(NSUUID().UUIDString).\(pathExtension)"
+        let imageURL = basePath.URLByAppendingPathComponent(imageName)
         
-        if let url = imageURL, data = imageData where data.writeToFile(url.absoluteString, atomically: false) {
-            // TODO: read location out of metadata
+        do {
+            try NSFileManager.defaultManager().copyItemAtURL(image, toURL: imageURL)
             
             return Image(name: imageName, date: NSDate(), latitude: 0, longitude: 0)
+        } catch let e as NSError {
+            print(e)
         }
+        
         return nil
     }
     
