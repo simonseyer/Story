@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tripStore.load()
         tripStore.loadDemoDataIfNeeded()
         
-        self.window?.rootViewController = TripViewController(model: tripStore.trips[0])
+        let tripViewController = TripViewController(model: tripStore.trips[0])
+        self.window?.rootViewController = UINavigationController(rootViewController: tripViewController)
         self.window?.makeKeyAndVisible()
         
         return true

@@ -41,17 +41,28 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         pageViewController.didMoveToParentViewController(self)
         tripView?.setDayView(pageViewController.view)
         
+        configureNavigationController()
+        
         pageViewController.delegate = self
-        
-        didTap()
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
-        tripView?.addGestureRecognizer(tapGestureRecognizer)
-        
+
         addMarkers()
         if let day = model.days.first {
             centerMapView(day, animated: false)
         }
     }
+    
+    private func configureNavigationController() {
+        self.navigationItem.title = model.name
+        
+        self.navigationController?.hidesBarsOnTap = true
+        self.automaticallyAdjustsScrollViewInsets = false
+        self.navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(didTap))
+    }
+    
+}
+
+// Status Bar Handling
+extension TripViewController {
     
     func didTap() {
         statusBarHidden = !statusBarHidden
@@ -71,6 +82,10 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
     }
+}
+
+// MapView Handling
+extension TripViewController {
     
     private func addMarkers() {
         for day in model.days {
