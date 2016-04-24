@@ -18,8 +18,32 @@ public class TripStore {
         return Array(_trips.values)
     }
     
+    public var observers = NSHashTable.weakObjectsHashTable()
+    
     public func storeTrip(trip: Trip) {
+        let oldIndex = trips.indexOf(trip)
+        
         _trips[trip.identifier] = trip
+        for observer in observers.copy().objectEnumerator() {
+            if let anObserver = observer as? TripStoreObserver {
+                if let index = oldIndex {
+                    anObserver.didUpdateTrip(trip, atIndex: index)
+                } else {
+                    anObserver.didInsertTrip(trip, atIndex: trips.indexOf(trip)!)
+                }
+            }
+        }
+    }
+    
+    public func removeTrip(trip: Trip) {
+        if let index = trips.indexOf(trip) {
+            _trips.removeValueForKey(trip.identifier)
+            for observer in observers.copy().objectEnumerator() {
+                if let anObserver = observer as? TripStoreObserver {
+                    anObserver.didRemoveTrip(trip, fromIndex: index)
+                }
+            }
+        }
     }
     
     public func load() {
@@ -51,6 +75,16 @@ public class TripStore {
     static func delete() {
         NSUserDefaults.standardUserDefaults().setValue(nil, forKey: userDefaultsTripKey)
     }
+    
+}
+
+protocol TripStoreObserver {
+    
+    func didInsertTrip(trip: Trip, atIndex index: Int)
+    
+    func didUpdateTrip(trip: Trip, atIndex index: Int)
+    
+    func didRemoveTrip(trip: Trip, fromIndex index: Int)
     
 }
 

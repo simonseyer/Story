@@ -19,11 +19,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.backgroundColor = UIColor.whiteColor()
         
-        TripStore.delete()
+        //TripStore.delete()
         tripStore.load()
         tripStore.loadDemoDataIfNeeded()
         
-        let tripListViewController = TripListViewController(model: tripStore.trips)
+        let tripListViewController = TripListViewController(model: tripStore)
         tripListViewController.selectionCommand = { trip in
             let tripViewController = TripViewController(model: trip)
             tripListViewController.navigationController?.pushViewController(tripViewController, animated: true)
