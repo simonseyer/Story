@@ -11,7 +11,7 @@
 		C303EB0C1CCCE7020038F41A /* cinque1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C303EB0A1CCCE7020038F41A /* cinque1.jpg */; };
 		C303EB0D1CCCE7020038F41A /* cinque2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C303EB0B1CCCE7020038F41A /* cinque2.jpg */; };
 		C361F1AA1CCD324900591392 /* NewTripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C361F1A91CCD324900591392 /* NewTripCell.swift */; };
-		C361F1DD1CCD587D00591392 /* el_capitan.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C361F1DC1CCD587D00591392 /* el_capitan.jpg */; };
+		C361F1DF1CCD6F5000591392 /* el_capitan.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C361F1DE1CCD6F5000591392 /* el_capitan.jpg */; };
 		C37336EC1CCD19D100E41E19 /* TripListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37336EB1CCD19D100E41E19 /* TripListViewController.swift */; };
 		C37336EE1CCD1A6F00E41E19 /* TripCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37336ED1CCD1A6F00E41E19 /* TripCell.swift */; };
 		C37336F01CCD1C5D00E41E19 /* ViewContstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37336EF1CCD1C5D00E41E19 /* ViewContstants.swift */; };
@@ -46,7 +46,7 @@
 		C303EB0A1CCCE7020038F41A /* cinque1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cinque1.jpg; sourceTree = "<group>"; };
 		C303EB0B1CCCE7020038F41A /* cinque2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cinque2.jpg; sourceTree = "<group>"; };
 		C361F1A91CCD324900591392 /* NewTripCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewTripCell.swift; sourceTree = "<group>"; };
-		C361F1DC1CCD587D00591392 /* el_capitan.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = el_capitan.jpg; path = ../../../Downloads/el_capitan.jpg; sourceTree = "<group>"; };
+		C361F1DE1CCD6F5000591392 /* el_capitan.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = el_capitan.jpg; sourceTree = "<group>"; };
 		C37336EB1CCD19D100E41E19 /* TripListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripListViewController.swift; sourceTree = "<group>"; };
 		C37336ED1CCD1A6F00E41E19 /* TripCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripCell.swift; sourceTree = "<group>"; };
 		C37336EF1CCD1C5D00E41E19 /* ViewContstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewContstants.swift; sourceTree = "<group>"; };
@@ -130,7 +130,7 @@
 				C39BA0C01CC81EB900A4D3EB /* Model */,
 				C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */,
 				C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */,
-				C361F1DC1CCD587D00591392 /* el_capitan.jpg */,
+				C361F1DE1CCD6F5000591392 /* el_capitan.jpg */,
 				C303EB0A1CCCE7020038F41A /* cinque1.jpg */,
 				C303EB0B1CCCE7020038F41A /* cinque2.jpg */,
 				C39BA0A31CC6CAD200A4D3EB /* LaunchScreen.storyboard */,
@@ -265,7 +265,7 @@
 			files = (
 				C303EB0C1CCCE7020038F41A /* cinque1.jpg in Resources */,
 				C303EB0D1CCCE7020038F41A /* cinque2.jpg in Resources */,
-				C361F1DD1CCD587D00591392 /* el_capitan.jpg in Resources */,
+				C361F1DF1CCD6F5000591392 /* el_capitan.jpg in Resources */,
 				C39BA0A51CC6CAD200A4D3EB /* LaunchScreen.storyboard in Resources */,
 				C39BA0A21CC6CAD200A4D3EB /* Assets.xcassets in Resources */,
 			);
