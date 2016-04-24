@@ -60,4 +60,12 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         guard index >= 0 && index < trip.days.count else { return nil }
         return DayViewController(model: trip.days[index])
     }
+    
+    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
+        return trip.days.count
+    }
+    
+    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
+        return 0
+    }
 }
