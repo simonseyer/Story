@@ -10,8 +10,8 @@ import Foundation
 
 public struct Day {
     
-    let text: String
-    let image: Image
+    var text: String
+    var image: Image
 
 }
 
@@ -27,7 +27,7 @@ public struct Image {
 public struct Trip {
     
     let identifier: String
-    let name: String
+    var name: String
     let days: [Day]
 
 }
