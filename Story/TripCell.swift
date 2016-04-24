@@ -12,7 +12,7 @@ class TripCell: UITableViewCell {
 
     let tripImageView = UIImageView()
     let tripTitleView = UILabel()
-    let blurEffectView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.ExtraLight))
+    let imageOverlayView = UIView()
     
     let titleLeftMargin = CGFloat(40)
     
@@ -46,13 +46,11 @@ class TripCell: UITableViewCell {
     
     private func setupContraints() {
         tripImageView.translatesAutoresizingMaskIntoConstraints = false
-        blurEffectView.translatesAutoresizingMaskIntoConstraints = false
+        imageOverlayView.translatesAutoresizingMaskIntoConstraints = false
         tripTitleView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(tripImageView)
-        if !UIAccessibilityIsReduceTransparencyEnabled() {
-            addSubview(blurEffectView)
-        }
+        addSubview(imageOverlayView)
         addSubview(tripTitleView)
         
         tripImageView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
@@ -60,12 +58,10 @@ class TripCell: UITableViewCell {
         tripImageView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
         tripImageView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
         
-        if !UIAccessibilityIsReduceTransparencyEnabled() {
-            blurEffectView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
-            blurEffectView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
-            blurEffectView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
-            blurEffectView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
-        }
+        imageOverlayView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
+        imageOverlayView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
+        imageOverlayView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
+        imageOverlayView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
         
         tripTitleView.centerYAnchor.constraintEqualToAnchor(centerYAnchor).active = true
         tripTitleView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: titleLeftMargin).active = true
@@ -76,9 +72,16 @@ class TripCell: UITableViewCell {
         
         tripImageView.contentMode = .ScaleAspectFill
         
+        imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
+        
         tripTitleView.numberOfLines = 1
-        tripTitleView.font = ViewConstants.textFont()
+        tripTitleView.font = UIFont(name: ViewConstants.boldTextFontName, size: 35)
         tripTitleView.textAlignment = .Left
+        tripTitleView.textColor = UIColor.whiteColor()
+        tripTitleView.shadowColor = UIColor.blackColor().colorWithAlphaComponent(0.3)
+        tripTitleView.shadowOffset = CGSize(width: 2, height: 2)
+        
+        
     }
     
     

@@ -13,7 +13,7 @@ class TripListViewController: UITableViewController {
     let cellReuseIdentifier = "trippCell"
     let model: [Trip]
     
-    let rowHeight = CGFloat(120)
+    let rowHeight = CGFloat(140)
     
     var selectionCommand: (Trip -> Void)?
     

@@ -61,6 +61,7 @@ class DayView: UIView {
         
         textView.numberOfLines = 0
         textView.font = ViewConstants.textFont()
+        textView.textColor = UIColor(hexValue: ViewConstants.textColorCode)
         textView.textAlignment = .Justified
     }
 }
