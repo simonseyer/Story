@@ -14,8 +14,10 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     
     var tripView: TripView?
     let model: Trip
+    var statusBarHidden = false
     
     let pageViewController: TripPageViewController
+    let statusBarAnimationDuration = 0.25
     
     init(model: Trip) {
         self.model = model
@@ -41,10 +43,33 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         
         pageViewController.delegate = self
         
+        didTap()
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTap))
+        tripView?.addGestureRecognizer(tapGestureRecognizer)
+        
         addMarkers()
         if let day = model.days.first {
             centerMapView(day, animated: false)
         }
+    }
+    
+    func didTap() {
+        statusBarHidden = !statusBarHidden
+        UIView.animateWithDuration(statusBarAnimationDuration) {[unowned self] in
+            self.setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
+        return .Slide
+    }
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return statusBarHidden
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
     
     private func addMarkers() {

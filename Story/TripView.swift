@@ -14,7 +14,7 @@ class TripView: UIView {
     let dayContainerView = UIView()
     let mapView = MKMapView()
     
-    private let mapViewHeight = CGFloat(120)
+    static let mapViewHeight = CGFloat(120)
     
     init() {
         super.init(frame: CGRect.zero)
@@ -36,9 +36,9 @@ class TripView: UIView {
         dayContainerView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         dayContainerView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
         dayContainerView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
+        dayContainerView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
         
-        mapView.heightAnchor.constraintEqualToConstant(mapViewHeight).active = true
-        mapView.topAnchor.constraintEqualToAnchor(dayContainerView.bottomAnchor).active = true
+        mapView.heightAnchor.constraintEqualToConstant(TripView.mapViewHeight).active = true
         mapView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         mapView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
         mapView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
@@ -46,6 +46,9 @@ class TripView: UIView {
     
     private func setupView() {
         backgroundColor = UIColor(hexValue: 0xFAF8F8)
+        
+        mapView.userInteractionEnabled = false
+        mapView.alpha = 0.7
     }
     
     func setDayView(dayView: UIView) {

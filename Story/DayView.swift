@@ -44,7 +44,7 @@ class DayView: UIView {
         textView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: textViewXMargin).active = true
         textView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
         textView.topAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: textViewYMargin).active = true
-        textView.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: -textViewYMargin).active = true
+        textView.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: -textViewYMargin - TripView.mapViewHeight).active = true
         textView.heightAnchor.constraintGreaterThanOrEqualToConstant(30).active = true
     }
     
