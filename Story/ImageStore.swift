@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import ImageIO
 
 public class ImageStore {
     
@@ -29,7 +30,11 @@ public class ImageStore {
         do {
             try NSFileManager.defaultManager().copyItemAtURL(image, toURL: imageURL)
             
-            return Image(name: imageName, date: NSDate(), latitude: 0, longitude: 0)
+            if let imageData = NSData(contentsOfURL: imageURL),
+                   date = getImageDate(imageData),
+                   location = getImageLocation(imageData) {
+                return Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude)
+            }
         } catch let e as NSError {
             print(e)
         }
@@ -37,4 +42,50 @@ public class ImageStore {
         return nil
     }
     
+}
+
+extension ImageStore {
+
+    static func getImageDate(imageData: NSData) -> NSDate? {
+        guard let gpsInfo = getImageGPSMetadata(imageData) else {
+            return nil
+        }
+        
+        guard let dateString = gpsInfo[kCGImagePropertyGPSDateStamp as String] as? String else {
+            return nil
+        }
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy:MM:dd"
+        return dateFormatter.dateFromString(dateString)
+    }
+    
+    static func getImageLocation(imageData: NSData) -> (latitude: Float, longitude: Float)? {
+        guard let gpsInfo = getImageGPSMetadata(imageData) else {
+            return nil
+        }
+        
+        guard let latitude = gpsInfo[kCGImagePropertyGPSLatitude as String] as? Float,
+              let longitude = gpsInfo[kCGImagePropertyGPSLongitude as String] as? Float else {
+            return nil
+        }
+        
+        return (latitude: latitude, longitude: longitude)
+    }
+    
+    private static func getImageGPSMetadata(imageData: NSData) -> [String : AnyObject]? {
+        guard let sourceRef = CGImageSourceCreateWithData(imageData, nil) else {
+            return nil
+        }
+        
+        guard let properties = CGImageSourceCopyPropertiesAtIndex(sourceRef, 0, nil) as NSDictionary? else {
+            return nil
+        }
+        
+        guard let gpsInfo = properties[kCGImagePropertyGPSDictionary as String] as? [String : AnyObject] else {
+            return nil
+        }
+        
+        return gpsInfo
+    }
 }
