@@ -12,9 +12,11 @@ class DayView: UIView {
 
     let imageView = UIImageView()
     let textView = UILabel()
+    let textBackgroundView = UIView()
     
     private let textViewXMargin = CGFloat(60)
     private let textViewYMargin = CGFloat(60)
+    private let magicPageIndicatorHeight = CGFloat(37)
     
     init() {
         super.init(frame: CGRect.zero)
@@ -27,26 +29,33 @@ class DayView: UIView {
     }
     
     private func setupContraints() {
-        addSubview(imageView)
-        addSubview(textView)
-        
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        textBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         textView.translatesAutoresizingMaskIntoConstraints = false
+        
+        addSubview(imageView)
+        addSubview(textBackgroundView)
+        addSubview(textView)
         
         imageView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         imageView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
         imageView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
         
+        textBackgroundView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
+        textBackgroundView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
+        textBackgroundView.topAnchor.constraintEqualToAnchor(imageView.bottomAnchor).active = true
+        textBackgroundView.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: -TripView.mapViewHeight + magicPageIndicatorHeight).active = true
+        
         textView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: textViewXMargin).active = true
         textView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
-        textView.topAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: textViewYMargin).active = true
-        textView.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: -textViewYMargin - TripView.mapViewHeight).active = true
+        textView.topAnchor.constraintEqualToAnchor(textBackgroundView.topAnchor, constant: textViewYMargin).active = true
+        textView.bottomAnchor.constraintEqualToAnchor(textBackgroundView.bottomAnchor, constant: -textViewYMargin).active = true
         textView.heightAnchor.constraintGreaterThanOrEqualToConstant(30).active = true
     }
     
     private func setupView() {
         clipsToBounds = true
-        backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
+        textBackgroundView.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         imageView.contentMode = .ScaleAspectFill
         

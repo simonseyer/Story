@@ -27,8 +27,8 @@ class TripView: UIView {
     }
     
     private func setupContraints() {
-        addSubview(dayContainerView)
         addSubview(mapView)
+        addSubview(dayContainerView)
         
         dayContainerView.translatesAutoresizingMaskIntoConstraints = false
         mapView.translatesAutoresizingMaskIntoConstraints = false
