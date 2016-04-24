@@ -24,7 +24,7 @@ class StoryTests: XCTestCase {
     }
     
     func testTripStore() {
-        let day = Day(date: NSDate(), image: Image(name: "test", latitude: 0, longitude: 0), text: "test")
+        let day = Day(text: "test", image: Image(name: "test", date: NSDate(), latitude: 0, longitude: 0))
         let trip = Trip(identifier: NSUUID().UUIDString, name: "Trip Test", days: [day])
         
         let store = TripStore()
@@ -50,15 +50,34 @@ class StoryTests: XCTestCase {
     }
     
     func testImageStore() {
-        let image = UIImage(named: "cinque")
+        let imageURL = NSBundle.mainBundle().URLForResource("cinque1", withExtension: "jpg")
         
-        let imageRef = ImageStore.storeImage(image!)
+        let imageRef = ImageStore.storeImage(imageURL!)
+        print(imageRef?.date)
         
         XCTAssertNotNil(imageRef)
         guard let ref = imageRef else { return }
         
-        let imageII = ImageStore.loadImage(ref)
-        XCTAssertEqual(image?.size, imageII?.size)
+        let image = ImageStore.loadImage(ref)
+        XCTAssertNotNil(image)
+    }
+    
+    func testImageMetadata() {
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        
+        
+        let imageURL = NSBundle.mainBundle().URLForResource("cinque1", withExtension: "jpg")
+        let imageDate = dateFormatter.dateFromString("10.09.2013")
+        let imageLatitude: Float = 44.107333
+        let imageLongitude: Float = 9.725500
+        let imageRef = ImageStore.storeImage(imageURL!)
+        
+        guard let ref = imageRef else { return }
+        
+        XCTAssertEqual(ref.date, imageDate)
+        XCTAssertEqualWithAccuracy(ref.latitude, imageLatitude, accuracy: FLT_EPSILON)
+        XCTAssertEqualWithAccuracy(ref.longitude, imageLongitude, accuracy: FLT_EPSILON)
     }
     
 }
