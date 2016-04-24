@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C303EAE91CCCCF870038F41A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C303EAE81CCCCF870038F41A /* ImageIO.framework */; };
+		C303EB0C1CCCE7020038F41A /* cinque1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C303EB0A1CCCE7020038F41A /* cinque1.jpg */; };
+		C303EB0D1CCCE7020038F41A /* cinque2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C303EB0B1CCCE7020038F41A /* cinque2.jpg */; };
 		C37EAE531CC9794A003F487D /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE521CC9794A003F487D /* TripViewController.swift */; };
 		C37EAE551CC97E6E003F487D /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE541CC97E6E003F487D /* DayViewController.swift */; };
 		C37EAE571CC97E8A003F487D /* TripPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE561CC97E8A003F487D /* TripPageViewController.swift */; };
@@ -34,6 +37,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C303EAE81CCCCF870038F41A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
+		C303EB0A1CCCE7020038F41A /* cinque1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cinque1.jpg; sourceTree = "<group>"; };
+		C303EB0B1CCCE7020038F41A /* cinque2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cinque2.jpg; sourceTree = "<group>"; };
 		C37EAE521CC9794A003F487D /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		C37EAE541CC97E6E003F487D /* DayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayViewController.swift; sourceTree = "<group>"; };
 		C37EAE561CC97E8A003F487D /* TripPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripPageViewController.swift; sourceTree = "<group>"; };
@@ -59,6 +65,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C303EAE91CCCCF870038F41A /* ImageIO.framework in Frameworks */,
 				C39BA0AD1CC6CD3400A4D3EB /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -86,6 +93,7 @@
 		C39BA08A1CC6CAD200A4D3EB = {
 			isa = PBXGroup;
 			children = (
+				C303EAE81CCCCF870038F41A /* ImageIO.framework */,
 				C39BA0AC1CC6CD3400A4D3EB /* MapKit.framework */,
 				C39BA0951CC6CAD200A4D3EB /* Story */,
 				C39BA0DF1CC82D7A00A4D3EB /* StoryTests */,
@@ -111,6 +119,8 @@
 				C39BA0C01CC81EB900A4D3EB /* Model */,
 				C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */,
 				C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */,
+				C303EB0A1CCCE7020038F41A /* cinque1.jpg */,
+				C303EB0B1CCCE7020038F41A /* cinque2.jpg */,
 				C39BA0A31CC6CAD200A4D3EB /* LaunchScreen.storyboard */,
 				C39BA0A61CC6CAD200A4D3EB /* Info.plist */,
 			);
@@ -238,6 +248,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C303EB0C1CCCE7020038F41A /* cinque1.jpg in Resources */,
+				C303EB0D1CCCE7020038F41A /* cinque2.jpg in Resources */,
 				C39BA0A51CC6CAD200A4D3EB /* LaunchScreen.storyboard in Resources */,
 				C39BA0A21CC6CAD200A4D3EB /* Assets.xcassets in Resources */,
 			);
