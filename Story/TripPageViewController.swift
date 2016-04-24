@@ -15,7 +15,8 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     required init(model: Trip) {
         self.viewModel = TripViewModel(trip: model)
         
-        super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: nil)
+        let options = [UIPageViewControllerOptionInterPageSpacingKey : 100]
+        super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: options)
         
         dataSource = viewModel
         delegate = self
