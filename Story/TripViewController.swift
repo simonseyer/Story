@@ -103,8 +103,8 @@ extension TripViewController {
         }
     }
     
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
-        if let viewControllers = pageViewController.viewControllers, dayViewController = viewControllers[0] as? DayViewController {
+    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
+        if let dayViewController = pendingViewControllers[0] as? DayViewController {
             centerMapView(dayViewController.day, animated: true)
         }
     }
