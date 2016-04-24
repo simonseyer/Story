@@ -45,7 +45,7 @@ class TripView: UIView {
     }
     
     private func setupView() {
-        backgroundColor = UIColor(hexValue: 0xFAF8F8)
+        backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         mapView.userInteractionEnabled = false
         mapView.alpha = 0.7

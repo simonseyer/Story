@@ -16,10 +16,6 @@ class DayView: UIView {
     private let textViewXMargin = CGFloat(60)
     private let textViewYMargin = CGFloat(60)
     
-    private let backgroundColorCode = 0xFAF8F8
-    private let textFontSize = CGFloat(21)
-    private let textFontName = "Baskerville"
-    
     init() {
         super.init(frame: CGRect.zero)
         setupContraints()
@@ -50,12 +46,12 @@ class DayView: UIView {
     
     private func setupView() {
         clipsToBounds = true
-        backgroundColor = UIColor(hexValue: backgroundColorCode)
+        backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         imageView.contentMode = .ScaleAspectFill
         
         textView.numberOfLines = 0
-        textView.font = UIFont(name: textFontName, size: textFontSize)
+        textView.font = ViewConstants.textFont()
         textView.textAlignment = .Justified
     }
 }

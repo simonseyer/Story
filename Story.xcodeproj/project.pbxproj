@@ -10,6 +10,7 @@
 		C303EAE91CCCCF870038F41A /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C303EAE81CCCCF870038F41A /* ImageIO.framework */; };
 		C303EB0C1CCCE7020038F41A /* cinque1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C303EB0A1CCCE7020038F41A /* cinque1.jpg */; };
 		C303EB0D1CCCE7020038F41A /* cinque2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C303EB0B1CCCE7020038F41A /* cinque2.jpg */; };
+		C37336F01CCD1C5D00E41E19 /* ViewContstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37336EF1CCD1C5D00E41E19 /* ViewContstants.swift */; };
 		C37EAE531CC9794A003F487D /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE521CC9794A003F487D /* TripViewController.swift */; };
 		C37EAE551CC97E6E003F487D /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE541CC97E6E003F487D /* DayViewController.swift */; };
 		C37EAE571CC97E8A003F487D /* TripPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE561CC97E8A003F487D /* TripPageViewController.swift */; };
@@ -40,6 +41,7 @@
 		C303EAE81CCCCF870038F41A /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = System/Library/Frameworks/ImageIO.framework; sourceTree = SDKROOT; };
 		C303EB0A1CCCE7020038F41A /* cinque1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cinque1.jpg; sourceTree = "<group>"; };
 		C303EB0B1CCCE7020038F41A /* cinque2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = cinque2.jpg; sourceTree = "<group>"; };
+		C37336EF1CCD1C5D00E41E19 /* ViewContstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewContstants.swift; sourceTree = "<group>"; };
 		C37EAE521CC9794A003F487D /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		C37EAE541CC97E6E003F487D /* DayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayViewController.swift; sourceTree = "<group>"; };
 		C37EAE561CC97E8A003F487D /* TripPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripPageViewController.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			children = (
 				C39BA0C41CC81FB700A4D3EB /* DayView.swift */,
 				C39BA0D61CC8227100A4D3EB /* TripView.swift */,
+				C37336EF1CCD1C5D00E41E19 /* ViewContstants.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -275,6 +278,7 @@
 				C39BA0EE1CC8335D00A4D3EB /* ImageStore.swift in Sources */,
 				C39BA0D71CC8227100A4D3EB /* TripView.swift in Sources */,
 				C39BA0D91CC823FA00A4D3EB /* TripStore.swift in Sources */,
+				C37336F01CCD1C5D00E41E19 /* ViewContstants.swift in Sources */,
 				C37EAE531CC9794A003F487D /* TripViewController.swift in Sources */,
 				C39BA0C21CC81ECF00A4D3EB /* Model.swift in Sources */,
 				C39BA0971CC6CAD200A4D3EB /* AppDelegate.swift in Sources */,
