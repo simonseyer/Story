@@ -42,6 +42,11 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         for viewController in viewModel.viewControllers.values {
             viewController.setEditing(editing, animated: animated)
         }
+        viewModel.editViewController?.setEditing(editing, animated: animated)
+        
+        if !editing {
+            viewModel.editViewController = nil
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -54,6 +59,9 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         dayStore.observers.removeObject(viewModel)
     }
 
+    func addDay() {
+        setViewControllers([viewModel.createEditViewController()], direction: .Forward, animated: true, completion: nil)
+    }
 }
 
 @objc class TripViewModel: NSObject, UIPageViewControllerDataSource {
@@ -61,14 +69,19 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     let trip: DayStore
     var editing =  false
     var viewControllers = [Int : DayViewController]()
+    var editViewController: DayViewController?
     
     init(trip: DayStore) {
         self.trip = trip
     }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
-        if let vc = viewController as? DayViewController, index = trip.days.indexOf(vc.day) {
-            return viewControllerAtIndex(index - 1)
+        if let vc = viewController as? DayViewController {
+            if let index = trip.days.indexOf(vc.day) {
+                return viewControllerAtIndex(index - 1)
+            } else {
+                return viewControllerAtIndex(trip.days.count - 1)
+            }
         }
         return nil
     }
@@ -76,6 +89,8 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
         if let vc = viewController as? DayViewController, index = trip.days.indexOf(vc.day) {
             return viewControllerAtIndex(index + 1)
+        } else if let vc = editViewController {
+            return vc
         }
         return nil
     }
@@ -85,15 +100,25 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
             return nil
         }
         
-        let viewController = DayViewController(model: trip.days[index])
+        let viewController = createViewController(trip.days[index])
+        viewControllers[index] = viewController
+        return viewController
+    }
+    
+    func createViewController(day: Day) -> DayViewController {
+        let viewController = DayViewController(model: day)
         viewController.setEditing(editing, animated: false)
         
         viewController.changeCommand = {[weak self] day in
             self?.trip.storeDay(day)
         }
         
-        viewControllers[index] = viewController
         return viewController
+    }
+    
+    func createEditViewController()  -> DayViewController {
+        editViewController = createViewController(Day(text: nil, image: nil))
+        return editViewController!
     }
     
     func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
@@ -112,6 +137,7 @@ extension TripViewModel: DayStoreObserver {
     }
     
     func didUpdateDay(day: Day, atIndex index: Int) {
+        // TODO: replace edit view controller
         if let vc = viewControllers[index] {
             vc.day = day
         }

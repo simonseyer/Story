@@ -65,6 +65,16 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         super.setEditing(editing, animated: animated)
         pageViewController.setEditing(editing, animated: animated)
         navigationController?.hidesBarsOnTap = !editing
+        
+        if editing {
+            navigationItem.setLeftBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addDay)), animated: true)
+        } else {
+            navigationItem.setLeftBarButtonItem(nil, animated: true)
+        }
+    }
+    
+    func addDay() {
+        pageViewController.addDay()
     }
 
 }
@@ -110,7 +120,10 @@ extension TripViewController {
     
     private func addMarkers() {
         for day in model.days {
-            tripView?.mapView.addAnnotation(DayAnnotation(day: day))
+            if let image = day.image {
+                // TODO: add annotation when image is added
+                tripView?.mapView.addAnnotation(DayAnnotation(image: image))
+            }
         }
     }
     
@@ -121,10 +134,12 @@ extension TripViewController {
     }
     
     private func centerMapView(dayModel: Day, animated: Bool) {
-        let day = DayAnnotation(day: dayModel)
-        if let mapView = tripView?.mapView {
-            let viewRegion = MKCoordinateRegionMakeWithDistance(day.coordinate, 500, 500)
-            mapView.setRegion(viewRegion, animated: animated)
+        if let image = dayModel.image {
+            let day = DayAnnotation(image: image)
+            if let mapView = tripView?.mapView {
+                let viewRegion = MKCoordinateRegionMakeWithDistance(day.coordinate, 500, 500)
+                mapView.setRegion(viewRegion, animated: animated)
+            }
         }
     }
     
@@ -133,13 +148,13 @@ extension TripViewController {
 
 @objc class DayAnnotation : NSObject, MKAnnotation {
     
-    let day: Day
+    let image: Image
     
-    init(day: Day) {
-        self.day = day
+    init(image: Image) {
+        self.image = image
     }
     
-    internal  var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2DMake(day.image.latitude, day.image.longitude)
+    internal var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2DMake(image.latitude, image.longitude)
     }
 }

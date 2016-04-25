@@ -44,8 +44,10 @@ class DayViewController: UIViewController {
     
     private func updateDayView() {
         if isVisible {
-            ImageStore.loadImage(day.image) {[weak self] image in
-                self?.dayView?.image = image
+            if let image = day.image {
+                ImageStore.loadImage(image) {[weak self] image in
+                    self?.dayView?.image = image
+                }
             }
             dayView?.text = day.text
             dayView?.setEditing(editing, animated: false)
@@ -56,7 +58,6 @@ class DayViewController: UIViewController {
         super.setEditing(editing, animated: animated)
         dayView?.setEditing(editing, animated: animated)
     }
-    
     
 }
 
@@ -101,7 +102,6 @@ extension DayViewController {
 extension DayViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(textView: UITextView) {
-        var day = self.day
         day.text = textView.text
         changeCommand?(day)
     }

@@ -39,6 +39,7 @@ class DayView: UIView {
     private let editViewMargin = CGFloat(20)
     private let editTextViewMargin = CGFloat(8)
     
+    private var editing = false
     
     var text: String? {
         get {
@@ -47,7 +48,7 @@ class DayView: UIView {
         set {
             textView.text = newValue
             editTextView.text = newValue
-            
+            updateViewVisibilities()
         }
     }
     
@@ -57,6 +58,7 @@ class DayView: UIView {
         }
         set {
             imageView.image = newValue
+            updateViewVisibilities()
         }
     }
     
@@ -94,6 +96,9 @@ class DayView: UIView {
         imageView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         imageView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
         imageView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
+        let maxHeightConstraint = imageView.heightAnchor.constraintEqualToConstant(1000)
+        maxHeightConstraint.priority = UILayoutPriorityDefaultLow
+        maxHeightConstraint.active = true
         
         LayoutUtils.fullInSuperview(imageOverlayView, superView: imageView)
         
@@ -116,7 +121,7 @@ class DayView: UIView {
         textView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
         textView.topAnchor.constraintEqualToAnchor(textBackgroundView.topAnchor, constant: textViewYMargin).active = true
         textView.bottomAnchor.constraintEqualToAnchor(textBackgroundView.bottomAnchor, constant: -textViewYMargin).active = true
-        textView.heightAnchor.constraintGreaterThanOrEqualToConstant(textViewHeight).active = true
+        textView.heightAnchor.constraintEqualToConstant(textViewHeight).active = true
     }
     
     private func setupView() {
@@ -162,10 +167,10 @@ class DayView: UIView {
     }
     
     private func setEditing(editing: Bool) {
-        imageOverlayView.alpha = editing ? 1 : 0
-        imageSelectionView.alpha = editing ? 1 : 0
-        textEditView.alpha = editing ? 1 : 0
-        textView.alpha = editing ? 0 : 1
+        self.editing = editing
+        
+        updateViewVisibilities()
+        
         if editing {
             if let tapGestureRecognizer = tapGestureRecognizer {
                 addGestureRecognizer(tapGestureRecognizer)
@@ -176,6 +181,13 @@ class DayView: UIView {
             }
             dismissKeyboard()
         }
+    }
+    
+    private func updateViewVisibilities() {
+        imageOverlayView.alpha = editing && imageView.image != nil ? 1 : 0
+        imageSelectionView.alpha = editing || imageView.image == nil ? 1 : 0
+        textEditView.alpha = editing || textView.text == nil ? 1 : 0
+        textView.alpha = editing ? 0 : 1
     }
     
     func dismissKeyboard() {

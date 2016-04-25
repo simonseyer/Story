@@ -119,8 +119,8 @@ extension TripListViewController {
             
             cell.trip = trip
             cell.tripTitle = trip.name
-            if let firstDay = DayStore(trip: trip).days.first { // TODO: use placeholder image name
-                cell.tripImage = ImageStore.loadImage(firstDay.image)
+            if let firstDay = DayStore(trip: trip).days.first, image = firstDay.image { // TODO: use placeholder image name
+                cell.tripImage = ImageStore.loadImage(image)
             } else {
                 cell.tripImage = defaultImage
             }

@@ -12,17 +12,17 @@ public struct Day {
     
     let identifier: String
     var tripIdentifier: String?
-    var text: String
-    var image: Image
+    var text: String?
+    var image: Image?
     
-    init(identifier: String, tripIdentifier: String?, text: String, image: Image) {
+    init(identifier: String, tripIdentifier: String?, text: String?, image: Image?) {
         self.identifier = identifier
         self.tripIdentifier = tripIdentifier
         self.text = text
         self.image = image
     }
     
-    init(text: String, image: Image) {
+    init(text: String?, image: Image?) {
         self.identifier = NSUUID().UUIDString
         self.text = text
         self.image = image
