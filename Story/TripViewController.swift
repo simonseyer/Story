@@ -13,13 +13,15 @@ import MapKit
 class TripViewController: UIViewController, UIPageViewControllerDelegate {
     
     var tripView: TripView?
-    let model: Trip
+    let model: DayStore
     var statusBarHidden = false
     
     let pageViewController: TripPageViewController
     let statusBarAnimationDuration = 0.4
     
-    init(model: Trip) {
+    var disappearCommand: (Void -> Void)?
+    
+    init(model: DayStore) {
         self.model = model
         pageViewController = TripPageViewController(model: model)
         super.init(nibName: nil, bundle: nil)
@@ -49,14 +51,22 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         if let day = model.days.first {
             centerMapView(day, animated: false)
         }
+        
+        navigationItem.rightBarButtonItem = editButtonItem()
     }
     
     override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
         configureNavigationController(false)
+        disappearCommand?()
     }
     
-    
-    
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        pageViewController.setEditing(editing, animated: animated)
+        navigationController?.hidesBarsOnTap = !editing
+    }
+
 }
 
 // Status & Navigation Bar Handling
@@ -64,25 +74,26 @@ extension TripViewController {
     
     private func configureNavigationController(configure: Bool) {
         navigationController?.hidesBarsOnTap = configure
-        automaticallyAdjustsScrollViewInsets = !configure
         navigationController?.setNavigationBarHidden(configure, animated: true)
         didTap()
         
         if configure {
-            navigationItem.title = model.name
+            navigationItem.title = model.trip.name
             navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(didTap))
         }
     }
     
     func didTap() {
         statusBarHidden = !statusBarHidden
-        UIView.animateWithDuration(statusBarAnimationDuration) {[unowned self] in
+        let delay = statusBarHidden ? 0 : 0.05
+        let animations = {[unowned self] in
             self.setNeedsStatusBarAppearanceUpdate()
         }
+        UIView.animateWithDuration(statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
     }
     
     override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
-        return .Slide
+        return .Fade
     }
     
     override func prefersStatusBarHidden() -> Bool {

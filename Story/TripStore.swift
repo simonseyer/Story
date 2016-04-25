@@ -24,46 +24,39 @@ public class TripStore {
         let oldIndex = trips.indexOf(trip)
         
         _trips[trip.identifier] = trip
-        for observer in observers.copy().objectEnumerator() {
-            if let anObserver = observer as? TripStoreObserver {
-                if let index = oldIndex {
-                    anObserver.didUpdateTrip(trip, atIndex: index)
-                } else {
-                    anObserver.didInsertTrip(trip, atIndex: trips.indexOf(trip)!)
-                }
-            }
+        if let index = oldIndex {
+            notifyObserver() { $0.didUpdateTrip(trip, atIndex: index) }
+        } else {
+            let index = trips.indexOf(trip)!
+            notifyObserver() { $0.didInsertTrip(trip, atIndex: index) }
         }
     }
     
     public func removeTrip(trip: Trip) {
         if let index = trips.indexOf(trip) {
             _trips.removeValueForKey(trip.identifier)
-            for observer in observers.copy().objectEnumerator() {
-                if let anObserver = observer as? TripStoreObserver {
-                    anObserver.didRemoveTrip(trip, fromIndex: index)
-                }
-            }
+            notifyObserver() { $0.didRemoveTrip(trip, fromIndex: index) }
         }
     }
     
     public func load() {
         let value = NSUserDefaults.standardUserDefaults().valueForKey(TripStore.userDefaultsTripKey)
         
-        guard let tripList = value as? [String: [String : AnyObject]] else {
+        guard let tripList = value as? [[String: AnyObject]] else {
             return
         }
         
-        for (identifier, tripDict) in tripList {
+        for tripDict in tripList {
             if let trip = Trip.fromDictionary(tripDict) {
-                _trips[identifier] = trip
+                _trips[trip.identifier] = trip
             }
         }
     }
     
     public func save() {
-        var value: [String: [String : AnyObject]] = [:]
-        for (identifier, trip) in _trips {
-            value[identifier] = trip.toDictionary()
+        var value: [[String: AnyObject]] = []
+        for trip in _trips.values {
+            value.append(trip.toDictionary())
         }
         NSUserDefaults.standardUserDefaults().setValue(value, forKey: TripStore.userDefaultsTripKey)
     }
@@ -76,6 +69,13 @@ public class TripStore {
         NSUserDefaults.standardUserDefaults().setValue(nil, forKey: userDefaultsTripKey)
     }
     
+    private func notifyObserver(block: TripStoreObserver -> Void) {
+        for observer in observers.copy().objectEnumerator() {
+            if let anObserver = observer as? TripStoreObserver {
+                block(anObserver)
+            }
+        }
+    }
 }
 
 protocol TripStoreObserver {
@@ -92,58 +92,10 @@ extension TripStore {
     
     func loadDemoDataIfNeeded() {
         if trips.count == 0 {
-            let image1 = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("cinque1", withExtension: "jpg")!)!
-            let day1 = Day(text: "Lorem ipsum I", image: image1)
-            let image2 = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("cinque2", withExtension: "jpg")!)!
-            let day2 = Day(text: "Lorem ipsum II", image: image2)
-            let trip = Trip(identifier: NSUUID().UUIDString, name: "Lorem", days: [day1, day2])
+            let trip = Trip(name: "Lorem")
             storeTrip(trip)
         }
     }
 }
 
-extension Trip {
-    
-    static func fromDictionary(dict: [String : AnyObject]) -> Trip? {
-        if  let identifier = dict["identifier"] as? String,
-            let name = dict["name"] as? String,
-            let days = dict["days"] as? [[String : AnyObject]] {
-            let dayList = days.map({ Day.fromDictionary($0) }).flatMap({ $0 })
-            return Trip(identifier: identifier, name: name, days: dayList)
-        }
-        return nil
-    }
-    
-    func toDictionary() -> [String : AnyObject] {
-        return [
-            "identifier" : identifier,
-            "name" : name,
-            "days" : days.map({ $0.toDictionary() })
-        ]
-    }
-}
 
-extension Day {
-    
-    static func fromDictionary(dict: [String : AnyObject]) -> Day? {
-        if  let date = dict["date"] as? NSDate,
-            let image = dict["image"] as? String,
-            let text = dict["text"] as? String,
-            let latitude = dict["latitude"] as? Double,
-            let longitude = dict["longitude"] as? Double {
-            return Day(text: text, image: Image(name: image, date: date, latitude: latitude, longitude: longitude))
-        }
-        return nil
-    }
-    
-    func toDictionary() -> [String : AnyObject] {
-        return [
-            "date" : image.date,
-            "image" : image.name,
-            "text" : text,
-            "latitude" : image.latitude,
-            "longitude" : image.longitude
-        ]
-    }
-    
-}

@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     private let tripStore = TripStore()
+    private var dayStore: DayStore?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
@@ -24,8 +25,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         tripStore.loadDemoDataIfNeeded()
         
         let tripListViewController = TripListViewController(model: tripStore)
-        tripListViewController.selectionCommand = { trip in
-            let tripViewController = TripViewController(model: trip)
+        tripListViewController.selectionCommand = {[unowned self] trip in
+            self.dayStore = DayStore(trip: trip)
+            self.dayStore?.load()
+            self.dayStore?.loadDemoDataIfNeeded()
+            
             tripListViewController.navigationController?.pushViewController(tripViewController, animated: true)
         }
         

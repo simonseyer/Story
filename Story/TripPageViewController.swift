@@ -10,9 +10,11 @@ import UIKit
 
 class TripPageViewController : UIPageViewController, UIPageViewControllerDelegate {
     
+    let dayStore: DayStore
     let viewModel: TripViewModel
     
-    required init(model: Trip) {
+    required init(model: DayStore) {
+        self.dayStore = model
         self.viewModel = TripViewModel(trip: model)
         
         let options = [UIPageViewControllerOptionInterPageSpacingKey : 1]
@@ -36,9 +38,9 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
 
 @objc class TripViewModel: NSObject, UIPageViewControllerDataSource {
     
-    let trip: Trip
+    let trip: DayStore
     
-    init(trip: Trip) {
+    init(trip: DayStore) {
         self.trip = trip
     }
     
@@ -57,8 +59,12 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     }
     
     func viewControllerAtIndex(index: Int) -> DayViewController? {
-        guard index >= 0 && index < trip.days.count else { return nil }
-        return DayViewController(model: trip.days[index])
+        guard index >= 0 && index < trip.days.count else {
+            return nil
+        }
+        
+        let viewController = DayViewController(model: trip.days[index])
+        return viewController
     }
     
     func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {

@@ -73,7 +73,7 @@ class TripListViewController: UITableViewController {
         case .Insert:
             let cell = tableView.cellForRowAtIndexPath(indexPath) as! TripCell
             if let text = cell.tripTitleTextView.text where !text.isEmpty {
-                let trip = Trip(identifier: NSUUID().UUIDString, name: text, days: [])
+                let trip = Trip(name: text)
                 model.storeTrip(trip)
                 cell.tripTitleTextView.text = ""
             }
@@ -119,7 +119,7 @@ extension TripListViewController {
             
             cell.trip = trip
             cell.tripTitle = trip.name
-            if let firstDay = trip.days.first {
+            if let firstDay = DayStore(trip: trip).days.first { // TODO: use placeholder image name
                 cell.tripImage = ImageStore.loadImage(firstDay.image)
             } else {
                 cell.tripImage = defaultImage
