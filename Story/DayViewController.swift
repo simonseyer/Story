@@ -31,8 +31,10 @@ class DayViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dayView?.imageView.image = ImageStore.loadImage(day.image)
         dayView?.textView.text = day.text
+            ImageStore.loadImage(day.image) {[weak self] image in
+                self?.dayView?.image = image
+            }
     }
     
 }

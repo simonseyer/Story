@@ -14,6 +14,15 @@ public class ImageStore {
     
     private static let basePath = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
     
+    public static func loadImage(image: Image, completion: UIImage? -> Void) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            let loadedImage = loadImage(image)
+            dispatch_async(dispatch_get_main_queue()) {
+                completion(loadedImage)
+            }
+        }
+    }
+    
     public static func loadImage(image: Image) -> UIImage? {
         let imageURL = basePath.URLByAppendingPathComponent(image.name)
         if let imageData = NSData(contentsOfURL: imageURL) {
