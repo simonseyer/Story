@@ -11,7 +11,6 @@ import UIKit
 class TripListViewController: UITableViewController {
 
     let cellReuseIdentifier = "trippCell"
-    let newTripCellReuseIdentifier = "newTrippCell"
     let model: TripStore
     
     let rowHeight = CGFloat(140)
@@ -34,7 +33,6 @@ class TripListViewController: UITableViewController {
         
         tableView.rowHeight = rowHeight
         tableView.registerClass(TripCell.self, forCellReuseIdentifier: cellReuseIdentifier)
-        tableView.registerClass(NewTripCell.self, forCellReuseIdentifier: newTripCellReuseIdentifier)
         
         tableView.separatorStyle = .None
         tableView.separatorColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
