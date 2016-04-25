@@ -34,11 +34,33 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         }
     }
     
+    override func setEditing(editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        
+        viewModel.editing = editing
+    
+        for viewController in viewModel.viewControllers.values {
+            viewController.setEditing(editing, animated: animated)
+        }
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        dayStore.observers.addObject(viewModel)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        dayStore.observers.removeObject(viewModel)
+    }
+
 }
 
 @objc class TripViewModel: NSObject, UIPageViewControllerDataSource {
     
     let trip: DayStore
+    var editing =  false
+    var viewControllers = [Int : DayViewController]()
     
     init(trip: DayStore) {
         self.trip = trip
@@ -64,6 +86,13 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         }
         
         let viewController = DayViewController(model: trip.days[index])
+        viewController.setEditing(editing, animated: false)
+        
+        viewController.changeCommand = {[weak self] day in
+            self?.trip.storeDay(day)
+        }
+        
+        viewControllers[index] = viewController
         return viewController
     }
     
@@ -75,3 +104,21 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         return 0
     }
 }
+
+extension TripViewModel: DayStoreObserver {
+    
+    func didInsertDay(day: Day, atIndex index: Int) {
+        
+    }
+    
+    func didUpdateDay(day: Day, atIndex index: Int) {
+        if let vc = viewControllers[index] {
+            vc.day = day
+        }
+    }
+    
+    func didRemoveDay(day: Day, fromIndex index: Int) {
+        
+    }
+}
+

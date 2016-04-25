@@ -30,6 +30,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.dayStore?.load()
             self.dayStore?.loadDemoDataIfNeeded()
             
+            let tripViewController = TripViewController(model: self.dayStore!)
+            tripViewController.disappearCommand = {[weak self] in
+                self?.dayStore?.save()
+            }
+            
             tripListViewController.navigationController?.pushViewController(tripViewController, animated: true)
         }
         
