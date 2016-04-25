@@ -79,7 +79,6 @@ class TripListViewController: UITableViewController {
             }
         case .Delete:
             model.removeTrip(model.trips[indexPath.row])
-            break
         default:
             break
         }
@@ -87,12 +86,15 @@ class TripListViewController: UITableViewController {
     
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
+        
+        let insertCellIndexPath = NSIndexPath(forRow: model.trips.count, inSection: 0)
         if (editing) {
             editMode = true
-            tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: model.trips.count, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.insertRowsAtIndexPaths([insertCellIndexPath], withRowAnimation: .Automatic)
+            tableView.scrollToRowAtIndexPath(insertCellIndexPath, atScrollPosition: .Bottom, animated: true)
         } else {
             editMode = false
-            tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: model.trips.count, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.deleteRowsAtIndexPaths([insertCellIndexPath], withRowAnimation: .Automatic)
         }
     }
     
