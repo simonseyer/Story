@@ -33,10 +33,7 @@ class TripView: UIView {
         dayContainerView.translatesAutoresizingMaskIntoConstraints = false
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
-        dayContainerView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
-        dayContainerView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
-        dayContainerView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
-        dayContainerView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
+        LayoutUtils.fullInSuperview(dayContainerView, superView: self)
         
         mapView.heightAnchor.constraintEqualToConstant(TripView.mapViewHeight).active = true
         mapView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
@@ -55,10 +52,6 @@ class TripView: UIView {
         dayView.translatesAutoresizingMaskIntoConstraints = false
         
         dayContainerView.addSubview(dayView)
-        
-        dayView.leftAnchor.constraintEqualToAnchor(dayContainerView.leftAnchor).active = true
-        dayView.bottomAnchor.constraintEqualToAnchor(dayContainerView.bottomAnchor).active = true
-        dayView.rightAnchor.constraintEqualToAnchor(dayContainerView.rightAnchor).active = true
-        dayView.topAnchor.constraintEqualToAnchor(dayContainerView.topAnchor).active = true
+        LayoutUtils.fullInSuperview(dayView, superView: dayContainerView)
     }
 }

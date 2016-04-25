@@ -82,15 +82,9 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         addSubview(tripTitleTextView)
         addSubview(tripTitleBottomBorder)
         
-        tripImageView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
-        tripImageView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
-        tripImageView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
-        tripImageView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
-        
-        imageOverlayView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
-        imageOverlayView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
-        imageOverlayView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
-        imageOverlayView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
+        LayoutUtils.fullInSuperview(tripImageView, superView: self)
+
+        LayoutUtils.fullInSuperview(imageOverlayView, superView: tripImageView)
         
         tripTitleView.centerYAnchor.constraintEqualToAnchor(centerYAnchor).active = true
         tripTitleView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: titleLeftMargin).active = true
