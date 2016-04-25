@@ -40,15 +40,18 @@ public class TripStore {
     }
     
     public func load() {
-        let value = NSUserDefaults.standardUserDefaults().valueForKey(TripStore.userDefaultsTripKey)
-        
-        guard let tripList = value as? [[String: AnyObject]] else {
-            return
-        }
-        
-        for tripDict in tripList {
-            if let trip = Trip.fromDictionary(tripDict) {
-                _trips[trip.identifier] = trip
+        let data = NSUserDefaults.standardUserDefaults().objectForKey(TripStore.userDefaultsTripKey)
+        if let data = data as? NSData {
+            let value = NSKeyedUnarchiver.unarchiveObjectWithData(data)
+            
+            guard let tripList = value as? [[String: AnyObject]] else {
+                return
+            }
+            
+            for tripDict in tripList {
+                if let trip = Trip.fromDictionary(tripDict) {
+                    _trips[trip.identifier] = trip
+                }
             }
         }
     }
@@ -58,7 +61,8 @@ public class TripStore {
         for trip in _trips.values {
             value.append(trip.toDictionary())
         }
-        NSUserDefaults.standardUserDefaults().setValue(value, forKey: TripStore.userDefaultsTripKey)
+        let data = NSKeyedArchiver.archivedDataWithRootObject(value)
+        NSUserDefaults.standardUserDefaults().setObject(data, forKey: TripStore.userDefaultsTripKey)
     }
     
     func reset() {

@@ -31,17 +31,18 @@ extension Trip {
 extension Day {
     
     static func fromDictionary(dict: [String : AnyObject]) -> Day? {
+        let date = dict["date"] as? NSDate
+        let image = dict["image"] as? String
+        let text = dict["text"] as? String
+        let latitude = dict["latitude"] as? Double
+        let longitude = dict["longitude"] as? Double
+        
         if  let identifier = dict["identifier"] as? String,
-            let tripIdentifier = dict["tripIdentifier"] as? String?,
-            let date = dict["date"] as? NSDate?,
-            let image = dict["image"] as? String?,
-            let text = dict["text"] as? String?,
-            let latitude = dict["latitude"] as? Double?,
-            let longitude = dict["longitude"] as? Double? {
+            let tripIdentifier = dict["tripIdentifier"] as? String? {
             
             var imageRef: Image? = nil
-            if let image = image, date = date, latitude = latitude, longitude = longitude {
-                imageRef = Image(name: image, date: date, latitude: latitude, longitude: longitude)
+            if let anImage = image, aDate = date, aLatitude = latitude, aLongitude = longitude {
+                imageRef = Image(name: anImage, date: aDate, latitude: aLatitude, longitude: aLongitude)
             }
             return Day(identifier: identifier, tripIdentifier: tripIdentifier, text: text, image: imageRef)
         }

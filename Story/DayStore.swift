@@ -44,15 +44,18 @@ public class DayStore {
     }
     
     public func load() {
-        let value = NSUserDefaults.standardUserDefaults().valueForKey(DayStore.userDefaultsDaysKey)
-        
-        guard let dayList = value as? [[String: AnyObject]] else {
-            return
-        }
-        
-        for dayDict in dayList {
-            if let day = Day.fromDictionary(dayDict) where day.tripIdentifier == trip.identifier {
-                days.append(day)
+        let data = NSUserDefaults.standardUserDefaults().objectForKey(DayStore.userDefaultsDaysKey)
+        if let data = data as? NSData {
+            let value = NSKeyedUnarchiver.unarchiveObjectWithData(data)
+            
+            guard let dayList = value as? [[String: AnyObject]] else {
+                return
+            }
+            
+            for dayDict in dayList {
+                if let day = Day.fromDictionary(dayDict) where day.tripIdentifier == trip.identifier {
+                    days.append(day)
+                }
             }
         }
     }
@@ -62,7 +65,8 @@ public class DayStore {
         for day in days {
             value.append(day.toDictionary())
         }
-        NSUserDefaults.standardUserDefaults().setValue(value, forKey: DayStore.userDefaultsDaysKey)
+        let data = NSKeyedArchiver.archivedDataWithRootObject(value)
+        NSUserDefaults.standardUserDefaults().setObject(data, forKey: DayStore.userDefaultsDaysKey)
     }
     
     func reset() {
