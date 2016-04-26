@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import ImageIO
+import Photos
 
 public class ImageStore {
     
@@ -31,13 +32,22 @@ public class ImageStore {
         return nil
     }
     
-    public static func storeImage(image: NSURL) -> Image? {
-        guard let pathExtension = image.pathExtension else { return nil }
+    public static func storeImage(image: NSURL, completion: Image? -> Void) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            let storedImage = storeImage(image)
+            dispatch_async(dispatch_get_main_queue()) {
+                completion(storedImage)
+            }
+        }
+    }
+    
+    public static func storeImage(imageURL: NSURL) -> Image? {
+        let pathExtension = imageURL.pathExtension ?? "jpeg"
         let imageName = "\(NSUUID().UUIDString).\(pathExtension)"
-        let imageURL = basePath.URLByAppendingPathComponent(imageName)
+        let targetImageURL = basePath.URLByAppendingPathComponent(imageName)
         
         do {
-            try NSFileManager.defaultManager().copyItemAtURL(image, toURL: imageURL)
+            try NSFileManager.defaultManager().copyItemAtURL(imageURL, toURL: targetImageURL)
             
             if let imageData = NSData(contentsOfURL: imageURL),
                    date = getImageDate(imageData),
@@ -49,6 +59,42 @@ public class ImageStore {
         }
         
         return nil
+    }
+    
+    public static func storeImage(image: UIImage, assetRef: NSURL, completion: Image? -> Void) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+            let storedImage = storeImage(image, assetRef: assetRef)
+            dispatch_async(dispatch_get_main_queue()) {
+                completion(storedImage)
+            }
+        }
+    }
+    
+    public static func storeImage(image: UIImage, assetRef: NSURL) -> Image? {
+        let assetResult = PHAsset.fetchAssetsWithALAssetURLs([assetRef], options: nil)
+        guard let asset = assetResult.firstObject as? PHAsset
+            where asset.creationDate != nil && asset.location != nil
+        else {
+            return nil
+        }
+        
+        guard let imageData = UIImageJPEGRepresentation(image, 1) else {
+            return nil
+        }
+        
+        let pathExtension = assetRef.pathExtension ?? "jpeg"
+        let imageName = "\(NSUUID().UUIDString).\(pathExtension)"
+        let targetImageURL = basePath.URLByAppendingPathComponent(imageName)
+        
+        do {
+            try imageData.writeToURL(targetImageURL, options: NSDataWritingOptions())
+        } catch let e as NSError {
+            print(e)
+            return nil
+        }
+        
+        let coordinate = asset.location!.coordinate
+        return Image(name: imageName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
     
 }

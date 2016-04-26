@@ -133,18 +133,19 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
 extension TripViewModel: DayStoreObserver {
     
     func didInsertDay(day: Day, atIndex index: Int) {
-        
+        // TODO
     }
     
     func didUpdateDay(day: Day, atIndex index: Int) {
         // TODO: replace edit view controller
+        // TODO: handle location update
         if let vc = viewControllers[index] {
             vc.day = day
         }
     }
     
     func didRemoveDay(day: Day, fromIndex index: Int) {
-        
+        // TODO
     }
 }
 

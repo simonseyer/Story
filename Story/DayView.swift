@@ -15,6 +15,7 @@ class DayView: UIView {
     let imageSelectionView = UIView()
     let imagePickerView = ImagePickerView()
     let imageSelectionBorder = DashedBorderShapeLayer()
+    let imageProcessingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
     let textBackgroundView = UIView()
     let textEditView = UIView()
@@ -83,12 +84,14 @@ class DayView: UIView {
         editTextView.translatesAutoresizingMaskIntoConstraints = false
         textView.translatesAutoresizingMaskIntoConstraints = false
         imagePickerView.translatesAutoresizingMaskIntoConstraints = false
+        imageProcessingSpinner.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(imageView)
         addSubview(imageOverlayView)
         addSubview(imageSelectionView)
         imageSelectionView.layer.addSublayer(imageSelectionBorder)
         addSubview(imagePickerView)
+        addSubview(imageProcessingSpinner)
         
         addSubview(textBackgroundView)
         addSubview(textEditView)
@@ -105,14 +108,17 @@ class DayView: UIView {
         
         LayoutUtils.fullInSuperview(imageOverlayView, superView: imageView)
         
-        imageSelectionView.leftAnchor.constraintEqualToAnchor(imageView.leftAnchor, constant: editViewMargin).active = true
-        imageSelectionView.rightAnchor.constraintEqualToAnchor(imageView.rightAnchor, constant: -editViewMargin).active = true
+        imageSelectionView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: editViewMargin).active = true
+        imageSelectionView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -editViewMargin).active = true
         imageSelectionView.topAnchor.constraintEqualToAnchor(topAnchor, constant: editViewMargin + magicTopMargin).active = true
         imageSelectionView.bottomAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: -editViewMargin).active = true
         
         imagePickerView.leftAnchor.constraintEqualToAnchor(imageSelectionView.leftAnchor, constant: 40).active = true
         imagePickerView.rightAnchor.constraintEqualToAnchor(imageSelectionView.rightAnchor, constant: -40).active = true
         imagePickerView.centerYAnchor.constraintEqualToAnchor(imageSelectionView.centerYAnchor).active = true
+        
+        imageProcessingSpinner.centerXAnchor.constraintEqualToAnchor(imageSelectionView.centerXAnchor).active = true
+        imageProcessingSpinner.centerYAnchor.constraintEqualToAnchor(imageSelectionView.centerYAnchor).active = true
         
         textBackgroundView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         textBackgroundView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
@@ -149,6 +155,8 @@ class DayView: UIView {
         imageOverlayView.alpha = 0
         imageSelectionView.alpha = 0
         
+        imageProcessingSpinner.hidesWhenStopped = true
+        
         textView.numberOfLines = 0
         textView.font = ViewConstants.textFont()
         textView.textColor = UIColor(hexValue: ViewConstants.textColorCode)
@@ -181,6 +189,15 @@ class DayView: UIView {
         }
     }
     
+    func setProcessing(processing: Bool) {
+        if processing {
+            imageProcessingSpinner.startAnimating()
+        } else {
+            imageProcessingSpinner.stopAnimating()
+        }
+        updateViewVisibilities()
+    }
+    
     private func setEditing(editing: Bool) {
         self.editing = editing
         
@@ -203,8 +220,9 @@ class DayView: UIView {
         imageSelectionView.alpha = (editing || imageView.image == nil) && !keyboardMode ? 1 : 0
         textEditView.alpha = editing || textView.text == nil ? 1 : 0
         textView.alpha = editing ? 0 : 1
-        imagePickerView.alpha = editing && !keyboardMode ? 1 : 0
+        imagePickerView.alpha = editing && !keyboardMode && !imageProcessingSpinner.isAnimating() ? 1 : 0
     }
+    
     
     func dismissKeyboard() {
         editTextView.resignFirstResponder()

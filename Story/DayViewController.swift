@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MobileCoreServices 
 
 class DayViewController: UIViewController {
     
@@ -115,7 +116,7 @@ extension DayViewController: UITextViewDelegate {
 }
 
 // Image handling
-extension DayViewController {
+extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     private func configureImagePicker() {
         
@@ -131,7 +132,39 @@ extension DayViewController {
             dayView?.imagePickerView.addSource(.SavedPhotos)
         }
         
-        
+        dayView?.imagePickerView.delegate = self
     }
     
+    func didSelectSource(source: ImagePickerSource) {
+        let imagePicker = UIImagePickerController()
+        
+        switch source {
+        case .Camera:
+            imagePicker.sourceType = .Camera
+        case .PhotoLibrary:
+            imagePicker.sourceType = .PhotoLibrary
+        case .SavedPhotos:
+            imagePicker.sourceType = .SavedPhotosAlbum
+        }
+        
+        imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeLivePhoto as String]
+        imagePicker.allowsEditing  = true
+        imagePicker.delegate = self
+        
+        presentViewController(imagePicker, animated: true, completion: nil)
+    }
+
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        dismissViewControllerAnimated(true, completion: nil)
+        dayView?.setProcessing(true)
+        
+        // TODO: handle captured image metadata
+        ImageStore.storeImage(info[UIImagePickerControllerEditedImage] as! UIImage, assetRef: info[UIImagePickerControllerReferenceURL] as! NSURL) {[weak self] image in
+            if let this = self {
+                this.day.image = image
+                this.changeCommand?(this.day)
+                this.dayView?.setProcessing(false)
+            }
+        }
+    }
 }
