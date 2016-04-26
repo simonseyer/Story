@@ -119,6 +119,7 @@ extension TripViewController {
         for day in model.days {
             if let image = day.image {
                 // TODO: add annotation when image is added
+                // TODO: handle location update
                 tripView?.mapView.addAnnotation(DayAnnotation(image: image))
             }
         }

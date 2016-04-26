@@ -170,6 +170,8 @@ class DayView: UIView {
         editTextView.tintColor = textView.textColor
         
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        
+        updateViewVisibilities()
     }
     
     override func layoutSubviews() {
@@ -221,6 +223,7 @@ class DayView: UIView {
         textEditView.alpha = editing || textView.text == nil ? 1 : 0
         textView.alpha = editing ? 0 : 1
         imagePickerView.alpha = editing && !keyboardMode && !imageProcessingSpinner.isAnimating() ? 1 : 0
+        imagePickerView.darkMode = imageView.image == nil
     }
     
     

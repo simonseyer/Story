@@ -24,6 +24,15 @@ class ImagePickerView: UIStackView {
     
     var delegate: ImagePickerViewDelegate?
     
+    var darkMode = false {
+        didSet {
+            for button in sourceViews {
+                button.tintColor = darkMode ? UIColor(hexValue: ViewConstants.borderColorCode) : UIColor.whiteColor()
+                button.setTitleColor(darkMode ? UIColor(hexValue: ViewConstants.lightTextColorCode) : UIColor.whiteColor(), forState: .Normal)
+            }
+        }
+    }
+    
     init() {
         super.init(frame: CGRectZero)
         setupView()
@@ -60,6 +69,11 @@ class ImagePickerView: UIStackView {
         }
     }
     
+    
+    
+    override func tintColorDidChange() {
+        
+    }
 }
 
 private class SourceButton: UIButton {
@@ -85,5 +99,9 @@ private class SourceButton: UIButton {
         
         borderLayer.frame = bounds
         borderLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 8).CGPath
+    }
+    
+    private override func tintColorDidChange() {
+        borderLayer.strokeColor = tintColor.CGColor
     }
 }
