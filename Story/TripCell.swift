@@ -82,8 +82,12 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         addSubview(tripTitleTextView)
         addSubview(tripTitleBottomBorder)
         
-        LayoutUtils.fullInSuperview(tripImageView, superView: self)
-
+        
+        tripImageView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: -30).active = true
+        tripImageView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: 30).active = true
+        tripImageView.topAnchor.constraintEqualToAnchor(topAnchor, constant: 0).active = true
+        tripImageView.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: 0).active = true
+        
         LayoutUtils.fullInSuperview(imageOverlayView, superView: tripImageView)
         
         tripTitleView.centerYAnchor.constraintEqualToAnchor(centerYAnchor).active = true
@@ -102,11 +106,17 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
     }
     
     private func setupView() {
-        clipsToBounds = true
+        //clipsToBounds = true
         layoutMargins = UIEdgeInsetsZero
         
         tripImageView.contentMode = .ScaleAspectFill
         tripImageView.clipsToBounds = true
+        
+        let horizontalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x",
+                                                                 type: .TiltAlongHorizontalAxis)
+        horizontalMotionEffect.minimumRelativeValue = -30
+        horizontalMotionEffect.maximumRelativeValue = 30
+        tripImageView.addMotionEffect(horizontalMotionEffect)
         
         imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
         

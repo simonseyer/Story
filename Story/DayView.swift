@@ -93,8 +93,8 @@ class DayView: UIView {
         textEditView.addSubview(editTextView)
         addSubview(textView)
         
-        imageView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
-        imageView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
+        imageView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: -30).active = true
+        imageView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: 30).active = true
         imageView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
         let maxHeightConstraint = imageView.heightAnchor.constraintEqualToConstant(1000)
         maxHeightConstraint.priority = UILayoutPriorityDefaultLow
@@ -129,6 +129,13 @@ class DayView: UIView {
         textBackgroundView.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         imageView.contentMode = .ScaleAspectFill
+        
+        
+        let horizontalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x",
+                                                                 type: .TiltAlongHorizontalAxis)
+        horizontalMotionEffect.minimumRelativeValue = -30
+        horizontalMotionEffect.maximumRelativeValue = 30
+        imageView.addMotionEffect(horizontalMotionEffect)
         
         imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
         imageOverlayView.alpha = 0
