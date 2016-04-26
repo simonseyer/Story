@@ -32,6 +32,7 @@
 		C39BA0EE1CC8335D00A4D3EB /* ImageStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0ED1CC8335D00A4D3EB /* ImageStore.swift */; };
 		C3CE79AD1CCEA9E2005B03E9 /* ModelSerizalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CE79AC1CCEA9E1005B03E9 /* ModelSerizalizer.swift */; };
 		C3CE79AF1CCEAB41005B03E9 /* DayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CE79AE1CCEAB41005B03E9 /* DayStore.swift */; };
+		C3E6F9571CCFE5C9004996EC /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E6F9561CCFE5C9004996EC /* ImagePickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		C39BA0ED1CC8335D00A4D3EB /* ImageStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageStore.swift; sourceTree = "<group>"; };
 		C3CE79AC1CCEA9E1005B03E9 /* ModelSerizalizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelSerizalizer.swift; sourceTree = "<group>"; };
 		C3CE79AE1CCEAB41005B03E9 /* DayStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayStore.swift; sourceTree = "<group>"; };
+		C3E6F9561CCFE5C9004996EC /* ImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 				C37336ED1CCD1A6F00E41E19 /* TripCell.swift */,
 				C37336EF1CCD1C5D00E41E19 /* ViewContstants.swift */,
 				C361F1E01CCDF95800591392 /* DashedBorderShapeLayer.swift */,
+				C3E6F9561CCFE5C9004996EC /* ImagePickerView.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				C3CE79AF1CCEAB41005B03E9 /* DayStore.swift in Sources */,
 				C39BA0C51CC81FB700A4D3EB /* DayView.swift in Sources */,
 				C37EAE571CC97E8A003F487D /* TripPageViewController.swift in Sources */,
+				C3E6F9571CCFE5C9004996EC /* ImagePickerView.swift in Sources */,
 				C39BA0EE1CC8335D00A4D3EB /* ImageStore.swift in Sources */,
 				C361F1E11CCDF95800591392 /* DashedBorderShapeLayer.swift in Sources */,
 				C37336EE1CCD1A6F00E41E19 /* TripCell.swift in Sources */,

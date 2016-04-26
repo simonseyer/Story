@@ -40,6 +40,8 @@ class DayViewController: UIViewController {
         
         dayView?.topLayoutGuide = topLayoutGuide
         dayView?.editTextView.delegate = self
+        
+        configureImagePicker()
     }
     
     private func updateDayView() {
@@ -91,19 +93,45 @@ extension DayViewController {
         let rawAnimationCurve = (notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).unsignedIntValue << 16
         let animationCurve = UIViewAnimationOptions(rawValue: UInt(rawAnimationCurve) | UIViewAnimationOptions.BeginFromCurrentState.rawValue)
         
-        dayView?.keyboardConstraint?.constant = -(CGRectGetMaxY(view.bounds) - CGRectGetMinY(convertedKeyboardEndFrame))
+        let keyboarConstant = -(CGRectGetMaxY(view.bounds) - CGRectGetMinY(convertedKeyboardEndFrame))
+        dayView?.keyboardConstraint?.constant = keyboarConstant
+        dayView?.keyboardMode = keyboarConstant < 0
         
         UIView.animateWithDuration(animationDuration, delay: 0.0, options: animationCurve, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
+
 }
 
+// Text handling
 extension DayViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(textView: UITextView) {
         day.text = textView.text
         changeCommand?(day)
+    }
+
+}
+
+// Image handling
+extension DayViewController {
+    
+    private func configureImagePicker() {
+        
+        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+            dayView?.imagePickerView.addSource(.Camera)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary) {
+            dayView?.imagePickerView.addSource(.PhotoLibrary)
+        }
+        
+        if UIImagePickerController.isSourceTypeAvailable(.SavedPhotosAlbum) {
+            dayView?.imagePickerView.addSource(.SavedPhotos)
+        }
+        
+        
     }
     
 }

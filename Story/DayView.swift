@@ -13,6 +13,7 @@ class DayView: UIView {
     let imageView = UIImageView()
     let imageOverlayView = UIView()
     let imageSelectionView = UIView()
+    let imagePickerView = ImagePickerView()
     let imageSelectionBorder = DashedBorderShapeLayer()
     
     let textBackgroundView = UIView()
@@ -21,15 +22,14 @@ class DayView: UIView {
     let editTextView = UITextView()
     let textView = UILabel()
     
-    var topLayoutGuide: UILayoutSupport? {
-        didSet {
-            if let topLayoutGuide = topLayoutGuide {
-                imageSelectionView.topAnchor.constraintEqualToAnchor(topLayoutGuide.bottomAnchor, constant: editViewMargin).active = true
-            }
-        }
-    }
+    var topLayoutGuide: UILayoutSupport?
     
     var keyboardConstraint: NSLayoutConstraint?
+    var keyboardMode = false {
+        didSet {
+            updateViewVisibilities()
+        }
+    }
     private var tapGestureRecognizer: UITapGestureRecognizer?
     
     private let textViewXMargin = CGFloat(60)
@@ -37,6 +37,7 @@ class DayView: UIView {
     private let magicPageIndicatorHeight = CGFloat(37)
     private let textViewHeight = CGFloat(80)
     private let editViewMargin = CGFloat(20)
+    private let magicTopMargin = CGFloat(66)
     private let editTextViewMargin = CGFloat(8)
     
     private var editing = false
@@ -81,11 +82,13 @@ class DayView: UIView {
         textEditView.translatesAutoresizingMaskIntoConstraints = false
         editTextView.translatesAutoresizingMaskIntoConstraints = false
         textView.translatesAutoresizingMaskIntoConstraints = false
+        imagePickerView.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(imageView)
         addSubview(imageOverlayView)
         addSubview(imageSelectionView)
         imageSelectionView.layer.addSublayer(imageSelectionBorder)
+        addSubview(imagePickerView)
         
         addSubview(textBackgroundView)
         addSubview(textEditView)
@@ -104,7 +107,12 @@ class DayView: UIView {
         
         imageSelectionView.leftAnchor.constraintEqualToAnchor(imageView.leftAnchor, constant: editViewMargin).active = true
         imageSelectionView.rightAnchor.constraintEqualToAnchor(imageView.rightAnchor, constant: -editViewMargin).active = true
+        imageSelectionView.topAnchor.constraintEqualToAnchor(topAnchor, constant: editViewMargin + magicTopMargin).active = true
         imageSelectionView.bottomAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: -editViewMargin).active = true
+        
+        imagePickerView.leftAnchor.constraintEqualToAnchor(imageSelectionView.leftAnchor, constant: 40).active = true
+        imagePickerView.rightAnchor.constraintEqualToAnchor(imageSelectionView.rightAnchor, constant: -40).active = true
+        imagePickerView.centerYAnchor.constraintEqualToAnchor(imageSelectionView.centerYAnchor).active = true
         
         textBackgroundView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         textBackgroundView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
@@ -129,15 +137,15 @@ class DayView: UIView {
         textBackgroundView.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         imageView.contentMode = .ScaleAspectFill
-        
-        
+                
         let horizontalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x",
                                                                  type: .TiltAlongHorizontalAxis)
         horizontalMotionEffect.minimumRelativeValue = -30
         horizontalMotionEffect.maximumRelativeValue = 30
         imageView.addMotionEffect(horizontalMotionEffect)
         
-        imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.4)
+        imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.55)
+
         imageOverlayView.alpha = 0
         imageSelectionView.alpha = 0
         
@@ -192,9 +200,10 @@ class DayView: UIView {
     
     private func updateViewVisibilities() {
         imageOverlayView.alpha = editing && imageView.image != nil ? 1 : 0
-        imageSelectionView.alpha = editing || imageView.image == nil ? 1 : 0
+        imageSelectionView.alpha = (editing || imageView.image == nil) && !keyboardMode ? 1 : 0
         textEditView.alpha = editing || textView.text == nil ? 1 : 0
         textView.alpha = editing ? 0 : 1
+        imagePickerView.alpha = editing && !keyboardMode ? 1 : 0
     }
     
     func dismissKeyboard() {
