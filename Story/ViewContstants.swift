@@ -17,6 +17,7 @@ struct ViewConstants {
     static let textFontSize = CGFloat(21)
     static let textFontName = "Baskerville"
     static let boldTextFontName = "Baskerville-Semibold"
+    static let parallaxDelta = CGFloat(30)
     
     static func textFont() -> UIFont? {
         return UIFont(name: textFontName, size: textFontSize)

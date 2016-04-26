@@ -83,8 +83,8 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         addSubview(tripTitleBottomBorder)
         
         
-        tripImageView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: -30).active = true
-        tripImageView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: 30).active = true
+        tripImageView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: -ViewConstants.parallaxDelta).active = true
+        tripImageView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: ViewConstants.parallaxDelta).active = true
         tripImageView.topAnchor.constraintEqualToAnchor(topAnchor, constant: 0).active = true
         tripImageView.bottomAnchor.constraintEqualToAnchor(bottomAnchor, constant: 0).active = true
         
@@ -114,8 +114,8 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         
         let horizontalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x",
                                                                  type: .TiltAlongHorizontalAxis)
-        horizontalMotionEffect.minimumRelativeValue = -30
-        horizontalMotionEffect.maximumRelativeValue = 30
+        horizontalMotionEffect.minimumRelativeValue = -ViewConstants.parallaxDelta
+        horizontalMotionEffect.maximumRelativeValue = ViewConstants.parallaxDelta
         tripImageView.addMotionEffect(horizontalMotionEffect)
         
         imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
