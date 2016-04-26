@@ -12,9 +12,8 @@ extension Trip {
     
     static func fromDictionary(dict: [String : AnyObject]) -> Trip? {
         if  let identifier = dict["identifier"] as? String,
-            let name = dict["name"] as? String,
-            let placeholderImageName = dict["placeholderImageName"] as? String? {
-            return Trip(identifier: identifier, name: name, placeholderImageName: placeholderImageName)
+            let name = dict["name"] as? String {
+            return Trip(identifier: identifier, name: name)
         }
         return nil
     }
@@ -22,8 +21,7 @@ extension Trip {
     func toDictionary() -> [String : AnyObject] {
         return [
             "identifier" : identifier,
-            "name" : name,
-            "placeholderImageName" : (placeholderImageName == nil ? NSNull() : placeholderImageName!)
+            "name" : name
         ]
     }
 }

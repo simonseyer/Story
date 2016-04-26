@@ -14,6 +14,7 @@ public class TripStore {
     static private let userDefaultsTripKey = "trips"
     
     private var _trips: [String : Trip] = [:]
+    var days: [Trip : [String : Day]] = [:]
     public var trips: [Trip] {
         return Array(_trips.values)
     }
@@ -39,29 +40,52 @@ public class TripStore {
         }
     }
     
+    public func dayStoreForTrip(trip: Trip) -> DayStore {
+        return DayStore(tripStore: self, trip: trip)
+    }
+    
     public func load() {
         let data = NSUserDefaults.standardUserDefaults().objectForKey(TripStore.userDefaultsTripKey)
         if let data = data as? NSData {
             let value = NSKeyedUnarchiver.unarchiveObjectWithData(data)
             
-            guard let tripList = value as? [[String: AnyObject]] else {
+            guard let valueDict = value as? [String: AnyObject] else {
                 return
             }
             
-            for tripDict in tripList {
-                if let trip = Trip.fromDictionary(tripDict) {
-                    _trips[trip.identifier] = trip
+            if let tripList = valueDict["trips"] as? [[String: AnyObject]] {
+                for tripDict in tripList {
+                    if let trip = Trip.fromDictionary(tripDict) {
+                        _trips[trip.identifier] = trip
+                    }
+                }
+            }
+            
+            if let dayList = valueDict["days"] as? [[String: AnyObject]] {
+                for dayDict in dayList {
+                    if let day = Day.fromDictionary(dayDict), tripIdentifier = day.tripIdentifier, trip = _trips[tripIdentifier] {
+                        if days[trip] == nil {
+                            days[trip] = [:]
+                        }
+                        days[trip]![day.identifier] = day
+                    }
                 }
             }
         }
     }
     
     public func save() {
-        var value: [[String: AnyObject]] = []
+        var tripList: [[String: AnyObject]] = []
         for trip in _trips.values {
-            value.append(trip.toDictionary())
+            tripList.append(trip.toDictionary())
         }
-        let data = NSKeyedArchiver.archivedDataWithRootObject(value)
+        
+        var dayList: [[String: AnyObject]] = []
+        for (_, day) in days.values.flatten() {
+            dayList.append(day.toDictionary())
+        }
+        
+        let data = NSKeyedArchiver.archivedDataWithRootObject(["trips" : tripList, "days" : dayList])
         NSUserDefaults.standardUserDefaults().setObject(data, forKey: TripStore.userDefaultsTripKey)
     }
     
@@ -98,6 +122,16 @@ extension TripStore {
         if trips.count == 0 {
             let trip = Trip(name: "Lorem")
             storeTrip(trip)
+            
+            let dayStore = dayStoreForTrip(trip)
+            
+            let image1 = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("cinque1", withExtension: "jpg")!)!
+            let day1 = Day(text: "Lorem ipsum I", image: image1)
+            dayStore.storeDay(day1)
+            
+            let image2 = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("cinque2", withExtension: "jpg")!)!
+            let day2 = Day(text: "Lorem ipsum II", image: image2)
+            dayStore.storeDay(day2)
         }
     }
 }

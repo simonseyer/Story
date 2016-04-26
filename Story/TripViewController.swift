@@ -19,8 +19,6 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     let pageViewController: TripPageViewController
     let statusBarAnimationDuration = 0.4
     
-    var disappearCommand: (Void -> Void)?
-    
     init(model: DayStore) {
         self.model = model
         pageViewController = TripPageViewController(model: model)
@@ -58,7 +56,6 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         configureNavigationController(false)
-        disappearCommand?()
     }
     
     override func setEditing(editing: Bool, animated: Bool) {

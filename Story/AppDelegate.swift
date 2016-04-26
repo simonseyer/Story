@@ -26,15 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let tripListViewController = TripListViewController(model: tripStore)
         tripListViewController.selectionCommand = {[unowned self] trip in
-            self.dayStore = DayStore(trip: trip)
-            self.dayStore?.load()
-            self.dayStore?.loadDemoDataIfNeeded()
-            
+            self.dayStore = self.tripStore.dayStoreForTrip(trip)
             let tripViewController = TripViewController(model: self.dayStore!)
-            tripViewController.disappearCommand = {[weak self] in
-                self?.dayStore?.save()
-            }
-            
             tripListViewController.navigationController?.pushViewController(tripViewController, animated: true)
         }
         

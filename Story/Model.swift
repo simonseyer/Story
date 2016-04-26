@@ -42,17 +42,15 @@ public struct Trip {
     
     let identifier: String
     var name: String
-    var placeholderImageName: String? = nil
 
     init(name: String) {
         self.identifier = NSUUID().UUIDString
         self.name = name
     }
     
-    init(identifier: String, name: String, placeholderImageName: String?) {
+    init(identifier: String, name: String) {
         self.identifier = identifier
         self.name = name
-        self.placeholderImageName = placeholderImageName
     }
 }
 
@@ -77,3 +75,11 @@ extension Trip: Equatable {}
 public func ==(lhs: Trip, rhs: Trip) -> Bool {
     return lhs.identifier == rhs.identifier
 }
+
+extension Trip: Hashable {
+
+    public var hashValue: Int {
+        return identifier.hashValue
+    }
+}
+
