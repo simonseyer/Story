@@ -19,6 +19,9 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     let pageViewController: TripPageViewController
     let statusBarAnimationDuration = 0.4
     
+    private var dayAnnotations = [Day : DayAnnotation]()
+    private weak var currentDayViewController: DayViewController?
+    
     init(model: DayStore) {
         self.model = model
         pageViewController = TripPageViewController(model: model)
@@ -51,11 +54,17 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         }
         
         navigationItem.rightBarButtonItem = editButtonItem()
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        model.observers.addObject(self)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         configureNavigationController(false)
+        model.observers.removeObject(self)
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
@@ -113,20 +122,31 @@ extension TripViewController {
 }
 
 // MapView Handling
-extension TripViewController {
+extension TripViewController : DayStoreObserver {
     
     private func addMarkers() {
         for day in model.days {
-            if let image = day.image {
-                // TODO: add annotation when image is added
-                // TODO: handle location update
-                tripView?.mapView.addAnnotation(DayAnnotation(image: image))
-            }
+            addAnnotationForDay(day)
+        }
+    }
+    
+    private func addAnnotationForDay(day: Day) {
+        if let image = day.image {
+            let annotation = DayAnnotation(image: image)
+            dayAnnotations[day] = annotation
+            tripView?.mapView.addAnnotation(annotation)
+        }
+    }
+    
+    private func removeAnnotationForDay(day: Day) {
+        if let oldAnnotation = dayAnnotations[day] {
+            tripView?.mapView.removeAnnotation(oldAnnotation)
         }
     }
     
     func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
         if let dayViewController = pendingViewControllers[0] as? DayViewController {
+            currentDayViewController = dayViewController
             centerMapView(dayViewController.day, animated: true)
         }
     }
@@ -141,6 +161,23 @@ extension TripViewController {
         }
     }
     
+    func didInsertDay(day: Day, atIndex index: Int) {
+        didUpdateDay(day, fromIndex: index, toIndex:  index)
+    }
+    
+    func didUpdateDay(day: Day, fromIndex: Int, toIndex: Int) {
+        removeAnnotationForDay(day)
+        addAnnotationForDay(day)
+        
+        if currentDayViewController?.day == day {
+            centerMapView(day, animated: true)
+        }
+    }
+    
+    func didRemoveDay(day: Day, fromIndex index: Int) {
+        removeAnnotationForDay(day)
+    }
+
 }
 
 
