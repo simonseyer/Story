@@ -19,6 +19,10 @@
 		C37EAE531CC9794A003F487D /* TripViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE521CC9794A003F487D /* TripViewController.swift */; };
 		C37EAE551CC97E6E003F487D /* DayViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE541CC97E6E003F487D /* DayViewController.swift */; };
 		C37EAE571CC97E8A003F487D /* TripPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37EAE561CC97E8A003F487D /* TripPageViewController.swift */; };
+		C38F2B571CD0B2B000B0EAE1 /* AsyncUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38F2B561CD0B2B000B0EAE1 /* AsyncUtils.swift */; };
+		C38F2B591CD0B6CF00B0EAE1 /* Photos.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C38F2B581CD0B6CF00B0EAE1 /* Photos.framework */; };
+		C38F2B5B1CD0B6D600B0EAE1 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C38F2B5A1CD0B6D600B0EAE1 /* CoreLocation.framework */; };
+		C38F2B5D1CD0B88E00B0EAE1 /* OneShotLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C38F2B5C1CD0B88E00B0EAE1 /* OneShotLocationManager.swift */; };
 		C39BA0971CC6CAD200A4D3EB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */; };
 		C39BA0A21CC6CAD200A4D3EB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */; };
 		C39BA0A51CC6CAD200A4D3EB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C39BA0A31CC6CAD200A4D3EB /* LaunchScreen.storyboard */; };
@@ -58,6 +62,10 @@
 		C37EAE521CC9794A003F487D /* TripViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripViewController.swift; sourceTree = "<group>"; };
 		C37EAE541CC97E6E003F487D /* DayViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayViewController.swift; sourceTree = "<group>"; };
 		C37EAE561CC97E8A003F487D /* TripPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TripPageViewController.swift; sourceTree = "<group>"; };
+		C38F2B561CD0B2B000B0EAE1 /* AsyncUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncUtils.swift; sourceTree = "<group>"; };
+		C38F2B581CD0B6CF00B0EAE1 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
+		C38F2B5A1CD0B6D600B0EAE1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C38F2B5C1CD0B88E00B0EAE1 /* OneShotLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneShotLocationManager.swift; sourceTree = "<group>"; };
 		C39BA0931CC6CAD200A4D3EB /* Story.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Story.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -83,6 +91,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C38F2B5B1CD0B6D600B0EAE1 /* CoreLocation.framework in Frameworks */,
+				C38F2B591CD0B6CF00B0EAE1 /* Photos.framework in Frameworks */,
 				C303EAE91CCCCF870038F41A /* ImageIO.framework in Frameworks */,
 				C39BA0AD1CC6CD3400A4D3EB /* MapKit.framework in Frameworks */,
 			);
@@ -112,6 +122,8 @@
 		C39BA08A1CC6CAD200A4D3EB = {
 			isa = PBXGroup;
 			children = (
+				C38F2B5A1CD0B6D600B0EAE1 /* CoreLocation.framework */,
+				C38F2B581CD0B6CF00B0EAE1 /* Photos.framework */,
 				C303EAE81CCCCF870038F41A /* ImageIO.framework */,
 				C39BA0AC1CC6CD3400A4D3EB /* MapKit.framework */,
 				C39BA0951CC6CAD200A4D3EB /* Story */,
@@ -150,6 +162,7 @@
 		C39BA0C01CC81EB900A4D3EB /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C38F2B5C1CD0B88E00B0EAE1 /* OneShotLocationManager.swift */,
 				C39BA0C11CC81ECE00A4D3EB /* Model.swift */,
 				C39BA0D81CC823FA00A4D3EB /* TripStore.swift */,
 				C39BA0ED1CC8335D00A4D3EB /* ImageStore.swift */,
@@ -177,6 +190,7 @@
 			children = (
 				C39BA0D41CC8219E00A4D3EB /* UIColor.swift */,
 				C361F1E21CCDFDF600591392 /* LayoutUtils.swift */,
+				C38F2B561CD0B2B000B0EAE1 /* AsyncUtils.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -315,6 +329,8 @@
 				C39BA0C21CC81ECF00A4D3EB /* Model.swift in Sources */,
 				C39BA0971CC6CAD200A4D3EB /* AppDelegate.swift in Sources */,
 				C37EAE551CC97E6E003F487D /* DayViewController.swift in Sources */,
+				C38F2B571CD0B2B000B0EAE1 /* AsyncUtils.swift in Sources */,
+				C38F2B5D1CD0B88E00B0EAE1 /* OneShotLocationManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

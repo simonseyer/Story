@@ -158,13 +158,20 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
         dismissViewControllerAnimated(true, completion: nil)
         dayView?.setProcessing(true)
         
-        // TODO: handle captured image metadata
-        ImageStore.storeImage(info[UIImagePickerControllerEditedImage] as! UIImage, assetRef: info[UIImagePickerControllerReferenceURL] as! NSURL) {[weak self] image in
+        let image = info[UIImagePickerControllerEditedImage] as! UIImage
+        let completionBlock: Image? -> Void = { [weak self] image in
             if let this = self {
                 this.day.image = image
                 this.changeCommand?(this.day)
                 this.dayView?.setProcessing(false)
             }
         }
+        
+        if let assetRef = info[UIImagePickerControllerReferenceURL] as? NSURL {
+            ImageStore.storeImage(image, assetRef: assetRef, completion: completionBlock)
+        } else {
+            ImageStore.storeImage(image, completion: completionBlock)
+        }
+       
     }
 }

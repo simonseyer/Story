@@ -10,19 +10,14 @@ import Foundation
 import UIKit
 import ImageIO
 import Photos
+import CoreLocation
 
 public class ImageStore {
     
     private static let basePath = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
+    private static var locationManager: OneShotLocationManager?
     
-    public static func loadImage(image: Image, completion: UIImage? -> Void) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-            let loadedImage = loadImage(image)
-            dispatch_async(dispatch_get_main_queue()) {
-                completion(loadedImage)
-            }
-        }
-    }
+    // # Sync
     
     public static func loadImage(image: Image) -> UIImage? {
         let imageURL = basePath.URLByAppendingPathComponent(image.name)
@@ -32,15 +27,7 @@ public class ImageStore {
         return nil
     }
     
-    public static func storeImage(image: NSURL, completion: Image? -> Void) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-            let storedImage = storeImage(image)
-            dispatch_async(dispatch_get_main_queue()) {
-                completion(storedImage)
-            }
-        }
-    }
-    
+    // ## For images with embedded metadata (e.g. bundeled images)
     public static func storeImage(imageURL: NSURL) -> Image? {
         let pathExtension = imageURL.pathExtension ?? "jpeg"
         let imageName = "\(NSUUID().UUIDString).\(pathExtension)"
@@ -50,8 +37,9 @@ public class ImageStore {
             try NSFileManager.defaultManager().copyItemAtURL(imageURL, toURL: targetImageURL)
             
             if let imageData = NSData(contentsOfURL: imageURL),
-                   date = getImageDate(imageData),
-                   location = getImageLocation(imageData) {
+                   gpsInfo = getImageGPSMetadata(imageData),
+                   date = getImageDate(gpsInfo),
+                   location = getImageLocation(gpsInfo) {
                 return Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude)
             }
         } catch let e as NSError {
@@ -61,35 +49,18 @@ public class ImageStore {
         return nil
     }
     
-    public static func storeImage(image: UIImage, assetRef: NSURL, completion: Image? -> Void) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
-            let storedImage = storeImage(image, assetRef: assetRef)
-            dispatch_async(dispatch_get_main_queue()) {
-                completion(storedImage)
-            }
-        }
-    }
     
+    // ## For images from the photo library with an associated PHAsset
     public static func storeImage(image: UIImage, assetRef: NSURL) -> Image? {
         let assetResult = PHAsset.fetchAssetsWithALAssetURLs([assetRef], options: nil)
+        
         guard let asset = assetResult.firstObject as? PHAsset
             where asset.creationDate != nil && asset.location != nil
         else {
             return nil
         }
         
-        guard let imageData = UIImageJPEGRepresentation(image, 1) else {
-            return nil
-        }
-        
-        let pathExtension = assetRef.pathExtension ?? "jpeg"
-        let imageName = "\(NSUUID().UUIDString).\(pathExtension)"
-        let targetImageURL = basePath.URLByAppendingPathComponent(imageName)
-        
-        do {
-            try imageData.writeToURL(targetImageURL, options: NSDataWritingOptions())
-        } catch let e as NSError {
-            print(e)
+        guard let imageName = storeImage(image) else {
             return nil
         }
         
@@ -97,12 +68,51 @@ public class ImageStore {
         return Image(name: imageName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
     
+    
+    // # Async
+    
+    public static func loadImage(image: Image, completion: UIImage? -> Void) {
+        Background.execute({ loadImage(image) }, completionBlock: completion)
+    }
+    
+    public static func storeImage(image: NSURL, completion: Image? -> Void) {
+        Background.execute({ storeImage(image) }, completionBlock: completion)
+    }
+    
+    public static func storeImage(image: UIImage, assetRef: NSURL, completion: Image? -> Void) {
+        Background.execute({ storeImage(image, assetRef: assetRef) }, completionBlock: completion)
+    }
+    
+    // ## For images from the camera with a associated
+    public static func storeImage(image: UIImage, completion: Image? -> Void){
+        let date = NSDate()
+        
+        if locationManager != nil {
+            print("Duplicate use of location manager")
+            completion(nil)
+        }
+        
+        locationManager = OneShotLocationManager()
+        locationManager!.fetchWithCompletion { (location, error) in
+            locationManager = nil
+            if let imageName = storeImage(image) {
+                if let location = location?.coordinate {
+                    let imageRef = Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude)
+                    completion(imageRef)
+                    return
+                }
+            }
+            print(error)
+            completion(nil)
+        }
+    }
 }
 
+// GPS metadata reader
 extension ImageStore {
 
-    static func getImageDate(imageData: NSData) -> NSDate? {
-        guard let gpsInfo = getImageGPSMetadata(imageData) else {
+    static func getImageDate(gpsDict: [String : AnyObject]?) -> NSDate? {
+        guard let gpsInfo = gpsDict else {
             return nil
         }
         
@@ -115,8 +125,8 @@ extension ImageStore {
         return dateFormatter.dateFromString(dateString)
     }
     
-    static func getImageLocation(imageData: NSData) -> (latitude: Double, longitude: Double)? {
-        guard let gpsInfo = getImageGPSMetadata(imageData) else {
+    static func getImageLocation(gpsDict: [String : AnyObject]?) -> (latitude: Double, longitude: Double)? {
+        guard let gpsInfo = gpsDict else {
             return nil
         }
         
@@ -143,4 +153,26 @@ extension ImageStore {
         
         return gpsInfo
     }
+}
+
+// Store image helper
+extension ImageStore {
+    
+    private static func storeImage(image: UIImage) -> String? {
+        guard let imageData = UIImageJPEGRepresentation(image, 1) else {
+            return nil
+        }
+        
+        let imageName = "\(NSUUID().UUIDString).jpeg"
+        let targetImageURL = basePath.URLByAppendingPathComponent(imageName)
+        
+        do {
+            try imageData.writeToURL(targetImageURL, options: NSDataWritingOptions())
+            return imageName
+        } catch let e as NSError {
+            print(e)
+            return nil
+        }
+    }
+
 }
