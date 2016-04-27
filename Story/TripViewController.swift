@@ -44,8 +44,6 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         pageViewController.didMoveToParentViewController(self)
         tripView?.setDayView(pageViewController.view)
         
-        configureNavigationController(true)
-        
         pageViewController.delegate = self
 
         addMarkers()
@@ -54,16 +52,20 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         }
         
         navigationItem.rightBarButtonItem = editButtonItem()
+        configureNavigationController(true, initial: true)
+    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
+        configureNavigationController(true, initial: false)
         model.observers.addObject(self)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        configureNavigationController(false)
+        
+        configureNavigationController(false, initial: false)
         model.observers.removeObject(self)
     }
     
@@ -88,14 +90,20 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
 // Status & Navigation Bar Handling
 extension TripViewController {
     
-    private func configureNavigationController(configure: Bool) {
+    private func configureNavigationController(configure: Bool, initial: Bool) {
         navigationController?.hidesBarsOnTap = configure
-        navigationController?.setNavigationBarHidden(configure, animated: true)
-        didTap()
         
         if configure {
             navigationItem.title = model.trip.name
             navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(didTap))
+            
+            if initial {
+                navigationController?.setNavigationBarHidden(true, animated: true)
+                didTap()
+            }
+        } else {
+            navigationController?.setNavigationBarHidden(false, animated: true)
+            navigationController?.barHideOnTapGestureRecognizer.removeTarget(self, action: #selector(didTap))
         }
     }
     
