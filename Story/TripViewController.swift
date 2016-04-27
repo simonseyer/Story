@@ -21,6 +21,7 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     
     private var dayAnnotations = [Day : DayAnnotation]()
     private weak var currentDayViewController: DayViewController?
+    private weak var lastDayViewController: DayViewController?
     
     init(model: DayStore) {
         self.model = model
@@ -154,8 +155,18 @@ extension TripViewController : DayStoreObserver {
     
     func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
         if let dayViewController = pendingViewControllers[0] as? DayViewController {
+            lastDayViewController = currentDayViewController
             currentDayViewController = dayViewController
             centerMapView(dayViewController.day, animated: true)
+        }
+    }
+    
+    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        if !completed {
+            currentDayViewController = lastDayViewController
+            if let dayViewController = currentDayViewController {
+                centerMapView(dayViewController.day, animated: true)
+            }
         }
     }
     
