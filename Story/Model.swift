@@ -54,13 +54,20 @@ public struct Trip {
     }
 }
 
-extension Day : Equatable {}
+extension Day: Equatable {}
 
 public func ==(lhs: Day, rhs: Day) -> Bool {
     return lhs.identifier == rhs.identifier
 }
 
-extension Image : Equatable {}
+extension Day: Hashable {
+    
+    public var hashValue: Int {
+        return identifier.hashValue
+    }
+}
+
+extension Image: Equatable {}
 
 public func ==(lhs: Image, rhs: Image) -> Bool {
     return
