@@ -17,8 +17,6 @@ public class ImageStore {
     private static let basePath = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
     private static var locationManager: OneShotLocationManager?
     
-    // # Sync
-    
     public static func loadImage(image: Image) -> UIImage? {
         let imageURL = basePath.URLByAppendingPathComponent(image.name)
         if let imageData = NSData(contentsOfURL: imageURL) {
@@ -26,8 +24,13 @@ public class ImageStore {
         }
         return nil
     }
+
+}
+
+// Storing photos
+extension ImageStore {
     
-    // ## For images with embedded metadata (e.g. bundeled images)
+    // For images with embedded metadata (e.g. bundled images)
     public static func storeImage(imageURL: NSURL) -> Image? {
         let pathExtension = imageURL.pathExtension ?? "jpeg"
         let imageName = "\(NSUUID().UUIDString).\(pathExtension)"
@@ -37,9 +40,9 @@ public class ImageStore {
             try NSFileManager.defaultManager().copyItemAtURL(imageURL, toURL: targetImageURL)
             
             if let imageData = NSData(contentsOfURL: imageURL),
-                   gpsInfo = getImageGPSMetadata(imageData),
-                   date = getImageDate(gpsInfo),
-                   location = getImageLocation(gpsInfo) {
+                gpsInfo = getImageGPSMetadata(imageData),
+                date = getImageDate(gpsInfo),
+                location = getImageLocation(gpsInfo) {
                 return Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude)
             }
         } catch let e as NSError {
@@ -50,14 +53,14 @@ public class ImageStore {
     }
     
     
-    // ## For images from the photo library with an associated PHAsset
+    // For images from the photo library with an associated PHAsset
     public static func storeImage(image: UIImage, assetRef: NSURL) -> Image? {
         let assetResult = PHAsset.fetchAssetsWithALAssetURLs([assetRef], options: nil)
         
         guard let asset = assetResult.firstObject as? PHAsset
             where asset.creationDate != nil && asset.location != nil
-        else {
-            return nil
+            else {
+                return nil
         }
         
         guard let imageName = storeImage(image) else {
@@ -68,22 +71,7 @@ public class ImageStore {
         return Image(name: imageName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
     
-    
-    // # Async
-    
-    public static func loadImage(image: Image, completion: UIImage? -> Void) {
-        Background.execute({ loadImage(image) }, completionBlock: completion)
-    }
-    
-    public static func storeImage(image: NSURL, completion: Image? -> Void) {
-        Background.execute({ storeImage(image) }, completionBlock: completion)
-    }
-    
-    public static func storeImage(image: UIImage, assetRef: NSURL, completion: Image? -> Void) {
-        Background.execute({ storeImage(image, assetRef: assetRef) }, completionBlock: completion)
-    }
-    
-    // ## For images from the camera with a associated
+    // For images from the camera (current date and location is used)
     public static func storeImage(image: UIImage, completion: Image? -> Void){
         let date = NSDate()
         
@@ -105,6 +93,21 @@ public class ImageStore {
             print(error)
             completion(nil)
         }
+    }
+}
+
+// Convenience async functions
+extension ImageStore {
+    public static func loadImage(image: Image, completion: UIImage? -> Void) {
+        Background.execute({ loadImage(image) }, completionBlock: completion)
+    }
+    
+    public static func storeImage(image: NSURL, completion: Image? -> Void) {
+        Background.execute({ storeImage(image) }, completionBlock: completion)
+    }
+    
+    public static func storeImage(image: UIImage, assetRef: NSURL, completion: Image? -> Void) {
+        Background.execute({ storeImage(image, assetRef: assetRef) }, completionBlock: completion)
     }
 }
 
