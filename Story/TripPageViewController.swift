@@ -45,11 +45,13 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         
         if !editing {
             if let currentViewController = currentViewController() where viewModel.additionalViewControllers.contains(currentViewController) {
+                viewModel.additionalViewControllers.removeAll()
                 if let dayViewController = viewModel.viewControllerAtIndex(dayStore.days.count - 1) {
                     setViewControllers([dayViewController], direction: .Reverse, animated: true, invalidate: true)
                 }
+            } else {
+                viewModel.additionalViewControllers.removeAll()
             }
-            viewModel.additionalViewControllers.removeAll()
         }
     }
     
@@ -127,9 +129,10 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         if let index = trip.days.indexOf(dayViewController.day), nextViewController = viewControllerAtIndex(index + 1) {
             return nextViewController
         } else if let index = additionalViewControllers.indexOf(dayViewController) {
-            return additionalViewControllerAtIndex(index)
+            return additionalViewControllerAtIndex(index + 1)
+        } else {
+            return additionalViewControllerAtIndex(0)
         }
-        return nil
     }
     
     func viewControllerAtIndex(index: Int) -> DayViewController? {
@@ -175,7 +178,7 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     }
     
     func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
-        return 0
+        return 0 // TODO improve
     }
     
     func clearCache() {
