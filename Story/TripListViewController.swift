@@ -154,8 +154,12 @@ extension TripListViewController : TripStoreObserver {
         tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: model.trips.count, inSection: 0), atScrollPosition: .Bottom, animated: true)
     }
     
-    func didUpdateTrip(trip: Trip, atIndex index: Int) {
-        tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+    func didUpdateTrip(trip: Trip, fromIndex: Int, toIndex: Int) {
+        if fromIndex != toIndex {
+            tableView.moveRowAtIndexPath(NSIndexPath(forRow: fromIndex, inSection: 0), toIndexPath: NSIndexPath(forRow: toIndex, inSection: 0))
+        } else {
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: toIndex, inSection: 0)], withRowAnimation: .Automatic)
+        }
     }
     
     func didRemoveTrip(trip: Trip, fromIndex index: Int) {

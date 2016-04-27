@@ -136,9 +136,9 @@ extension TripViewModel: DayStoreObserver {
         // TODO
     }
     
-    func didUpdateDay(day: Day, atIndex index: Int) {
         // TODO: replace edit view controller
         if let vc = viewControllers[index] {
+    func didUpdateDay(day: Day, fromIndex: Int, toIndex: Int) {
             vc.day = day
         }
     }

@@ -38,10 +38,10 @@ public class DayStore {
         _days![day.identifier] = aDay
         tripStore.days[trip] = _days
         
-        if let index = oldIndex {
-            notifyObserver() { $0.didUpdateDay(aDay, atIndex: index) }
+        let index = days.indexOf(day)!
+        if let oldIndex = oldIndex {
+            notifyObserver() { $0.didUpdateDay(aDay, fromIndex: oldIndex, toIndex: index) }
         } else {
-            let index = days.count
             notifyObserver() { $0.didInsertDay(aDay, atIndex: index) }
         }
     }
@@ -67,7 +67,7 @@ protocol DayStoreObserver {
     
     func didInsertDay(day: Day, atIndex index: Int)
     
-    func didUpdateDay(day: Day, atIndex index: Int)
+    func didUpdateDay(day: Day, fromIndex: Int, toIndex: Int)
     
     func didRemoveDay(day: Day, fromIndex index: Int)
     

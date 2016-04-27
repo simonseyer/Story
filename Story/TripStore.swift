@@ -25,10 +25,10 @@ public class TripStore {
         let oldIndex = trips.indexOf(trip)
         
         _trips[trip.identifier] = trip
-        if let index = oldIndex {
-            notifyObserver() { $0.didUpdateTrip(trip, atIndex: index) }
+        let index = trips.indexOf(trip)!
+        if let oldIndex = oldIndex {
+            notifyObserver() { $0.didUpdateTrip(trip, fromIndex: oldIndex, toIndex: index) }
         } else {
-            let index = trips.indexOf(trip)!
             notifyObserver() { $0.didInsertTrip(trip, atIndex: index) }
         }
     }
@@ -110,7 +110,7 @@ protocol TripStoreObserver {
     
     func didInsertTrip(trip: Trip, atIndex index: Int)
     
-    func didUpdateTrip(trip: Trip, atIndex index: Int)
+    func didUpdateTrip(trip: Trip, fromIndex: Int, toIndex: Int)
     
     func didRemoveTrip(trip: Trip, fromIndex index: Int)
     
