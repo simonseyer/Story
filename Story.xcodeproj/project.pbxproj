@@ -37,6 +37,7 @@
 		C3CE79AD1CCEA9E2005B03E9 /* ModelSerizalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CE79AC1CCEA9E1005B03E9 /* ModelSerizalizer.swift */; };
 		C3CE79AF1CCEAB41005B03E9 /* DayStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CE79AE1CCEAB41005B03E9 /* DayStore.swift */; };
 		C3E09E811CD21F34007E4D50 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E09E801CD21F34007E4D50 /* ImageViewController.swift */; };
+		C3E09ECE1CD26CB5007E4D50 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E09ECD1CD26CB5007E4D50 /* MapViewController.swift */; };
 		C3E6F9571CCFE5C9004996EC /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E6F9561CCFE5C9004996EC /* ImagePickerView.swift */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +86,7 @@
 		C3CE79AC1CCEA9E1005B03E9 /* ModelSerizalizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ModelSerizalizer.swift; sourceTree = "<group>"; };
 		C3CE79AE1CCEAB41005B03E9 /* DayStore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayStore.swift; sourceTree = "<group>"; };
 		C3E09E801CD21F34007E4D50 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
+		C3E09ECD1CD26CB5007E4D50 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		C3E6F9561CCFE5C9004996EC /* ImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,6 +120,7 @@
 				C37EAE561CC97E8A003F487D /* TripPageViewController.swift */,
 				C37336EB1CCD19D100E41E19 /* TripListViewController.swift */,
 				C3E09E801CD21F34007E4D50 /* ImageViewController.swift */,
+				C3E09ECD1CD26CB5007E4D50 /* MapViewController.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -256,6 +259,7 @@
 				TargetAttributes = {
 					C39BA0921CC6CAD200A4D3EB = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = BEBDXV5R79;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -325,6 +329,7 @@
 				C3CE79AD1CCEA9E2005B03E9 /* ModelSerizalizer.swift in Sources */,
 				C37336EC1CCD19D100E41E19 /* TripListViewController.swift in Sources */,
 				C3E09E811CD21F34007E4D50 /* ImageViewController.swift in Sources */,
+				C3E09ECE1CD26CB5007E4D50 /* MapViewController.swift in Sources */,
 				C361F1E31CCDFDF600591392 /* LayoutUtils.swift in Sources */,
 				C39BA0D71CC8227100A4D3EB /* TripView.swift in Sources */,
 				C39BA0D91CC823FA00A4D3EB /* TripStore.swift in Sources */,
@@ -457,10 +462,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Story/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.Story;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -468,10 +476,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = Story/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.Story;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

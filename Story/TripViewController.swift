@@ -22,6 +22,7 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     private var dayAnnotations = [Day : DayAnnotation]()
     private weak var currentDayViewController: DayViewController?
     private weak var lastDayViewController: DayViewController?
+    private var mapPreviewDelegate: DayMapPreviewDelegate?
     
     private var initial = true
     
@@ -54,6 +55,11 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
             centerMapView(day, animated: false)
         }
         
+        if let tripView = tripView {
+            //tripView.mapView.userInteractionEnabled = true
+            mapPreviewDelegate = DayMapPreviewDelegate(baseViewController: self, tripView: tripView)
+            registerForPreviewingWithDelegate(mapPreviewDelegate!, sourceView: tripView.mapView)
+        }
         
         navigationItem.rightBarButtonItem = editButtonItem()
     }
@@ -217,4 +223,26 @@ extension TripViewController : DayStoreObserver {
     internal var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2DMake(image.latitude, image.longitude)
     }
+}
+
+
+@objc class DayMapPreviewDelegate : NSObject, UIViewControllerPreviewingDelegate {
+    
+    let baseViewController: UIViewController
+    let tripView: TripView
+    
+    init(baseViewController: UIViewController, tripView: TripView) {
+        self.baseViewController = baseViewController
+        self.tripView = tripView
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        previewingContext.sourceRect = tripView.mapView.frame
+        return MapViewController(viewRegion: tripView.mapView.region, annotations: tripView.mapView.annotations)
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        baseViewController.showViewController(viewControllerToCommit, sender: nil)
+    }
+    
 }

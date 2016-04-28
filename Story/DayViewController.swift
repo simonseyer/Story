@@ -12,6 +12,7 @@ import MobileCoreServices
 class DayViewController: UIViewController {
     
     var dayView: DayView?
+    private var imagePreviewDelegate: DayImagePreviewDelegate?
     private var isVisible = false
     
     var day: Day {
@@ -47,7 +48,9 @@ class DayViewController: UIViewController {
         
         if let dayView = dayView {
             dayView.imageView.userInteractionEnabled = true
-            registerForPreviewingWithDelegate(self, sourceView: dayView.imageView)
+            imagePreviewDelegate = DayImagePreviewDelegate(baseViewController: self, dayView: dayView)
+            registerForPreviewingWithDelegate(imagePreviewDelegate!, sourceView: dayView.imageView)
+//            
 //            tapGestureRec = UITapGestureRecognizer(target: self, action: #selector(didTouchImage))
 //            dayView.imageView.addGestureRecognizer(tapGestureRec!)
         }
@@ -72,7 +75,7 @@ class DayViewController: UIViewController {
     
     func didTouchImage() {
         if let dayView = dayView {
-            presentViewController(ImageViewController(image: dayView.imageView.image, fill: false, statusBarHidden: false), animated: true, completion: nil)
+            presentViewController(ImageViewController(image: dayView.imageView.image, fill: false), animated: true, completion: nil)
         }
     }
 }
@@ -189,20 +192,23 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
     }
 }
 
-extension DayViewController : UIViewControllerPreviewingDelegate {
+@objc class DayImagePreviewDelegate : NSObject, UIViewControllerPreviewingDelegate {
+    
+    let baseViewController: UIViewController
+    let dayView: DayView
+    
+    init(baseViewController: UIViewController, dayView: DayView) {
+        self.baseViewController = baseViewController
+        self.dayView = dayView
+    }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        if let dayView = dayView {
-            previewingContext.sourceRect = dayView.imageView.frame
-            return ImageViewController(image: dayView.imageView.image, fill: true, statusBarHidden: false)
-        }
-        return nil
+        previewingContext.sourceRect = dayView.imageView.frame
+        return ImageViewController(image: dayView.imageView.image, fill: true)
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        if let dayView = dayView {
-            showViewController(ImageViewController(image: dayView.imageView.image, fill: false, statusBarHidden: false), sender: nil)
-        }
+        baseViewController.showViewController(ImageViewController(image: dayView.imageView.image, fill: false), sender: nil)
     }
 
 }

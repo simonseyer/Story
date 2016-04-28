@@ -22,12 +22,11 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     
     var lastZoomScale: CGFloat = -1
     
-    var statusBarHidden: Bool
+    var statusBarHidden: Bool = false
     var fill: Bool
     
-    init(image: UIImage?, fill: Bool, statusBarHidden: Bool) {
+    init(image: UIImage?, fill: Bool) {
         self.fill = fill
-        self.statusBarHidden = statusBarHidden
         super.init(nibName: nil, bundle: nil)
         imageView.image = image
     }

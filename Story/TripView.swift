@@ -27,8 +27,9 @@ class TripView: UIView {
     }
     
     private func setupContraints() {
-        addSubview(mapView)
         addSubview(dayContainerView)
+        addSubview(mapView)
+        
         
         dayContainerView.translatesAutoresizingMaskIntoConstraints = false
         mapView.translatesAutoresizingMaskIntoConstraints = false
@@ -44,7 +45,11 @@ class TripView: UIView {
     private func setupView() {
         backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
-        mapView.userInteractionEnabled = false
+        mapView.zoomEnabled = false
+        mapView.scrollEnabled = false
+        mapView.rotateEnabled = false
+        mapView.pitchEnabled = false
+       
         mapView.alpha = 0.7
     }
     
@@ -54,4 +59,6 @@ class TripView: UIView {
         dayContainerView.addSubview(dayView)
         LayoutUtils.fullInSuperview(dayView, superView: dayContainerView)
     }
+    
+    
 }
