@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Photos
 
 public struct Day {
     
@@ -35,6 +36,7 @@ public struct Image {
     let date: NSDate
     let latitude: Double
     let longitude: Double
+    let livePhoto: PHLivePhoto?
     
 }
 

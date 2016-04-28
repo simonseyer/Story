@@ -39,6 +39,7 @@
 		C3E09E811CD21F34007E4D50 /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E09E801CD21F34007E4D50 /* ImageViewController.swift */; };
 		C3E09ECE1CD26CB5007E4D50 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E09ECD1CD26CB5007E4D50 /* MapViewController.swift */; };
 		C3E6F9571CCFE5C9004996EC /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E6F9561CCFE5C9004996EC /* ImagePickerView.swift */; };
+		C3FDB9D91CD2869E0092155D /* LivePhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3FDB9D81CD2869E0092155D /* LivePhotoViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +89,7 @@
 		C3E09E801CD21F34007E4D50 /* ImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		C3E09ECD1CD26CB5007E4D50 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		C3E6F9561CCFE5C9004996EC /* ImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
+		C3FDB9D81CD2869E0092155D /* LivePhotoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LivePhotoViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +122,7 @@
 				C37EAE561CC97E8A003F487D /* TripPageViewController.swift */,
 				C37336EB1CCD19D100E41E19 /* TripListViewController.swift */,
 				C3E09E801CD21F34007E4D50 /* ImageViewController.swift */,
+				C3FDB9D81CD2869E0092155D /* LivePhotoViewController.swift */,
 				C3E09ECD1CD26CB5007E4D50 /* MapViewController.swift */,
 			);
 			name = Controller;
@@ -321,6 +324,7 @@
 				C39BA0D51CC8219E00A4D3EB /* UIColor.swift in Sources */,
 				C3CE79AF1CCEAB41005B03E9 /* DayStore.swift in Sources */,
 				C39BA0C51CC81FB700A4D3EB /* DayView.swift in Sources */,
+				C3FDB9D91CD2869E0092155D /* LivePhotoViewController.swift in Sources */,
 				C37EAE571CC97E8A003F487D /* TripPageViewController.swift in Sources */,
 				C3E6F9571CCFE5C9004996EC /* ImagePickerView.swift in Sources */,
 				C39BA0EE1CC8335D00A4D3EB /* ImageStore.swift in Sources */,

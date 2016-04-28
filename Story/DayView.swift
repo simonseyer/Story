@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import PhotosUI
 
 class DayView: UIView {
 
     let imageView = UIImageView()
+    let livePhotoView = PHLivePhotoView()
     let imageOverlayView = UIView()
     let imageSelectionView = UIView()
     let imagePickerView = ImagePickerView()
@@ -64,6 +66,15 @@ class DayView: UIView {
         }
     }
     
+    var livePhoto: PHLivePhoto? {
+        get {
+            return livePhotoView.livePhoto
+        }
+        set {
+            livePhotoView.livePhoto = newValue
+        }
+    }
+    
     init() {
         super.init(frame: CGRect.zero)
         
@@ -77,6 +88,7 @@ class DayView: UIView {
     
     private func setupContraints() {
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        livePhotoView.translatesAutoresizingMaskIntoConstraints = false
         imageOverlayView.translatesAutoresizingMaskIntoConstraints = false
         imageSelectionView.translatesAutoresizingMaskIntoConstraints = false
         textBackgroundView.translatesAutoresizingMaskIntoConstraints = false
@@ -87,6 +99,7 @@ class DayView: UIView {
         imageProcessingSpinner.translatesAutoresizingMaskIntoConstraints = false
         
         addSubview(imageView)
+        addSubview(livePhotoView)
         addSubview(imageOverlayView)
         addSubview(imageSelectionView)
         imageSelectionView.layer.addSublayer(imageSelectionBorder)
@@ -105,6 +118,8 @@ class DayView: UIView {
         let maxHeightConstraint = imageView.heightAnchor.constraintEqualToConstant(1000)
         maxHeightConstraint.priority = UILayoutPriorityDefaultLow
         maxHeightConstraint.active = true
+        
+        LayoutUtils.fullInSuperview(livePhotoView, superView: imageView)
         
         LayoutUtils.fullInSuperview(imageOverlayView, superView: imageView)
         
@@ -143,7 +158,10 @@ class DayView: UIView {
         textBackgroundView.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         imageView.contentMode = .ScaleAspectFill
-                
+        
+        livePhotoView.contentMode = .ScaleAspectFill
+        livePhotoView.userInteractionEnabled = false
+        
         let horizontalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x",
                                                                  type: .TiltAlongHorizontalAxis)
         horizontalMotionEffect.minimumRelativeValue = -ViewConstants.parallaxDelta

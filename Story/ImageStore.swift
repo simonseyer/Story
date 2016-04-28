@@ -43,7 +43,7 @@ extension ImageStore {
                 gpsInfo = getImageGPSMetadata(imageData),
                 date = getImageDate(gpsInfo),
                 location = getImageLocation(gpsInfo) {
-                return Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude)
+                return Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
             }
         } catch let e as NSError {
             print(e)
@@ -54,7 +54,7 @@ extension ImageStore {
     
     
     // For images from the photo library with an associated PHAsset
-    public static func storeImage(image: UIImage, assetRef: NSURL) -> Image? {
+    public static func storeImage(image: UIImage, assetRef: NSURL, livePhoto: PHLivePhoto? = nil) -> Image? {
         let assetResult = PHAsset.fetchAssetsWithALAssetURLs([assetRef], options: nil)
         
         guard let asset = assetResult.firstObject as? PHAsset
@@ -68,7 +68,7 @@ extension ImageStore {
         }
         
         let coordinate = asset.location!.coordinate
-        return Image(name: imageName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude)
+        return Image(name: imageName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude, livePhoto: livePhoto)
     }
     
     // For images from the camera (current date and location is used)
@@ -85,7 +85,7 @@ extension ImageStore {
             locationManager = nil
             if let imageName = storeImage(image) {
                 if let location = location?.coordinate {
-                    let imageRef = Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude)
+                    let imageRef = Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
                     completion(imageRef)
                     return
                 }
@@ -106,8 +106,8 @@ extension ImageStore {
         Background.execute({ storeImage(image) }, completionBlock: completion)
     }
     
-    public static func storeImage(image: UIImage, assetRef: NSURL, completion: Image? -> Void) {
-        Background.execute({ storeImage(image, assetRef: assetRef) }, completionBlock: completion)
+    public static func storeImage(image: UIImage, assetRef: NSURL, livePhoto: PHLivePhoto? = nil, completion: Image? -> Void) {
+        Background.execute({ storeImage(image, assetRef: assetRef, livePhoto: livePhoto) }, completionBlock: completion)
     }
 }
 

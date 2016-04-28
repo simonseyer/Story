@@ -8,6 +8,7 @@
 
 import UIKit
 import MobileCoreServices 
+import Photos
 
 class DayViewController: UIViewController {
     
@@ -48,11 +49,12 @@ class DayViewController: UIViewController {
         
         if let dayView = dayView {
             dayView.imageView.userInteractionEnabled = true
-            imagePreviewDelegate = DayImagePreviewDelegate(baseViewController: self, dayView: dayView)
+            imagePreviewDelegate = DayImagePreviewDelegate(dayViewController: self)
             registerForPreviewingWithDelegate(imagePreviewDelegate!, sourceView: dayView.imageView)
 //            
+//            dayView.livePhotoView.userInteractionEnabled = true
 //            tapGestureRec = UITapGestureRecognizer(target: self, action: #selector(didTouchImage))
-//            dayView.imageView.addGestureRecognizer(tapGestureRec!)
+//            dayView.livePhotoView.addGestureRecognizer(tapGestureRec!)
         }
     }
     
@@ -63,9 +65,18 @@ class DayViewController: UIViewController {
                     self?.dayView?.image = image
                 }
             }
+            if let livePhoto = day.image?.livePhoto {
+                self.dayView?.livePhoto = livePhoto
+            }
             dayView?.text = day.text
             dayView?.setEditing(editing, animated: false)
         }
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        dayView?.livePhotoView.startPlaybackWithStyle(.Hint)
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
@@ -74,9 +85,10 @@ class DayViewController: UIViewController {
     }
     
     func didTouchImage() {
-        if let dayView = dayView {
-            presentViewController(ImageViewController(image: dayView.imageView.image, fill: false), animated: true, completion: nil)
-        }
+//        dayView?.livePhotoView.startPlaybackWithStyle(.Full)
+//        if let dayView = dayView {
+//            presentViewController(ImageViewController(image: dayView.imageView.image, fill: false), animated: true, completion: nil)
+//        }
     }
 }
 
@@ -164,7 +176,6 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
         }
         
         imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeLivePhoto as String]
-        imagePicker.allowsEditing  = true
         imagePicker.delegate = self
         
         presentViewController(imagePicker, animated: true, completion: nil)
@@ -174,7 +185,8 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
         dismissViewControllerAnimated(true, completion: nil)
         dayView?.setProcessing(true)
         
-        let image = info[UIImagePickerControllerEditedImage] as! UIImage
+        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let livePhoto = info[UIImagePickerControllerLivePhoto] as! PHLivePhoto?
         let completionBlock: Image? -> Void = { [weak self] image in
             if let this = self {
                 this.day.image = image
@@ -184,7 +196,7 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
         }
         
         if let assetRef = info[UIImagePickerControllerReferenceURL] as? NSURL {
-            ImageStore.storeImage(image, assetRef: assetRef, completion: completionBlock)
+            ImageStore.storeImage(image, assetRef: assetRef, livePhoto: livePhoto, completion: completionBlock)
         } else {
             ImageStore.storeImage(image, completion: completionBlock)
         }
@@ -194,21 +206,34 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
 
 @objc class DayImagePreviewDelegate : NSObject, UIViewControllerPreviewingDelegate {
     
-    let baseViewController: UIViewController
-    let dayView: DayView
+    let dayViewController: DayViewController
     
-    init(baseViewController: UIViewController, dayView: DayView) {
-        self.baseViewController = baseViewController
-        self.dayView = dayView
+    init(dayViewController: DayViewController) {
+        self.dayViewController = dayViewController
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        previewingContext.sourceRect = dayView.imageView.frame
-        return ImageViewController(image: dayView.imageView.image, fill: true)
+        if let dayView = dayViewController.dayView {
+            previewingContext.sourceRect = dayView.imageView.frame
+            
+            if let livePhoto = dayViewController.day.image?.livePhoto {
+                return LivePhotoViewController(image: dayView.imageView.image, photo: livePhoto)
+            } else {
+                return ImageViewController(image: dayView.imageView.image, fill: true)
+            }
+        }
+        return nil
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        baseViewController.showViewController(ImageViewController(image: dayView.imageView.image, fill: false), sender: nil)
+        if let dayView = dayViewController.dayView {
+            if let livePhoto = dayViewController.day.image?.livePhoto {
+                dayViewController.showViewController(LivePhotoViewController(image: dayView.imageView.image, photo: livePhoto), sender: nil)
+            } else {
+                dayViewController.showViewController(ImageViewController(image: dayView.imageView.image, fill: false), sender: nil)
+            }
+        }
+        
     }
 
 }

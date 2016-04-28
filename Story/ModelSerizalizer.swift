@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Photos
 
 extension Trip {
     
@@ -34,13 +35,14 @@ extension Day {
         let text = dict["text"] as? String
         let latitude = dict["latitude"] as? Double
         let longitude = dict["longitude"] as? Double
+        let livePhoto = dict["livePhoto"] as? PHLivePhoto
         
         if  let identifier = dict["identifier"] as? String,
             let tripIdentifier = dict["tripIdentifier"] as? String? {
             
             var imageRef: Image? = nil
             if let anImage = image, aDate = date, aLatitude = latitude, aLongitude = longitude {
-                imageRef = Image(name: anImage, date: aDate, latitude: aLatitude, longitude: aLongitude)
+                imageRef = Image(name: anImage, date: aDate, latitude: aLatitude, longitude: aLongitude, livePhoto: livePhoto)
             }
             return Day(identifier: identifier, tripIdentifier: tripIdentifier, text: text, image: imageRef)
         }
@@ -55,7 +57,8 @@ extension Day {
             "image" : (image?.name == nil ? NSNull() : image!.name),
             "text" : (text == nil ? NSNull() : text!),
             "latitude" : (image?.latitude == nil ? NSNull() : image!.latitude),
-            "longitude" : (image?.longitude == nil ? NSNull() : image!.longitude)
+            "longitude" : (image?.longitude == nil ? NSNull() : image!.longitude),
+            "livePhoto" : (image?.livePhoto == nil ? NSNull() : image!.livePhoto!)
         ]
     }
     
