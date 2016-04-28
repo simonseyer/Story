@@ -21,6 +21,7 @@ class DayViewController: UIViewController {
     }
     
     var changeCommand: (Day -> Void)?
+    private var tapGestureRec: UITapGestureRecognizer?
     
     init(model: Day) {
         self.day = model
@@ -43,6 +44,13 @@ class DayViewController: UIViewController {
         dayView?.editTextView.delegate = self
         
         configureImagePicker()
+        
+        if let dayView = dayView {
+            dayView.imageView.userInteractionEnabled = true
+            registerForPreviewingWithDelegate(self, sourceView: dayView.imageView)
+//            tapGestureRec = UITapGestureRecognizer(target: self, action: #selector(didTouchImage))
+//            dayView.imageView.addGestureRecognizer(tapGestureRec!)
+        }
     }
     
     private func updateDayView() {
@@ -62,6 +70,11 @@ class DayViewController: UIViewController {
         dayView?.setEditing(editing, animated: animated)
     }
     
+    func didTouchImage() {
+        if let dayView = dayView {
+            presentViewController(ImageViewController(image: dayView.imageView.image, fill: false, statusBarHidden: false), animated: true, completion: nil)
+        }
+    }
 }
 
 
@@ -174,4 +187,22 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
         }
        
     }
+}
+
+extension DayViewController : UIViewControllerPreviewingDelegate {
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+        if let dayView = dayView {
+            previewingContext.sourceRect = dayView.imageView.frame
+            return ImageViewController(image: dayView.imageView.image, fill: true, statusBarHidden: false)
+        }
+        return nil
+    }
+    
+    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+        if let dayView = dayView {
+            showViewController(ImageViewController(image: dayView.imageView.image, fill: false, statusBarHidden: false), sender: nil)
+        }
+    }
+
 }

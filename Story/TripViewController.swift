@@ -23,6 +23,8 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     private weak var currentDayViewController: DayViewController?
     private weak var lastDayViewController: DayViewController?
     
+    private var initial = true
+    
     init(model: DayStore) {
         self.model = model
         pageViewController = TripPageViewController(model: model)
@@ -52,14 +54,15 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
             centerMapView(day, animated: false)
         }
         
+        
         navigationItem.rightBarButtonItem = editButtonItem()
-        configureNavigationController(true, initial: true)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        configureNavigationController(true, initial: false)
+        configureNavigationController(true, initial: initial)
+        initial = false
         model.observers.addObject(self)
     }
     
@@ -96,25 +99,28 @@ extension TripViewController {
         
         if configure {
             navigationItem.title = model.trip.name
-            navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(didTap))
+            navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(updateStatusBarVisibility))
             
             if initial {
                 navigationController?.setNavigationBarHidden(true, animated: true)
-                didTap()
+                updateStatusBarVisibility()
+            } else {
+                updateStatusBarVisibility()
             }
         } else {
-            navigationController?.setNavigationBarHidden(false, animated: true)
-            navigationController?.barHideOnTapGestureRecognizer.removeTarget(self, action: #selector(didTap))
+            navigationController?.barHideOnTapGestureRecognizer.removeTarget(self, action: #selector(updateStatusBarVisibility))
         }
     }
     
-    func didTap() {
-        statusBarHidden = !statusBarHidden
-        let delay = statusBarHidden ? 0 : 0.05
-        let animations = {[unowned self] in
-            self.setNeedsStatusBarAppearanceUpdate()
+    func updateStatusBarVisibility() {
+        if let navigationController = navigationController {
+            statusBarHidden = navigationController.navigationBarHidden
+            let delay = statusBarHidden ? 0 : 0.05
+            let animations = {[unowned self] in
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+            UIView.animateWithDuration(statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
         }
-        UIView.animateWithDuration(statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
     }
     
     override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
