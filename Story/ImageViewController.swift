@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageViewController: UIViewController, UIScrollViewDelegate {
+class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureRecognizerDelegate {
 
     let statusBarAnimationDuration = 0.4
     
@@ -24,6 +24,8 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     
     var statusBarHidden: Bool = false
     var fill: Bool
+    
+    var doubleTapGestureRecognizer: UITapGestureRecognizer?
     
     init(image: UIImage?, fill: Bool) {
         self.fill = fill
@@ -61,6 +63,11 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
         
         automaticallyAdjustsScrollViewInsets  = false
         
+        doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
+        doubleTapGestureRecognizer!.numberOfTapsRequired = 2
+        scrollView.addGestureRecognizer(doubleTapGestureRecognizer!)
+        navigationController?.barHideOnTapGestureRecognizer.requireGestureRecognizerToFail(doubleTapGestureRecognizer!)
+        
         updateConstraints()
         updateZoom()
         if !fill {
@@ -84,6 +91,30 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
         return statusBarHidden
     }
     
+    func doubleTapped(sender: UITapGestureRecognizer) {
+        let newScale = scrollView.zoomScale * 4.0;
+        
+        if (scrollView.zoomScale > scrollView.minimumZoomScale) {
+            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
+        } else {
+            let rect = zoomRect(newScale, center:sender.locationInView(sender.view))
+            scrollView.zoomToRect(rect, animated: true)
+        }
+    }
+    
+    func zoomRect(scale: CGFloat, center: CGPoint) -> CGRect {
+        var zoomRect = CGRect()
+        
+        zoomRect.size.height = imageView.frame.size.height / scale
+        zoomRect.size.width = imageView.frame.size.width / scale
+        
+        let newCenter = imageView.convertPoint(center, fromView: scrollView)
+        
+        zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
+        zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
+        
+        return zoomRect
+    }
     
     // Update zoom scale and constraints with animation.
     override func viewWillTransitionToSize(size: CGSize,
