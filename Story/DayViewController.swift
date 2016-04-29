@@ -227,8 +227,8 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
         if let dayView = dayViewController.dayView {
-            if let livePhoto = dayViewController.day.image?.livePhoto {
-                dayViewController.showViewController(LivePhotoViewController(image: dayView.imageView.image, photo: livePhoto), sender: nil)
+            if viewControllerToCommit.isKindOfClass(LivePhotoViewController) {
+                dayViewController.showViewController(viewControllerToCommit, sender: nil)
             } else {
                 dayViewController.showViewController(ImageViewController(image: dayView.imageView.image, fill: false), sender: nil)
             }
