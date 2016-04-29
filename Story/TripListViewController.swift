@@ -173,8 +173,9 @@ extension TripListViewController {
 extension TripListViewController : TripStoreObserver {
     
     func didInsertTrip(trip: Trip, atIndex index: Int) {
-        
         tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexForModelIndex(index), inSection: 0)], withRowAnimation: .Automatic)
+        self.selectionCommand?(trip)
+        setEditing(false, animated: false)
     }
     
     func didUpdateTrip(trip: Trip, fromIndex: Int, toIndex: Int) {

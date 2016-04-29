@@ -49,6 +49,10 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         tripView?.setDayView(pageViewController.view)
         
         pageViewController.delegate = self
+        pageViewController.invalidateCommand = {[weak self] in
+            self?.updateLocation()
+            self?.updateDeleteButton(true)
+        }
 
         addMarkers()
         if let day = model.days.first {
@@ -72,6 +76,10 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         configureNavigationController(true, initial: initial)
         initial = false
         model.observers.addObject(self)
+        
+        if model.days.isEmpty {
+            setEditing(true, animated: false)
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -90,21 +98,22 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
             navigationItem.setLeftBarButtonItem(UIBarButtonItem(title: "New", style: .Plain, target: self, action: #selector(addDay)), animated: true)
             navigationController?.setNavigationBarHidden(false, animated: false)
             updateStatusBarVisibility()
-            if let mapView = tripView?.mapView {
-                UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-                    self.tripView?.deleteButton.alpha = 1.0
-                    mapView.transform = CGAffineTransformMakeTranslation(0, mapView.bounds.size.height)
-                }, completion: nil)
-            }
+            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+                self.tripView?.mapView.transform = CGAffineTransformMakeTranslation(0, TripView.mapViewHeight)
+            }, completion: nil)
         } else {
             navigationItem.setLeftBarButtonItem(nil, animated: true)
-            if let mapView = tripView?.mapView {
-                UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
-                    self.tripView?.deleteButton.alpha = 0.0
-                    mapView.transform = CGAffineTransformIdentity
-                }, completion: nil)
-            }
+            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+                self.tripView?.mapView.transform = CGAffineTransformIdentity
+            }, completion: nil)
         }
+        updateDeleteButton(animated)
+    }
+    
+    func updateDeleteButton(animated: Bool) {
+        UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+            self.tripView?.deleteButton.alpha = self.editing && !self.model.days.isEmpty ? 1 : 0
+        }, completion: nil)
     }
     
     func addDay() {
@@ -118,8 +127,8 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         deleteActionSheet.addAction(cancelActionButton)
         
         let deleteActionButton: UIAlertAction = UIAlertAction(title: "Delete Moment", style: .Destructive) {[weak self] action -> Void in
-            if let day = self?.currentDayViewController?.day{
-                self?.model.removeDay(day)
+            if let dayViewController = self?.pageViewController.currentViewController() {
+                self?.model.removeDay(dayViewController.day)
             }
         }
         deleteActionSheet.addAction(deleteActionButton)
@@ -225,21 +234,27 @@ extension TripViewController : DayStoreObserver {
     
     func didInsertDay(day: Day, atIndex index: Int) {
         didUpdateDay(day, fromIndex: index, toIndex:  index)
+        updateDeleteButton(true)
+        updateLocation()
     }
     
     func didUpdateDay(day: Day, fromIndex: Int, toIndex: Int) {
         removeAnnotationForDay(day)
         addAnnotationForDay(day)
-        
-        if currentDayViewController?.day == day {
-            centerMapView(day, animated: true)
-        }
+        updateLocation()
     }
     
     func didRemoveDay(day: Day, fromIndex index: Int) {
         removeAnnotationForDay(day)
+        updateDeleteButton(true)
     }
 
+    func updateLocation() {
+        if let dayViewController = pageViewController.currentViewController() {
+            centerMapView(dayViewController.day, animated: true)
+        }
+    }
+    
 }
 
 

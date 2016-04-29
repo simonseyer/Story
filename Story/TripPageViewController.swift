@@ -12,6 +12,7 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     
     let dayStore: DayStore
     let viewModel: TripViewModel
+    var invalidateCommand: (Void -> Void)?
     
     required init(model: DayStore) {
         self.dayStore = model
@@ -43,7 +44,11 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
             viewController.setEditing(editing, animated: animated)
         }
         
-        if !editing {
+        if editing {
+            if dayStore.days.isEmpty {
+                addDay()
+            }
+        } else {
             if let currentViewController = currentViewController() where viewModel.additionalViewControllers.contains(currentViewController) {
                 viewModel.additionalViewControllers.removeAll()
                 if let dayViewController = viewModel.viewControllerAtIndex(dayStore.days.count - 1) {
@@ -68,7 +73,10 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
             viewModel.currentViewController = currentViewController
         }
         dispatch_async(dispatch_get_main_queue()) {
-            super.setViewControllers(viewControllers, direction: direction, animated: animated, completion: completion)
+            super.setViewControllers(viewControllers, direction: direction, animated: animated) {[weak self] finished in
+                completion?(finished)
+                self?.invalidateCommand?()
+            }
         }
     }
     
@@ -229,7 +237,7 @@ extension TripPageViewController: DayStoreObserver {
             } else if let nextViewController = viewModel.viewControllerAtIndex(index + 1) {
                 self.setViewControllers([nextViewController], direction: .Forward, animated: true, invalidate: true)
             } else {
-                self.setViewControllers([], direction: .Reverse, animated: true, invalidate: true)
+                self.setViewControllers([viewModel.createAdditionalViewController()], direction: .Reverse, animated: true, invalidate: true)
             }
         } else {
             invalidatePageViewController()

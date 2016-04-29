@@ -45,8 +45,10 @@ class DayViewController: UIViewController {
         dayView?.topLayoutGuide = topLayoutGuide
         
         dayView?.didEndEditTextCommand = {[weak self] text in
-            self?.day.text = text
-            self?.changeCommand?((self?.day)!)
+            if self?.day.text != nil || (text != nil && !text!.isEmpty) {
+                self?.day.text = text
+                self?.changeCommand?((self?.day)!)
+            }
         }
         
         configureImagePicker()
