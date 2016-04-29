@@ -131,6 +131,7 @@ extension TripListViewController {
             }
         } else {
             cell.tripImage = defaultImage
+            cell.tripTitle = ""
         }
         
         cell.changeCommand = {[weak self] trip in
