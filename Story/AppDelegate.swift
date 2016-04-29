@@ -18,9 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
         let navigationbar = UINavigationBar.appearance()
-        navigationbar.titleTextAttributes = [NSFontAttributeName : UIFont(name: ViewConstants.boldTextFontName, size: 20)!]
+        navigationbar.titleTextAttributes = [NSFontAttributeName : UIFont(name: ViewConstants.boldTextFontName, size: 20)!, NSForegroundColorAttributeName : UIColor(hexValue: ViewConstants.tintTextColorCode)]
+        navigationbar.tintColor = UIColor(hexValue: ViewConstants.tintTextColorCode)
         let barButtonItem = UIBarButtonItem.appearance()
-        barButtonItem.setTitleTextAttributes([NSFontAttributeName : UIFont(name: ViewConstants.textFontName, size: 20)!], forState: .Normal)
+        barButtonItem.setTitleTextAttributes([NSFontAttributeName : UIFont(name: ViewConstants.textFontName, size: 20)!, NSForegroundColorAttributeName : UIColor(hexValue: ViewConstants.tintTextColorCode)], forState: .Normal)
         
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.backgroundColor = UIColor.whiteColor()
