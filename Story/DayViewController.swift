@@ -43,7 +43,11 @@ class DayViewController: UIViewController {
         super.viewDidLoad()
         
         dayView?.topLayoutGuide = topLayoutGuide
-        dayView?.editTextView.delegate = self
+        
+        dayView?.didEndEditTextCommand = {[weak self] text in
+            self?.day.text = text
+            self?.changeCommand?((self?.day)!)
+        }
         
         configureImagePicker()
         
@@ -123,22 +127,12 @@ extension DayViewController {
         let animationCurve = UIViewAnimationOptions(rawValue: UInt(rawAnimationCurve) | UIViewAnimationOptions.BeginFromCurrentState.rawValue)
         
         let keyboarConstant = -(CGRectGetMaxY(view.bounds) - CGRectGetMinY(convertedKeyboardEndFrame))
-        dayView?.keyboardConstraint?.constant = keyboarConstant
+        dayView?.keyboardConstraint?.constant = keyboarConstant - 8 // TODO: move to view
         dayView?.keyboardMode = keyboarConstant < 0
         
         UIView.animateWithDuration(animationDuration, delay: 0.0, options: animationCurve, animations: {
             self.view.layoutIfNeeded()
         }, completion: nil)
-    }
-
-}
-
-// Text handling
-extension DayViewController: UITextViewDelegate {
-    
-    func textViewDidEndEditing(textView: UITextView) {
-        day.text = textView.text
-        changeCommand?(day)
     }
 
 }

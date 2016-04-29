@@ -9,7 +9,7 @@
 import UIKit
 import PhotosUI
 
-class DayView: UIView {
+class DayView: UIView, UITextViewDelegate {
 
     let imageView = UIImageView()
     let livePhotoView = PHLivePhotoView()
@@ -20,9 +20,11 @@ class DayView: UIView {
     let imageProcessingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
     
     let textBackgroundView = UIView()
+    let textPlaceholderLabel = UILabel()
     let textEditView = UIView()
     let textEditBorder = DashedBorderShapeLayer()
     let editTextView = UITextView()
+    let characterCountLabel = UILabel()
     let textView = UILabel()
     
     var topLayoutGuide: UILayoutSupport?
@@ -35,10 +37,10 @@ class DayView: UIView {
     }
     private var tapGestureRecognizer: UITapGestureRecognizer?
     
-    private let textViewXMargin = CGFloat(60)
-    private let textViewYMargin = CGFloat(60)
+    private let textViewXMargin = CGFloat(30)
+    private let textViewYMargin = CGFloat(20)
     private let magicPageIndicatorHeight = CGFloat(37)
-    private let textViewHeight = CGFloat(80)
+    private let textViewHeight = CGFloat(140)
     private let editViewMargin = CGFloat(20)
     private let magicTopMargin = CGFloat(66)
     private let editTextViewMargin = CGFloat(8)
@@ -52,7 +54,8 @@ class DayView: UIView {
         set {
             textView.text = newValue
             editTextView.text = newValue
-            updateViewVisibilities()
+            updateViewVisibilities(false)
+            updateCharacterCountLabel()
         }
     }
     
@@ -62,7 +65,7 @@ class DayView: UIView {
         }
         set {
             imageView.image = newValue
-            updateViewVisibilities()
+            updateViewVisibilities(false)
         }
     }
     
@@ -74,6 +77,8 @@ class DayView: UIView {
             livePhotoView.livePhoto = newValue
         }
     }
+    
+    var didEndEditTextCommand: (String? -> Void)?
     
     init() {
         super.init(frame: CGRect.zero)
@@ -92,8 +97,10 @@ class DayView: UIView {
         imageOverlayView.translatesAutoresizingMaskIntoConstraints = false
         imageSelectionView.translatesAutoresizingMaskIntoConstraints = false
         textBackgroundView.translatesAutoresizingMaskIntoConstraints = false
+        textPlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
         textEditView.translatesAutoresizingMaskIntoConstraints = false
         editTextView.translatesAutoresizingMaskIntoConstraints = false
+        characterCountLabel.translatesAutoresizingMaskIntoConstraints = false
         textView.translatesAutoresizingMaskIntoConstraints = false
         imagePickerView.translatesAutoresizingMaskIntoConstraints = false
         imageProcessingSpinner.translatesAutoresizingMaskIntoConstraints = false
@@ -107,9 +114,11 @@ class DayView: UIView {
         addSubview(imageProcessingSpinner)
         
         addSubview(textBackgroundView)
+        addSubview(textPlaceholderLabel)
         addSubview(textEditView)
         textEditView.layer.addSublayer(textEditBorder)
         textEditView.addSubview(editTextView)
+        addSubview(characterCountLabel)
         addSubview(textView)
         
         imageView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: -ViewConstants.parallaxDelta).active = true
@@ -142,9 +151,16 @@ class DayView: UIView {
         keyboardConstraint = textBackgroundView.bottomAnchor.constraintLessThanOrEqualToAnchor(bottomAnchor)
         keyboardConstraint?.active = true
         
+        textPlaceholderLabel.leftAnchor.constraintEqualToAnchor(editTextView.leftAnchor, constant: 6).active = true
+        textPlaceholderLabel.rightAnchor.constraintEqualToAnchor(editTextView.rightAnchor, constant: -6).active = true
+        textPlaceholderLabel.topAnchor.constraintEqualToAnchor(editTextView.topAnchor, constant: 8).active = true
+        
         LayoutUtils.fullInSuperview(textEditView, superView: textBackgroundView, margin: editViewMargin)
         
         LayoutUtils.fullInSuperview(editTextView, superView: textEditView, margin: editTextViewMargin)
+        
+        characterCountLabel.rightAnchor.constraintEqualToAnchor(textView.rightAnchor).active = true
+        characterCountLabel.topAnchor.constraintEqualToAnchor(textView.bottomAnchor, constant: 8).active = true
         
         textView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: textViewXMargin).active = true
         textView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
@@ -175,6 +191,12 @@ class DayView: UIView {
         
         imageProcessingSpinner.hidesWhenStopped = true
         
+        textPlaceholderLabel.font = ViewConstants.textFont()
+        textPlaceholderLabel.textColor = UIColor(hexValue: ViewConstants.textColorCode)
+        textPlaceholderLabel.alpha = 0.5
+        textPlaceholderLabel.numberOfLines = 0
+        textPlaceholderLabel.text = "What awesome stuff happend in this moment?"
+        
         textView.numberOfLines = 0
         textView.font = ViewConstants.textFont()
         textView.textColor = UIColor(hexValue: ViewConstants.textColorCode)
@@ -186,10 +208,15 @@ class DayView: UIView {
         editTextView.textColor = textView.textColor
         editTextView.backgroundColor = UIColor.clearColor()
         editTextView.tintColor = textView.textColor
+        editTextView.delegate = self
+        
+        characterCountLabel.font = UIFont(name: ViewConstants.textFontName, size: 14)
+        characterCountLabel.textColor = UIColor(hexValue: ViewConstants.lightTextColorCode)
         
         tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         
-        updateViewVisibilities()
+        updateViewVisibilities(false)
+        updateCharacterCountLabel()
     }
     
     override func layoutSubviews() {
@@ -235,17 +262,58 @@ class DayView: UIView {
         }
     }
     
-    private func updateViewVisibilities() {
+    private func updateViewVisibilities(animated: Bool = true) {
+        textPlaceholderLabel.alpha = (editing && editTextView.text.characters.count == 0) ? 0.5 : 0.0
+        UIView.animateWithDuration(animated ? 0.3 : 0.0) { [unowned self] in
+            self._updateViewVisibilities()
+        }
+    }
+    
+    private func _updateViewVisibilities() {
         imageOverlayView.alpha = editing && imageView.image != nil ? 1 : 0
         imageSelectionView.alpha = (editing || imageView.image == nil) && !keyboardMode ? 1 : 0
         textEditView.alpha = editing || textView.text == nil ? 1 : 0
         textView.alpha = editing ? 0 : 1
         imagePickerView.alpha = editing && !keyboardMode && !imageProcessingSpinner.isAnimating() ? 1 : 0
         imagePickerView.darkMode = imageView.image == nil
+        characterCountLabel.alpha = editing && keyboardMode ? 1.0 : 0.0
     }
     
     
     func dismissKeyboard() {
         editTextView.resignFirstResponder()
     }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        didEndEditTextCommand?(textView.text)
+    }
+
+    func textViewDidChange(textView: UITextView) {
+        self.updateViewVisibilities()
+        updateCharacterCountLabel()
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        guard let oldText = textView.text else {
+            return true
+        }
+        let newString = (oldText as NSString).stringByReplacingCharactersInRange(range, withString: text)
+        let ok = newString.characters.count <= 140
+        if !ok {
+            textView.text = (newString as NSString).substringToIndex(141)
+
+            dispatch_async(dispatch_get_main_queue()) {
+                self.characterCountLabel.transform = CGAffineTransformMakeTranslation(6, 0)
+                UIView.animateWithDuration(0.7, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 20, options: UIViewAnimationOptions(), animations: { () -> Void in
+                    self.characterCountLabel.transform = CGAffineTransformIdentity
+                }, completion: nil)
+            }
+        }
+        return ok
+    }
+    
+    private func updateCharacterCountLabel() {
+        characterCountLabel.text = "\(min(editTextView.text?.characters.count ?? 0, 140)) / 140"
+    }
+    
 }

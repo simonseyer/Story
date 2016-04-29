@@ -134,6 +134,8 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         tripTitleTextView.backgroundColor = UIColor.clearColor()
         tripTitleTextView.tintColor = UIColor.whiteColor()
         tripTitleTextView.delegate = self
+        let placeholder = NSAttributedString(string: "Your Story", attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor().colorWithAlphaComponent(0.7)])
+        tripTitleTextView.attributedPlaceholder = placeholder
         
         tripTitleBottomBorder.backgroundColor = UIColor.whiteColor()
         tripTitleBottomBorder.alpha = 0
@@ -147,4 +149,23 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         }
     }
     
+    func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+        guard let text = textField.text else {
+            return true
+        }
+        let newString = (text as NSString).stringByReplacingCharactersInRange(range, withString: string)
+        let ok = newString.characters.count <= 14
+        if !ok {
+            textField.text = (newString as NSString).substringToIndex(15)
+            dispatch_async(dispatch_get_main_queue()) {
+                self.tripTitleTextView.transform = CGAffineTransformMakeTranslation(6, 0)
+                self.tripTitleBottomBorder.transform = CGAffineTransformMakeTranslation(6, 0)
+                UIView.animateWithDuration(0.7, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 20, options: UIViewAnimationOptions(), animations: { () -> Void in
+                    self.tripTitleTextView.transform = CGAffineTransformIdentity
+                    self.tripTitleBottomBorder.transform = CGAffineTransformIdentity
+                }, completion: nil)
+            }
+        }
+        return ok
+    }
 }
