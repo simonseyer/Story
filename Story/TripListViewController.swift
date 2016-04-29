@@ -39,7 +39,7 @@ class TripListViewController: UITableViewController {
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
         
-        navigationItem.title = "Story"
+        navigationItem.title = "Story Book"
         
         navigationItem.rightBarButtonItem = editButtonItem()
         tableView.allowsSelectionDuringEditing = false

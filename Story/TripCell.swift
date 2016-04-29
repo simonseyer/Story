@@ -29,7 +29,6 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         set {
             tripTitleView.text = newValue
             tripTitleTextView.text = newValue
-            
         }
     }
     
@@ -134,7 +133,7 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         tripTitleTextView.backgroundColor = UIColor.clearColor()
         tripTitleTextView.tintColor = UIColor.whiteColor()
         tripTitleTextView.delegate = self
-        let placeholder = NSAttributedString(string: "Your Story", attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor().colorWithAlphaComponent(0.7)])
+        let placeholder = NSAttributedString(string: "New Story", attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor().colorWithAlphaComponent(0.7)])
         tripTitleTextView.attributedPlaceholder = placeholder
         
         tripTitleBottomBorder.backgroundColor = UIColor.whiteColor()
