@@ -123,9 +123,13 @@ extension ImageStore {
             return nil
         }
         
+        guard let timeString = gpsInfo[kCGImagePropertyGPSTimeStamp as String] as? String else {
+            return nil
+        }
+        
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy:MM:dd"
-        return dateFormatter.dateFromString(dateString)
+        dateFormatter.dateFormat = "yyyy:MM:dd:HH:mm:ss"
+        return dateFormatter.dateFromString("\(dateString):\(timeString)")
     }
     
     static func getImageLocation(gpsDict: [String : AnyObject]?) -> (latitude: Double, longitude: Double)? {
