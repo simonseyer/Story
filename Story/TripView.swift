@@ -13,6 +13,7 @@ class TripView: UIView {
 
     let dayContainerView = UIView()
     let mapView = MKMapView()
+    let deleteButton = UIButton()
     
     static let mapViewHeight = CGFloat(120)
     
@@ -28,10 +29,12 @@ class TripView: UIView {
     
     private func setupContraints() {
         addSubview(dayContainerView)
+        addSubview(deleteButton)
         addSubview(mapView)
         
         
         dayContainerView.translatesAutoresizingMaskIntoConstraints = false
+        deleteButton.translatesAutoresizingMaskIntoConstraints = false
         mapView.translatesAutoresizingMaskIntoConstraints = false
         
         LayoutUtils.fullInSuperview(dayContainerView, superView: self)
@@ -40,6 +43,9 @@ class TripView: UIView {
         mapView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         mapView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
         mapView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
+        
+        deleteButton.centerXAnchor.constraintEqualToAnchor(mapView.centerXAnchor).active = true
+        deleteButton.centerYAnchor.constraintEqualToAnchor(mapView.centerYAnchor).active = true
     }
     
     private func setupView() {
@@ -51,6 +57,11 @@ class TripView: UIView {
         mapView.pitchEnabled = false
        
         mapView.alpha = 0.7
+        
+        deleteButton.titleLabel?.font = ViewConstants.textFont()
+        deleteButton.setTitleColor(UIColor(hexValue: ViewConstants.tintTextColorCode), forState: .Normal)
+        deleteButton.setTitle("Delete Moment", forState: .Normal)
+        deleteButton.alpha = 0
     }
     
     func setDayView(dayView: UIView) {

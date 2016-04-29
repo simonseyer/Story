@@ -62,6 +62,8 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         }
         
         navigationItem.rightBarButtonItem = editButtonItem()
+        
+        tripView?.deleteButton.addTarget(self, action: #selector(deleteDay), forControlEvents: .TouchUpInside)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -85,11 +87,23 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         navigationController?.hidesBarsOnTap = !editing
         
         if editing {
-            navigationItem.setLeftBarButtonItem(UIBarButtonItem(title: "New Moment", style: .Plain, target: self, action: #selector(addDay)), animated: true)
+            navigationItem.setLeftBarButtonItem(UIBarButtonItem(title: "New", style: .Plain, target: self, action: #selector(addDay)), animated: true)
             navigationController?.setNavigationBarHidden(false, animated: false)
             updateStatusBarVisibility()
+            if let mapView = tripView?.mapView {
+                UIView.animateWithDuration(0.2, delay: 0.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+                    self.tripView?.deleteButton.alpha = 1.0
+                    mapView.transform = CGAffineTransformMakeTranslation(0, mapView.bounds.size.height)
+                }, completion: nil)
+            }
         } else {
             navigationItem.setLeftBarButtonItem(nil, animated: true)
+            if let mapView = tripView?.mapView {
+                UIView.animateWithDuration(0.2, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+                    self.tripView?.deleteButton.alpha = 0.0
+                    mapView.transform = CGAffineTransformIdentity
+                }, completion: nil)
+            }
         }
     }
     
@@ -97,6 +111,21 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         pageViewController.addDay()
     }
 
+    func deleteDay() {
+        let deleteActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        
+        let cancelActionButton: UIAlertAction = UIAlertAction(title: "Please Keep It", style: .Cancel, handler: nil)
+        deleteActionSheet.addAction(cancelActionButton)
+        
+        let deleteActionButton: UIAlertAction = UIAlertAction(title: "Delete Moment", style: .Destructive) {[weak self] action -> Void in
+            if let day = self?.currentDayViewController?.day{
+                self?.model.removeDay(day)
+            }
+        }
+        deleteActionSheet.addAction(deleteActionButton)
+        
+        presentViewController(deleteActionSheet, animated: true, completion: nil)
+    }
 }
 
 // Status & Navigation Bar Handling
