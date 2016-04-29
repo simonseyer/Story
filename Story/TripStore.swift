@@ -16,7 +16,17 @@ public class TripStore {
     private var _trips: [String : Trip] = [:]
     var days: [Trip : [String : Day]] = [:]
     public var trips: [Trip] {
-        return Array(_trips.values)
+        return Array(_trips.values).sort { (aTrip, anotherTrip) -> Bool in
+            if let aFirstDay = days[aTrip]?.first?.1 {
+                if let anotherFirstDay = days[anotherTrip]?.first?.1 {
+                    return DayStore.isOrdered(aFirstDay, anotherDay: anotherFirstDay)
+                } else {
+                    return false
+                }
+            } else {
+                return true
+            }
+        }
     }
     
     public var observers = NSHashTable.weakObjectsHashTable()

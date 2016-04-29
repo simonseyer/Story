@@ -14,7 +14,9 @@ public class DayStore {
     public let trip: Trip
     public var days: [Day] {
         if let days = tripStore.days[trip] {
-            return Array(days.values)
+            return Array(days.values).sort { (aDay, anotherDay) -> Bool in
+                return DayStore.isOrdered(aDay, anotherDay: anotherDay)
+            }
         }
         return []
     }
@@ -61,6 +63,23 @@ public class DayStore {
             }
         }
     }
+    
+    static func isOrdered(aDay: Day , anotherDay: Day) -> Bool {
+        if let aDate = aDay.image?.date {
+            if let anotherDate = anotherDay.image?.date {
+                return aDate <= anotherDate
+            } else {
+                return true
+            }
+        } else {
+            if anotherDay.image != nil {
+                return false
+            } else {
+                return true
+            }
+        }
+    }
+
 }
 
 protocol DayStoreObserver {
@@ -72,3 +91,9 @@ protocol DayStoreObserver {
     func didRemoveDay(day: Day, fromIndex index: Int)
     
 }
+
+public func <=(lhs: NSDate, rhs: NSDate) -> Bool {
+    let comparison = lhs.compare(rhs)
+    return comparison == .OrderedAscending || comparison == .OrderedSame
+}
+
