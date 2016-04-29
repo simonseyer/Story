@@ -13,8 +13,9 @@ extension Trip {
     
     static func fromDictionary(dict: [String : AnyObject]) -> Trip? {
         if  let identifier = dict["identifier"] as? String,
+            let creationDate = dict["creationDate"] as? NSDate,
             let name = dict["name"] as? String {
-            return Trip(identifier: identifier, name: name)
+            return Trip(identifier: identifier, creationDate: creationDate, name: name)
         }
         return nil
     }
@@ -22,6 +23,7 @@ extension Trip {
     func toDictionary() -> [String : AnyObject] {
         return [
             "identifier" : identifier,
+            "creationDate" : creationDate,
             "name" : name
         ]
     }
@@ -38,13 +40,14 @@ extension Day {
         let livePhoto = dict["livePhoto"] as? PHLivePhoto
         
         if  let identifier = dict["identifier"] as? String,
-            let tripIdentifier = dict["tripIdentifier"] as? String? {
+            let tripIdentifier = dict["tripIdentifier"] as? String?,
+            let creationDate = dict["creationDate"] as? NSDate{
             
             var imageRef: Image? = nil
             if let anImage = image, aDate = date, aLatitude = latitude, aLongitude = longitude {
                 imageRef = Image(name: anImage, date: aDate, latitude: aLatitude, longitude: aLongitude, livePhoto: livePhoto)
             }
-            return Day(identifier: identifier, tripIdentifier: tripIdentifier, text: text, image: imageRef)
+            return Day(identifier: identifier, creationDate: creationDate, tripIdentifier: tripIdentifier, text: text, image: imageRef)
         }
         return nil
     }
@@ -52,6 +55,7 @@ extension Day {
     func toDictionary() -> [String : AnyObject] {
         return [
             "identifier" : identifier,
+            "creationDate" : creationDate,
             "tripIdentifier" : (tripIdentifier == nil ? NSNull() : tripIdentifier!),
             "date" : (image?.date == nil ? NSNull() : image!.date),
             "image" : (image?.name == nil ? NSNull() : image!.name),

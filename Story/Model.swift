@@ -12,12 +12,14 @@ import Photos
 public struct Day {
     
     let identifier: String
+    let creationDate: NSDate
     var tripIdentifier: String?
     var text: String?
     var image: Image?
     
-    init(identifier: String, tripIdentifier: String?, text: String?, image: Image?) {
+    init(identifier: String, creationDate: NSDate, tripIdentifier: String?, text: String?, image: Image?) {
         self.identifier = identifier
+        self.creationDate = creationDate
         self.tripIdentifier = tripIdentifier
         self.text = text
         self.image = image
@@ -25,6 +27,7 @@ public struct Day {
     
     init(text: String?, image: Image?) {
         self.identifier = NSUUID().UUIDString
+        self.creationDate = NSDate()
         self.text = text
         self.image = image
     }
@@ -43,15 +46,19 @@ public struct Image {
 public struct Trip {
     
     let identifier: String
+    let creationDate: NSDate
     var name: String
+    
 
     init(name: String) {
         self.identifier = NSUUID().UUIDString
+        self.creationDate = NSDate()
         self.name = name
     }
     
-    init(identifier: String, name: String) {
+    init(identifier: String, creationDate: NSDate, name: String) {
         self.identifier = identifier
+        self.creationDate = creationDate
         self.name = name
     }
 }

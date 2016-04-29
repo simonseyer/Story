@@ -16,7 +16,7 @@ class TripListViewController: UITableViewController {
     let rowHeight = CGFloat(140)
     
     var selectionCommand: (Trip -> Void)?
-    var defaultImage = UIImage(named: "el_capitan.jpg")
+    var defaultImage: UIImage?
     var editMode = false
     
     init(model: TripStore) {
@@ -66,7 +66,8 @@ class TripListViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return indexPath.row < model.trips.count ? .Delete : .Insert
+        let row = modelIndexForIndex(indexPath.row)
+        return row < 0 ? .Insert : .Delete
     }
     
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -79,7 +80,7 @@ class TripListViewController: UITableViewController {
                 cell.tripTitleTextView.text = ""
             }
         case .Delete:
-            model.removeTrip(model.trips[indexPath.row])
+            model.removeTrip(model.trips[modelIndexForIndex(indexPath.row)])
         default:
             break
         }
@@ -88,17 +89,23 @@ class TripListViewController: UITableViewController {
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        let insertCellIndexPath = NSIndexPath(forRow: model.trips.count, inSection: 0)
+        let insertCellIndexPath = NSIndexPath(forRow: 0, inSection: 0)
         if (editing) {
             editMode = true
             tableView.insertRowsAtIndexPaths([insertCellIndexPath], withRowAnimation: .Automatic)
-            tableView.scrollToRowAtIndexPath(insertCellIndexPath, atScrollPosition: .Bottom, animated: true)
         } else {
             editMode = false
             tableView.deleteRowsAtIndexPaths([insertCellIndexPath], withRowAnimation: .Automatic)
         }
     }
     
+    func indexForModelIndex(modelIndex: Int) -> Int {
+        return modelIndex + (editing ? 1 : 0)
+    }
+    
+    func modelIndexForIndex(index: Int) -> Int {
+        return index - (editing ? 1 : 0)
+    }
 }
 
 // TableView DataSource
@@ -115,8 +122,19 @@ extension TripListViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as! TripCell
         
-        if indexPath.row < model.trips.count {
-            let trip = model.trips[indexPath.row]
+        let row = modelIndexForIndex(indexPath.row)
+        
+        if row < 0 {
+            Background.execute({ return UIImage(named: "el_capitan.jpg") }) {[weak self, weak cell] image in
+                self?.defaultImage = image
+                if cell?.trip == nil {
+                    cell?.tripImage = image
+                }
+            }
+            cell.tripImage = defaultImage
+            cell.tripTitle = ""
+        } else {
+            let trip = model.trips[row]
             
             cell.trip = trip
             cell.tripTitle = trip.name
@@ -127,11 +145,13 @@ extension TripListViewController {
                     }
                 }
             } else {
-                cell.tripImage = defaultImage
+                Background.execute({ return UIImage(named: "el_capitan.jpg") }) {[weak self, weak cell] image in
+                    self?.defaultImage = image
+                    if cell?.trip == trip {
+                        cell?.tripImage = image
+                    }
+                }
             }
-        } else {
-            cell.tripImage = defaultImage
-            cell.tripTitle = ""
         }
         
         cell.changeCommand = {[weak self] trip in
@@ -142,8 +162,9 @@ extension TripListViewController {
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row < model.trips.count {
-            selectionCommand?(model.trips[indexPath.row])
+        let row = modelIndexForIndex(indexPath.row)
+        if row >= 0 && row < model.trips.count {
+            selectionCommand?(model.trips[row])
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
@@ -152,20 +173,20 @@ extension TripListViewController {
 extension TripListViewController : TripStoreObserver {
     
     func didInsertTrip(trip: Trip, atIndex index: Int) {
-        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
-        tableView.scrollToRowAtIndexPath(NSIndexPath(forRow: model.trips.count, inSection: 0), atScrollPosition: .Bottom, animated: true)
+        
+        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexForModelIndex(index), inSection: 0)], withRowAnimation: .Automatic)
     }
     
     func didUpdateTrip(trip: Trip, fromIndex: Int, toIndex: Int) {
         if fromIndex != toIndex {
-            tableView.moveRowAtIndexPath(NSIndexPath(forRow: fromIndex, inSection: 0), toIndexPath: NSIndexPath(forRow: toIndex, inSection: 0))
+            tableView.moveRowAtIndexPath(NSIndexPath(forRow: indexForModelIndex(fromIndex), inSection: 0), toIndexPath: NSIndexPath(forRow: indexForModelIndex(toIndex), inSection: 0))
         } else {
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: toIndex, inSection: 0)], withRowAnimation: .Automatic)
+            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: indexForModelIndex(toIndex), inSection: 0)], withRowAnimation: .Automatic)
         }
     }
     
     func didRemoveTrip(trip: Trip, fromIndex index: Int) {
-        tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+        tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexForModelIndex(index), inSection: 0)], withRowAnimation: .Automatic)
     }
 }
 

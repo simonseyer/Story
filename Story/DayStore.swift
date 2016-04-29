@@ -75,7 +75,7 @@ public class DayStore {
             if anotherDay.image != nil {
                 return false
             } else {
-                return true
+                return aDay.creationDate <= anotherDay.creationDate
             }
         }
     }

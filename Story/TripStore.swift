@@ -19,12 +19,16 @@ public class TripStore {
         return Array(_trips.values).sort { (aTrip, anotherTrip) -> Bool in
             if let aFirstDay = days[aTrip]?.first?.1 {
                 if let anotherFirstDay = days[anotherTrip]?.first?.1 {
-                    return DayStore.isOrdered(aFirstDay, anotherDay: anotherFirstDay)
+                    return !DayStore.isOrdered(aFirstDay, anotherDay: anotherFirstDay)
                 } else {
                     return false
                 }
             } else {
-                return true
+                if days[anotherTrip]?.first != nil {
+                    return true
+                } else {
+                    return !(aTrip.creationDate <= anotherTrip.creationDate)
+                }
             }
         }
     }
