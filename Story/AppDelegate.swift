@@ -23,6 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let barButtonItem = UIBarButtonItem.appearance()
         barButtonItem.setTitleTextAttributes([NSFontAttributeName : UIFont(name: ViewConstants.textFontName, size: 20)!, NSForegroundColorAttributeName : UIColor(hexValue: ViewConstants.tintTextColorCode)], forState: .Normal)
         
+        let pageControl = UIPageControl.appearance();
+        pageControl.pageIndicatorTintColor = UIColor(hexValue: ViewConstants.textColorCode);
+        pageControl.currentPageIndicatorTintColor = UIColor(hexValue: ViewConstants.tintTextColorCode);
+        
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.backgroundColor = UIColor.whiteColor()
         
