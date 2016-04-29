@@ -43,6 +43,7 @@ class TripListViewController: UITableViewController {
         
         navigationItem.rightBarButtonItem = editButtonItem()
         tableView.allowsSelectionDuringEditing = false
+
     }
     
     override func viewWillAppear(animated: Bool) {

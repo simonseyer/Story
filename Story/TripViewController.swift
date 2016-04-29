@@ -85,7 +85,9 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         navigationController?.hidesBarsOnTap = !editing
         
         if editing {
-            navigationItem.setLeftBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: #selector(addDay)), animated: true)
+            navigationItem.setLeftBarButtonItem(UIBarButtonItem(title: "New Moment", style: .Plain, target: self, action: #selector(addDay)), animated: true)
+            navigationController?.setNavigationBarHidden(false, animated: false)
+            updateStatusBarVisibility()
         } else {
             navigationItem.setLeftBarButtonItem(nil, animated: true)
         }

@@ -195,7 +195,7 @@ class DayView: UIView, UITextViewDelegate {
         textPlaceholderLabel.textColor = UIColor(hexValue: ViewConstants.textColorCode)
         textPlaceholderLabel.alpha = 0.5
         textPlaceholderLabel.numberOfLines = 0
-        textPlaceholderLabel.text = "What awesome stuff happend in this moment?"
+        textPlaceholderLabel.text = "What happend in this moment?"
         
         textView.numberOfLines = 0
         textView.font = ViewConstants.textFont()
