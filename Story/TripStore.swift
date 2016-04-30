@@ -144,7 +144,7 @@ extension TripStore {
                 let dayStore = self.dayStoreForTrip(tutorialTrip)
                 
                 let image = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw1", withExtension: "JPG")!)
-                let text = "I love to travel and to share my stories. Look above — a lonely bike. But a more important, my first moment in a new country: Norway"
+                let text = "I love to travel and to share my stories. Look above — a lonely bike. But more important, it's my first moment in a new country: Norway"
                 dayStore.storeDay(Day(text: text, image: image))
                 
                 self.storeTrip(tutorialTrip)
