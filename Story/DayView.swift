@@ -21,11 +21,11 @@ class DayView: UIView, UITextViewDelegate {
     
     let textBackgroundView = UIView()
     let textPlaceholderLabel = UILabel()
-    let textEditView = UIView()
+    let textEditContainerView = UIView()
     let textEditBorder = DashedBorderShapeLayer()
     let editTextView = UITextView()
     let characterCountLabel = UILabel()
-    let textView = UILabel()
+    let textLabel = UILabel()
     
     var topLayoutGuide: UILayoutSupport?
     
@@ -49,17 +49,17 @@ class DayView: UIView, UITextViewDelegate {
     
     var text: String? {
         get {
-            return textView.attributedText?.string
+            return textLabel.attributedText?.string
         }
         set {
             if let text = newValue {
                 let string = NSAttributedString(string: text, attributes: [
-                    NSFontAttributeName : textView.font,
-                    NSForegroundColorAttributeName : textView.textColor
+                    NSFontAttributeName : textLabel.font,
+                    NSForegroundColorAttributeName : textLabel.textColor
                 ])
-                textView.attributedText = string
+                textLabel.attributedText = string
             } else {
-                textView.attributedText = nil
+                textLabel.attributedText = nil
             }
             editTextView.text = newValue
             updateViewVisibilities(false)
@@ -106,10 +106,10 @@ class DayView: UIView, UITextViewDelegate {
         imageSelectionView.translatesAutoresizingMaskIntoConstraints = false
         textBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         textPlaceholderLabel.translatesAutoresizingMaskIntoConstraints = false
-        textEditView.translatesAutoresizingMaskIntoConstraints = false
+        textEditContainerView.translatesAutoresizingMaskIntoConstraints = false
         editTextView.translatesAutoresizingMaskIntoConstraints = false
         characterCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        textView.translatesAutoresizingMaskIntoConstraints = false
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
         imagePickerView.translatesAutoresizingMaskIntoConstraints = false
         imageProcessingSpinner.translatesAutoresizingMaskIntoConstraints = false
         
@@ -123,11 +123,11 @@ class DayView: UIView, UITextViewDelegate {
         
         addSubview(textBackgroundView)
         addSubview(textPlaceholderLabel)
-        addSubview(textEditView)
-        textEditView.layer.addSublayer(textEditBorder)
-        textEditView.addSubview(editTextView)
+        addSubview(textEditContainerView)
+        textEditContainerView.layer.addSublayer(textEditBorder)
+        textEditContainerView.addSubview(editTextView)
         addSubview(characterCountLabel)
-        addSubview(textView)
+        addSubview(textLabel)
         
         imageView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: -ViewConstants.parallaxDelta).active = true
         imageView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: ViewConstants.parallaxDelta).active = true
@@ -163,18 +163,18 @@ class DayView: UIView, UITextViewDelegate {
         textPlaceholderLabel.rightAnchor.constraintEqualToAnchor(editTextView.rightAnchor, constant: -6).active = true
         textPlaceholderLabel.topAnchor.constraintEqualToAnchor(editTextView.topAnchor, constant: 8).active = true
         
-        LayoutUtils.fullInSuperview(textEditView, superView: textBackgroundView, margin: editViewMargin)
+        LayoutUtils.fullInSuperview(textEditContainerView, superView: textBackgroundView, margin: editViewMargin)
         
-        LayoutUtils.fullInSuperview(editTextView, superView: textEditView, margin: editTextViewMargin)
+        LayoutUtils.fullInSuperview(editTextView, superView: textEditContainerView, margin: editTextViewMargin)
         
-        characterCountLabel.rightAnchor.constraintEqualToAnchor(textView.rightAnchor).active = true
-        characterCountLabel.topAnchor.constraintEqualToAnchor(textView.bottomAnchor, constant: 8).active = true
+        characterCountLabel.rightAnchor.constraintEqualToAnchor(textLabel.rightAnchor).active = true
+        characterCountLabel.topAnchor.constraintEqualToAnchor(textLabel.bottomAnchor, constant: 8).active = true
         
-        textView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: textViewXMargin).active = true
-        textView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
-        textView.topAnchor.constraintEqualToAnchor(textBackgroundView.topAnchor, constant: textViewYMargin).active = true
-        textView.bottomAnchor.constraintEqualToAnchor(textBackgroundView.bottomAnchor, constant: -textViewYMargin).active = true
-        textView.heightAnchor.constraintEqualToConstant(textViewHeight).active = true
+        textLabel.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: textViewXMargin).active = true
+        textLabel.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
+        textLabel.topAnchor.constraintEqualToAnchor(textBackgroundView.topAnchor, constant: textViewYMargin).active = true
+        textLabel.bottomAnchor.constraintEqualToAnchor(textBackgroundView.bottomAnchor, constant: -textViewYMargin).active = true
+        textLabel.heightAnchor.constraintEqualToConstant(textViewHeight).active = true
     }
     
     private func setupView() {
@@ -205,17 +205,17 @@ class DayView: UIView, UITextViewDelegate {
         textPlaceholderLabel.numberOfLines = 0
         textPlaceholderLabel.text = "What happend in this moment?"
         
-        textView.numberOfLines = 0
-        textView.font = ViewConstants.textFont()
-        textView.textColor = UIColor(hexValue: ViewConstants.textColorCode)
-        textView.textAlignment = .Justified
+        textLabel.numberOfLines = 0
+        textLabel.font = ViewConstants.textFont()
+        textLabel.textColor = UIColor(hexValue: ViewConstants.textColorCode)
+        textLabel.textAlignment = .Justified
         
-        textEditView.alpha = 0
+        textEditContainerView.alpha = 0
         
-        editTextView.font = textView.font
-        editTextView.textColor = textView.textColor
+        editTextView.font = textLabel.font
+        editTextView.textColor = textLabel.textColor
         editTextView.backgroundColor = UIColor.clearColor()
-        editTextView.tintColor = textView.textColor
+        editTextView.tintColor = textLabel.textColor
         editTextView.delegate = self
         
         characterCountLabel.font = UIFont(name: ViewConstants.textFontName, size: 14)
@@ -231,7 +231,7 @@ class DayView: UIView, UITextViewDelegate {
         super.layoutSubviews()
         
         imageSelectionBorder.frame = imageSelectionView.bounds
-        textEditBorder.frame = textEditView.bounds
+        textEditBorder.frame = textEditContainerView.bounds
     }
     
     func setEditing(editing: Bool, animated: Bool) {
@@ -280,9 +280,9 @@ class DayView: UIView, UITextViewDelegate {
     private func _updateViewVisibilities() {
         imageOverlayView.alpha = editing && imageView.image != nil ? 1 : 0
         imageSelectionView.alpha = (editing || imageView.image == nil) && !keyboardMode ? 1 : 0
-        textEditView.alpha = editing || textView.attributedText == nil ? 1 : 0
+        textEditContainerView.alpha = editing || textLabel.attributedText == nil ? 1 : 0
         editTextView.alpha = editing ? 1 : 0
-        textView.alpha = editing ? 0 : 1
+        textLabel.alpha = editing ? 0 : 1
         imagePickerView.alpha = editing && !keyboardMode && !imageProcessingSpinner.isAnimating() ? 1 : 0
         imagePickerView.darkMode = imageView.image == nil
         characterCountLabel.alpha = editing && keyboardMode ? 1.0 : 0.0
