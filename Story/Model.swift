@@ -36,6 +36,7 @@ public struct Day {
 public struct Image {
     
     let name: String
+    let thumbnailName: String
     let date: NSDate
     let latitude: Double
     let longitude: Double

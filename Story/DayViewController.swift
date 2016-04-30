@@ -57,17 +57,16 @@ class DayViewController: UIViewController {
             dayView.imageView.userInteractionEnabled = true
             imagePreviewDelegate = DayImagePreviewDelegate(dayViewController: self)
             registerForPreviewingWithDelegate(imagePreviewDelegate!, sourceView: dayView.imageView)
-//            
-//            dayView.livePhotoView.userInteractionEnabled = true
+
 //            tapGestureRec = UITapGestureRecognizer(target: self, action: #selector(didTouchImage))
-//            dayView.livePhotoView.addGestureRecognizer(tapGestureRec!)
+//            dayView.imageView.addGestureRecognizer(tapGestureRec!)
         }
     }
     
     private func updateDayView() {
         if isVisible {
             if let image = day.image {
-                ImageStore.loadImage(image) {[weak self] image in
+                ImageStore.loadImage(image, thumbnail: true) {[weak self] image in
                     self?.dayView?.image = image
                 }
             }
@@ -91,10 +90,11 @@ class DayViewController: UIViewController {
     }
     
     func didTouchImage() {
-//        dayView?.livePhotoView.startPlaybackWithStyle(.Full)
-//        if let dayView = dayView {
-//            presentViewController(ImageViewController(image: dayView.imageView.image, fill: false), animated: true, completion: nil)
-//        }
+        if let image = day.image {
+            ImageStore.loadImage(image, thumbnail: false) {[weak self] image in
+                self?.navigationController?.pushViewController(ImageViewController(image: image, fill: false), animated: true)
+            }
+        }
     }
 }
 
@@ -203,6 +203,7 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
 @objc class DayImagePreviewDelegate : NSObject, UIViewControllerPreviewingDelegate {
     
     let dayViewController: DayViewController
+    private weak var currentImageViewController: ImageViewController?
     
     init(dayViewController: DayViewController) {
         self.dayViewController = dayViewController
@@ -215,21 +216,25 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
             if let livePhoto = dayViewController.day.image?.livePhoto {
                 return LivePhotoViewController(image: dayView.imageView.image, photo: livePhoto)
             } else {
-                return ImageViewController(image: dayView.imageView.image, fill: true)
+                let viewController = ImageViewController(image: dayView.imageView.image, fill: true)
+                currentImageViewController = viewController
+                if let image = dayViewController.day.image {
+                    ImageStore.loadImage(image, thumbnail: false) {[weak self] image in
+                        self?.currentImageViewController?.fullSizeImage = image
+                    }
+                }
+                return viewController
             }
         }
         return nil
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        if let dayView = dayViewController.dayView {
-            if viewControllerToCommit.isKindOfClass(LivePhotoViewController) {
-                dayViewController.showViewController(viewControllerToCommit, sender: nil)
-            } else {
-                dayViewController.showViewController(ImageViewController(image: dayView.imageView.image, fill: false), sender: nil)
-            }
+        if viewControllerToCommit.isKindOfClass(LivePhotoViewController) {
+            dayViewController.showViewController(viewControllerToCommit, sender: nil)
+        } else if let imageViewController = viewControllerToCommit as? ImageViewController  {
+            dayViewController.showViewController(ImageViewController(image: imageViewController.fullSizeImage ?? imageViewController.imageView.image, fill: false), sender: nil)
         }
-        
     }
 
 }

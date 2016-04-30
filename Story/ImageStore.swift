@@ -17,8 +17,8 @@ public class ImageStore {
     private static let basePath = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)[0]
     private static var locationManager: OneShotLocationManager?
     
-    public static func loadImage(image: Image) -> UIImage? {
-        let imageURL = basePath.URLByAppendingPathComponent(image.name)
+    public static func loadImage(image: Image, thumbnail: Bool) -> UIImage? {
+        let imageURL = basePath.URLByAppendingPathComponent(thumbnail ? image.thumbnailName : image.name)
         if let imageData = NSData(contentsOfURL: imageURL) {
             return UIImage(data: imageData)
         }
@@ -32,23 +32,18 @@ extension ImageStore {
     
     // For images with embedded metadata (e.g. bundled images)
     public static func storeImage(imageURL: NSURL) -> Image? {
-        let pathExtension = imageURL.pathExtension ?? "jpeg"
-        let imageName = "\(NSUUID().UUIDString).\(pathExtension)"
-        let targetImageURL = basePath.URLByAppendingPathComponent(imageName)
-        
-        do {
-            try NSFileManager.defaultManager().copyItemAtURL(imageURL, toURL: targetImageURL)
+        if let imageData = NSData(contentsOfURL: imageURL),
+            image = UIImage(data: imageData),
+            gpsInfo = getImageGPSMetadata(imageData),
+            date = getImageDate(gpsInfo),
+            location = getImageLocation(gpsInfo) {
             
-            if let imageData = NSData(contentsOfURL: imageURL),
-                gpsInfo = getImageGPSMetadata(imageData),
-                date = getImageDate(gpsInfo),
-                location = getImageLocation(gpsInfo) {
-                return Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
+            guard let (imageName, thumbnailName) = storeImage(image) else {
+                return nil
             }
-        } catch let e as NSError {
-            print(e)
+            
+            return Image(name: imageName, thumbnailName: thumbnailName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
         }
-        
         return nil
     }
     
@@ -63,12 +58,12 @@ extension ImageStore {
                 return nil
         }
         
-        guard let imageName = storeImage(image) else {
+        guard let (imageName, thumbnailName) = storeImage(image) else {
             return nil
         }
         
         let coordinate = asset.location!.coordinate
-        return Image(name: imageName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude, livePhoto: livePhoto)
+        return Image(name: imageName, thumbnailName: thumbnailName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude, livePhoto: livePhoto)
     }
     
     // For images from the camera (current date and location is used)
@@ -83,9 +78,9 @@ extension ImageStore {
         locationManager = OneShotLocationManager()
         locationManager!.fetchWithCompletion { (location, error) in
             locationManager = nil
-            if let imageName = storeImage(image) {
+            if let (imageName, thumbnailName) = storeImage(image) {
                 if let location = location?.coordinate {
-                    let imageRef = Image(name: imageName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
+                    let imageRef = Image(name: imageName, thumbnailName: thumbnailName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
                     completion(imageRef)
                     return
                 }
@@ -98,8 +93,8 @@ extension ImageStore {
 
 // Convenience async functions
 extension ImageStore {
-    public static func loadImage(image: Image, completion: UIImage? -> Void) {
-        Background.execute({ loadImage(image) }, completionBlock: completion)
+    public static func loadImage(image: Image, thumbnail: Bool, completion: UIImage? -> Void) {
+        Background.execute({ loadImage(image, thumbnail: thumbnail) }, completionBlock: completion)
     }
     
     public static func storeImage(image: NSURL, completion: Image? -> Void) {
@@ -165,7 +160,8 @@ extension ImageStore {
 // Store image helper
 extension ImageStore {
     
-    private static func storeImage(image: UIImage) -> String? {
+    private static func storeImage(image: UIImage) -> (String, String)? {
+        // Image
         guard let imageData = UIImageJPEGRepresentation(image, 1) else {
             return nil
         }
@@ -175,11 +171,59 @@ extension ImageStore {
         
         do {
             try imageData.writeToURL(targetImageURL, options: NSDataWritingOptions())
-            return imageName
         } catch let e as NSError {
             print(e)
             return nil
         }
+        
+        // Thumbnail
+        let thumbnailImage = resizeImage(image, size: UIScreen.mainScreen().bounds.size)
+        
+        let thumbnailImageName = "\(NSUUID().UUIDString)-thumbnail.jpeg"
+        let thumbnailImageURL = basePath.URLByAppendingPathComponent(thumbnailImageName)
+        
+        guard let thumbnailImageData = UIImageJPEGRepresentation(thumbnailImage, 1) else {
+            return nil
+        }
+        
+        do {
+            try thumbnailImageData.writeToURL(thumbnailImageURL, options: NSDataWritingOptions())
+        } catch let e as NSError {
+            print(e)
+            return nil
+        }
+        
+        return (imageName, thumbnailImageName)
     }
 
+    private static func resizeImage(image: UIImage, size: CGSize) -> (UIImage) {
+        
+        let xFactor = size.width / image.size.width
+        let yFactor = size.height / image.size.height
+        let factor = max(xFactor, yFactor)
+        
+        let newSize = CGSize(width: image.size.width * factor, height: image.size.height * factor)
+        let newRect = CGRectIntegral(CGRectMake(0,0, newSize.width, newSize.height))
+        let imageRef = image.CGImage
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 0)
+        let context = UIGraphicsGetCurrentContext()
+        
+        // Set the quality level to use when rescaling
+        CGContextSetInterpolationQuality(context, .High)
+        let flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, newSize.height)
+        
+        CGContextConcatCTM(context, flipVertical)
+        // Draw into the context; this scales the image
+        CGContextDrawImage(context, newRect, imageRef)
+        
+        let newImageRef = CGBitmapContextCreateImage(context)! as CGImage
+        let newImage = UIImage(CGImage: newImageRef)
+        
+        // Get the resized image from the context and a UIImage
+        UIGraphicsEndImageContext()
+        
+        return newImage
+    }
+    
 }

@@ -24,7 +24,7 @@ class StoryTests: XCTestCase {
     }
     
     func testTripStore() {
-        let day = Day(text: "test", image: Image(name: "test", date: NSDate(), latitude: 0, longitude: 0))
+        let day = Day(text: "test", image: Image(name: "test", date: NSDate(), latitude: 0, longitude: 0, livePhoto: nil))
         let trip = Trip(identifier: NSUUID().UUIDString, name: "Trip Test", days: [day])
         
         let store = TripStore()

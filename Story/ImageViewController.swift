@@ -27,6 +27,8 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
     
     var doubleTapGestureRecognizer: UITapGestureRecognizer?
     
+    var fullSizeImage: UIImage?
+    
     init(image: UIImage?, fill: Bool) {
         self.fill = fill
         super.init(nibName: nil, bundle: nil)

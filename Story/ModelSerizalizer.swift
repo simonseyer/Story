@@ -34,6 +34,7 @@ extension Day {
     static func fromDictionary(dict: [String : AnyObject]) -> Day? {
         let date = dict["date"] as? NSDate
         let image = dict["image"] as? String
+        let thumbnail = dict["thumbnail"] as? String
         let text = dict["text"] as? String
         let latitude = dict["latitude"] as? Double
         let longitude = dict["longitude"] as? Double
@@ -44,8 +45,8 @@ extension Day {
             let creationDate = dict["creationDate"] as? NSDate{
             
             var imageRef: Image? = nil
-            if let anImage = image, aDate = date, aLatitude = latitude, aLongitude = longitude {
-                imageRef = Image(name: anImage, date: aDate, latitude: aLatitude, longitude: aLongitude, livePhoto: livePhoto)
+            if let anImage = image, aThumbnail = thumbnail, aDate = date, aLatitude = latitude, aLongitude = longitude {
+                imageRef = Image(name: anImage, thumbnailName: aThumbnail, date: aDate, latitude: aLatitude, longitude: aLongitude, livePhoto: livePhoto)
             }
             return Day(identifier: identifier, creationDate: creationDate, tripIdentifier: tripIdentifier, text: text, image: imageRef)
         }
@@ -59,6 +60,7 @@ extension Day {
             "tripIdentifier" : (tripIdentifier == nil ? NSNull() : tripIdentifier!),
             "date" : (image?.date == nil ? NSNull() : image!.date),
             "image" : (image?.name == nil ? NSNull() : image!.name),
+            "thumbnail" : (image?.thumbnailName == nil ? NSNull() : image!.thumbnailName),
             "text" : (text == nil ? NSNull() : text!),
             "latitude" : (image?.latitude == nil ? NSNull() : image!.latitude),
             "longitude" : (image?.longitude == nil ? NSNull() : image!.longitude),

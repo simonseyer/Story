@@ -139,7 +139,7 @@ extension TripListViewController {
             cell.trip = trip
             cell.tripTitle = trip.name
             if let firstDay = model.dayStoreForTrip(trip).days.first, image = firstDay.image {
-                ImageStore.loadImage(image) {[weak cell] in
+                ImageStore.loadImage(image, thumbnail: true) {[weak cell] in
                     if cell?.trip == trip {
                         cell?.tripImage = $0
                     }
