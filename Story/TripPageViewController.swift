@@ -86,6 +86,7 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         dayStore.observers.addObject(self)
+        invalidatePageViewController()
     }
     
     override func viewWillDisappear(animated: Bool) {
