@@ -78,7 +78,9 @@ extension ImageStore {
         locationManager = OneShotLocationManager()
         locationManager!.fetchWithCompletion { (location, error) in
             locationManager = nil
-            if let (imageName, thumbnailName) = storeImage(image) {
+            
+            let rotatedImage = normalizedImage(image)
+            if let (imageName, thumbnailName) = storeImage(rotatedImage) {
                 if let location = location?.coordinate {
                     let imageRef = Image(name: imageName, thumbnailName: thumbnailName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
                     completion(imageRef)
@@ -224,6 +226,19 @@ extension ImageStore {
         UIGraphicsEndImageContext()
         
         return newImage
+    }
+    
+    private static func normalizedImage(image: UIImage) -> UIImage {
+        if image.imageOrientation == .Up {
+            return image
+        }
+        
+        UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
+        image.drawInRect(CGRect(origin: CGPoint(x: 0, y: 0), size: image.size))
+        let normalizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return normalizedImage
     }
     
 }
