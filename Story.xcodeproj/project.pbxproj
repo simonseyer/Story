@@ -69,7 +69,7 @@
 		C38F2B581CD0B6CF00B0EAE1 /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = System/Library/Frameworks/Photos.framework; sourceTree = SDKROOT; };
 		C38F2B5A1CD0B6D600B0EAE1 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C38F2B5C1CD0B88E00B0EAE1 /* OneShotLocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OneShotLocationManager.swift; sourceTree = "<group>"; };
-		C39BA0931CC6CAD200A4D3EB /* Story.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Story.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39BA0931CC6CAD200A4D3EB /* Simon Seyer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simon Seyer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C39BA0A41CC6CAD200A4D3EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -144,7 +144,7 @@
 		C39BA0941CC6CAD200A4D3EB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C39BA0931CC6CAD200A4D3EB /* Story.app */,
+				C39BA0931CC6CAD200A4D3EB /* Simon Seyer.app */,
 				C39BA0DE1CC82D7A00A4D3EB /* StoryTests.xctest */,
 			);
 			name = Products;
@@ -230,7 +230,7 @@
 			);
 			name = Story;
 			productName = Story;
-			productReference = C39BA0931CC6CAD200A4D3EB /* Story.app */;
+			productReference = C39BA0931CC6CAD200A4D3EB /* Simon Seyer.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C39BA0DD1CC82D7A00A4D3EB /* StoryTests */ = {
@@ -472,7 +472,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.Story;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Simon Seyer";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
@@ -487,7 +487,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.Story;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Simon Seyer";
 				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
