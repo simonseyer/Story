@@ -14,7 +14,7 @@ enum ImagePickerSource: String {
     case SavedPhotos = "Recent Photos"
 }
 
-protocol ImagePickerViewDelegate {
+protocol ImagePickerViewDelegate: class {
     func didSelectSource(source: ImagePickerSource)
 }
 
@@ -22,7 +22,7 @@ class ImagePickerView: UIStackView {
 
     var sourceViews = [UIButton]()
     
-    var delegate: ImagePickerViewDelegate?
+    weak var delegate: ImagePickerViewDelegate?
     
     var darkMode = false {
         didSet {

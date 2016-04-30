@@ -16,9 +16,24 @@ class DayViewController: UIViewController {
     private var imagePreviewDelegate: DayImagePreviewDelegate?
     private var isVisible = false
     
+    var cachedImage: UIImage?
     var day: Day {
         didSet {
+            cacheImage()
             updateDayView()
+        }
+    }
+    
+    private func cacheImage() {
+        if let image = day.image {
+            ImageStore.loadImage(image, thumbnail: true) {[weak self] image in
+                if let this = self {
+                    this.cachedImage = image
+                    if this.isVisible {
+                        this.dayView?.image = image
+                    }
+                }
+            }
         }
     }
     
@@ -28,6 +43,7 @@ class DayViewController: UIViewController {
     init(model: Day) {
         self.day = model
         super.init(nibName: nil, bundle: nil)
+        cacheImage()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -65,11 +81,7 @@ class DayViewController: UIViewController {
     
     private func updateDayView() {
         if isVisible {
-            if let image = day.image {
-                ImageStore.loadImage(image, thumbnail: true) {[weak self] image in
-                    self?.dayView?.image = image
-                }
-            }
+            dayView?.imageView.image = cachedImage
             if let livePhoto = day.image?.livePhoto {
                 self.dayView?.livePhoto = livePhoto
             }
@@ -132,7 +144,7 @@ extension DayViewController {
         dayView?.keyboardConstraint?.constant = keyboarConstant - 8 // TODO: move to view
         dayView?.keyboardMode = keyboarConstant < 0
         
-        UIView.animateWithDuration(animationDuration, delay: 0.0, options: animationCurve, animations: {
+        UIView.animateWithDuration(animationDuration, delay: 0.0, options: animationCurve, animations: {[unowned self] in
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
@@ -202,7 +214,7 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
 
 @objc class DayImagePreviewDelegate : NSObject, UIViewControllerPreviewingDelegate {
     
-    let dayViewController: DayViewController
+    weak var dayViewController: DayViewController?
     private weak var currentImageViewController: ImageViewController?
     
     init(dayViewController: DayViewController) {
@@ -210,7 +222,7 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        if let dayView = dayViewController.dayView {
+        if let dayViewController = dayViewController, dayView = dayViewController.dayView {
             previewingContext.sourceRect = dayView.imageView.frame
             
             if let livePhoto = dayViewController.day.image?.livePhoto {
@@ -230,10 +242,12 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        if viewControllerToCommit.isKindOfClass(LivePhotoViewController) {
-            dayViewController.showViewController(viewControllerToCommit, sender: nil)
-        } else if let imageViewController = viewControllerToCommit as? ImageViewController  {
-            dayViewController.showViewController(ImageViewController(image: imageViewController.fullSizeImage ?? imageViewController.imageView.image, fill: false), sender: nil)
+        if let dayViewController = dayViewController {
+            if viewControllerToCommit.isKindOfClass(LivePhotoViewController) {
+                dayViewController.showViewController(viewControllerToCommit, sender: nil)
+            } else if let imageViewController = viewControllerToCommit as? ImageViewController  {
+                dayViewController.showViewController(ImageViewController(image: imageViewController.fullSizeImage ?? imageViewController.imageView.image, fill: false), sender: nil)
+            }
         }
     }
 

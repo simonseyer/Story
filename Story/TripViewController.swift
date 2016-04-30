@@ -98,12 +98,12 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
             navigationItem.setLeftBarButtonItem(UIBarButtonItem(title: "New", style: .Plain, target: self, action: #selector(addDay)), animated: true)
             navigationController?.setNavigationBarHidden(false, animated: false)
             updateStatusBarVisibility()
-            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: {[unowned self] in
                 self.tripView?.mapView.transform = CGAffineTransformMakeTranslation(0, TripView.mapViewHeight)
             }, completion: nil)
         } else {
             navigationItem.setLeftBarButtonItem(nil, animated: true)
-            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {[unowned self] in
                 self.tripView?.mapView.transform = CGAffineTransformIdentity
             }, completion: nil)
         }
@@ -111,7 +111,7 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     }
     
     func updateDeleteButton(animated: Bool) {
-        UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {
+        UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {[unowned self] in
             self.tripView?.deleteButton.alpha = self.editing && !self.model.days.isEmpty ? 1 : 0
         }, completion: nil)
     }
@@ -277,8 +277,8 @@ extension TripViewController : DayStoreObserver {
 
 @objc class DayMapPreviewDelegate : NSObject, UIViewControllerPreviewingDelegate {
     
-    let baseViewController: UIViewController
-    let tripView: TripView
+    weak var baseViewController: UIViewController?
+    weak var tripView: TripView?
     
     init(baseViewController: UIViewController, tripView: TripView) {
         self.baseViewController = baseViewController
@@ -286,12 +286,17 @@ extension TripViewController : DayStoreObserver {
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        previewingContext.sourceRect = tripView.mapView.frame
-        return MapViewController(viewRegion: tripView.mapView.region, annotations: tripView.mapView.annotations)
+        if let tripView = tripView {
+            previewingContext.sourceRect = tripView.mapView.frame
+            return MapViewController(viewRegion: tripView.mapView.region, annotations: tripView.mapView.annotations)
+        }
+        return nil
     }
     
     func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
-        baseViewController.showViewController(viewControllerToCommit, sender: nil)
+        if let baseViewController = baseViewController {
+            baseViewController.showViewController(viewControllerToCommit, sender: nil)
+        }
     }
     
 }
