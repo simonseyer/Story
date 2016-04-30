@@ -90,6 +90,10 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
+        if editing == self.editing {
+            return
+        }
+        
         super.setEditing(editing, animated: animated)
         pageViewController.setEditing(editing, animated: animated)
         navigationController?.hidesBarsOnTap = !editing
