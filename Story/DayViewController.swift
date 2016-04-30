@@ -90,12 +90,6 @@ class DayViewController: UIViewController {
         }
     }
     
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        dayView?.livePhotoView.startPlaybackWithStyle(.Hint)
-    }
-    
     override func setEditing(editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         dayView?.setEditing(editing, animated: animated)
@@ -107,6 +101,10 @@ class DayViewController: UIViewController {
                 self?.navigationController?.pushViewController(ImageViewController(image: image, fill: false), animated: true)
             }
         }
+    }
+    
+    func preview() {
+        dayView?.livePhotoView.startPlaybackWithStyle(.Hint)
     }
 }
 

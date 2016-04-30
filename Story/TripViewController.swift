@@ -222,6 +222,8 @@ extension TripViewController : DayStoreObserver {
             if let dayViewController = currentDayViewController {
                 centerMapView(dayViewController.day, animated: true)
             }
+        } else {
+            currentDayViewController?.preview()
         }
     }
     
