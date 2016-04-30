@@ -138,21 +138,17 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
 }
 
 // Status & Navigation Bar Handling
-extension TripViewController {
+extension TripViewController: UINavigationControllerDelegate {
     
     private func configureNavigationController(configure: Bool, initial: Bool) {
+        navigationController?.delegate = self
         navigationController?.hidesBarsOnTap = configure
         
         if configure {
             navigationItem.title = model.trip.name
             navigationController?.barHideOnTapGestureRecognizer.addTarget(self, action: #selector(updateStatusBarVisibility))
             
-            if initial {
-                navigationController?.setNavigationBarHidden(true, animated: true)
-                updateStatusBarVisibility()
-            } else {
-                updateStatusBarVisibility()
-            }
+            updateStatusBarVisibility()
         } else {
             navigationController?.barHideOnTapGestureRecognizer.removeTarget(self, action: #selector(updateStatusBarVisibility))
         }
@@ -179,6 +175,13 @@ extension TripViewController {
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
         return .LightContent
+    }
+    
+    func navigationController(navigationController: UINavigationController, didShowViewController viewController: UIViewController, animated: Bool) {
+        if viewController == self {
+            navigationController.setNavigationBarHidden(true, animated: true)
+            updateStatusBarVisibility()
+        }
     }
 }
 
