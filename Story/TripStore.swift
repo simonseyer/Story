@@ -15,6 +15,7 @@ public class TripStore {
     
     private var _trips: [String : Trip] = [:]
     var days: [Trip : [String : Day]] = [:]
+    private var dayStoreCache = [Trip : DayStore]()
     public var trips: [Trip] {
         return Array(_trips.values).sort { (aTrip, anotherTrip) -> Bool in
             if let aFirstDay = days[aTrip]?.first?.1 {
@@ -55,7 +56,10 @@ public class TripStore {
     }
     
     public func dayStoreForTrip(trip: Trip) -> DayStore {
-        return DayStore(tripStore: self, trip: trip)
+        if dayStoreCache[trip] == nil {
+            dayStoreCache[trip] = DayStore(tripStore: self, trip: trip)
+        }
+        return dayStoreCache[trip]!
     }
     
     public func load() {
