@@ -146,7 +146,7 @@ extension TripViewController: UINavigationControllerDelegate {
     
     private func configureNavigationController(configure: Bool, initial: Bool) {
         navigationController?.delegate = self
-        navigationController?.hidesBarsOnTap = configure
+        navigationController?.hidesBarsOnTap = configure && !editing
         
         if configure {
             navigationItem.title = model.trip.name
