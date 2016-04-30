@@ -49,10 +49,18 @@ class DayView: UIView, UITextViewDelegate {
     
     var text: String? {
         get {
-            return textView.text
+            return textView.attributedText?.string
         }
         set {
-            textView.text = newValue
+            if let text = newValue {
+                let string = NSAttributedString(string: text, attributes: [
+                    NSFontAttributeName : textView.font,
+                    NSForegroundColorAttributeName : textView.textColor
+                ])
+                textView.attributedText = string
+            } else {
+                textView.attributedText = nil
+            }
             editTextView.text = newValue
             updateViewVisibilities(false)
             updateCharacterCountLabel()
@@ -272,7 +280,8 @@ class DayView: UIView, UITextViewDelegate {
     private func _updateViewVisibilities() {
         imageOverlayView.alpha = editing && imageView.image != nil ? 1 : 0
         imageSelectionView.alpha = (editing || imageView.image == nil) && !keyboardMode ? 1 : 0
-        textEditView.alpha = editing || textView.text == nil ? 1 : 0
+        textEditView.alpha = editing || textView.attributedText == nil ? 1 : 0
+        editTextView.alpha = editing ? 1 : 0
         textView.alpha = editing ? 0 : 1
         imagePickerView.alpha = editing && !keyboardMode && !imageProcessingSpinner.isAnimating() ? 1 : 0
         imagePickerView.darkMode = imageView.image == nil
