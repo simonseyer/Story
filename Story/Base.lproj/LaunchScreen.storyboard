@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -18,9 +17,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="HZ3-KW-XHN">
-                                <rect key="frame" x="60" y="60" width="481" height="479"/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Story Book" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IUx-FA-ofn">
                                 <rect key="frame" x="249" y="30" width="103" height="23"/>
                                 <fontDescription key="fontDescription" name="Baskerville-SemiBold" family="Baskerville" pointSize="20"/>
@@ -30,12 +26,8 @@
                         </subviews>
                         <color key="backgroundColor" red="0.98039215686274506" green="0.97254901960784312" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="HZ3-KW-XHN" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Brx-aY-r84"/>
-                            <constraint firstItem="HZ3-KW-XHN" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="40" id="PXk-eX-M9E"/>
                             <constraint firstItem="IUx-FA-ofn" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="10" id="dkA-zC-eph"/>
-                            <constraint firstItem="HZ3-KW-XHN" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="fqu-ou-ceQ"/>
                             <constraint firstItem="IUx-FA-ofn" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="mOl-tj-7DT"/>
-                            <constraint firstItem="HZ3-KW-XHN" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leadingMargin" constant="40" id="qRu-3W-icl"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -44,7 +36,4 @@
             <point key="canvasLocation" x="53" y="375"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="LaunchImage" width="777" height="679"/>
-    </resources>
 </document>
