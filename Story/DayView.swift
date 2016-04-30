@@ -53,10 +53,17 @@ class DayView: UIView, UITextViewDelegate {
         }
         set {
             if let text = newValue {
+                let paragrahStyle = NSMutableParagraphStyle()
+                paragrahStyle.alignment = .Justified
+                paragrahStyle.lineSpacing = 1.1
+                
                 let string = NSAttributedString(string: text, attributes: [
                     NSFontAttributeName : textLabel.font,
-                    NSForegroundColorAttributeName : textLabel.textColor
+                    NSForegroundColorAttributeName : textLabel.textColor,
+                    NSParagraphStyleAttributeName : paragrahStyle,
+                    NSBaselineOffsetAttributeName : 0
                 ])
+                
                 textLabel.attributedText = string
             } else {
                 textLabel.attributedText = nil
