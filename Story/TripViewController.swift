@@ -235,7 +235,7 @@ extension TripViewController : DayStoreObserver {
         if let latitude = dayModel.image?.latitude, longitude = dayModel.image?.longitude {
             let day = DayAnnotation(latitude: latitude, longitude: longitude)
             if let mapView = tripView?.mapView {
-                let viewRegion = MKCoordinateRegionMakeWithDistance(day.coordinate, 500, 500)
+                let viewRegion = MKCoordinateRegionMakeWithDistance(day.coordinate, 2000, 2000)
                 mapView.setRegion(viewRegion, animated: animated)
             }
         }
