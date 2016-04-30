@@ -16,7 +16,6 @@ class TripListViewController: UITableViewController {
     let rowHeight = CGFloat(140)
     
     var selectionCommand: (Trip -> Void)?
-    var defaultImage: UIImage?
     var editMode = false
     
     init(model: TripStore) {
@@ -87,6 +86,10 @@ class TripListViewController: UITableViewController {
     }
     
     override func setEditing(editing: Bool, animated: Bool) {
+        if self.editing == editing {
+            return
+        }
+        
         super.setEditing(editing, animated: animated)
         
         let insertCellIndexPath = NSIndexPath(forRow: 0, inSection: 0)
@@ -125,13 +128,12 @@ extension TripListViewController {
         let row = modelIndexForIndex(indexPath.row)
         
         if row < 0 {
-            Background.execute({ return UIImage(named: "el_capitan.jpg") }) {[weak self, weak cell] image in
-                self?.defaultImage = image
+            Background.execute({[unowned self] in return self.randomDefaultImage() }) {[weak cell] image in
                 if cell?.trip == nil {
                     cell?.tripImage = image
                 }
             }
-            cell.tripImage = defaultImage
+            cell.tripImage = nil
             cell.tripTitle = ""
         } else {
             let trip = model.trips[row]
@@ -145,8 +147,7 @@ extension TripListViewController {
                     }
                 }
             } else {
-                Background.execute({ return UIImage(named: "el_capitan.jpg") }) {[weak self, weak cell] image in
-                    self?.defaultImage = image
+                Background.execute({[unowned self] in return self.randomDefaultImage() }) {[weak cell] image in
                     if cell?.trip == trip {
                         cell?.tripImage = image
                     }
@@ -167,6 +168,11 @@ extension TripListViewController {
             selectionCommand?(model.trips[row])
         }
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
+    }
+    
+    func randomDefaultImage() -> UIImage? {
+        let number = Int(arc4random_uniform(5) + 1)
+        return UIImage(named: "nw\(number).JPG")
     }
 }
 

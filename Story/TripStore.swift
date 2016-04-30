@@ -154,17 +154,17 @@ extension TripStore {
                     dayStore.storeDay(Day(text: text, image: image))
                 }
                 
-                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw4", withExtension: "JPG")!) { image in
+                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw3", withExtension: "JPG")!) { image in
                     let text = "... or lived on a razor-edge"
                     dayStore.storeDay(Day(text: text, image: image))
                 }
                 
-                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw6", withExtension: "JPG")!) { image in
+                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw4", withExtension: "JPG")!) { image in
                     let text = "Dive deep into your memories by pressing on the image or on the map. Try it now, jump into the waterfall!"
                     dayStore.storeDay(Day(text: text, image: image))
                 }
                 
-                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw7", withExtension: "JPG")!) { image in
+                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw5", withExtension: "JPG")!) { image in
                     let text = "It's time to go back and build your own story. It is as simple as editing your personal Story Book"
                     dayStore.storeDay(Day(text: text, image: image))
                 }

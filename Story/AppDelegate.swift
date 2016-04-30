@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = UIWindow(frame: UIScreen.mainScreen().bounds)
         self.window?.backgroundColor = UIColor.whiteColor()
         
-        //TripStore.delete()
+        TripStore.delete()
         tripStore.load()
         tripStore.loadDemoDataIfNeeded()
         
