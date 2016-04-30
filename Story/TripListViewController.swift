@@ -179,10 +179,13 @@ extension TripListViewController : TripStoreObserver {
     }
     
     func didUpdateTrip(trip: Trip, fromIndex: Int, toIndex: Int) {
-        if fromIndex != toIndex {
-            tableView.moveRowAtIndexPath(NSIndexPath(forRow: indexForModelIndex(fromIndex), inSection: 0), toIndexPath: NSIndexPath(forRow: indexForModelIndex(toIndex), inSection: 0))
-        } else {
-            tableView.reloadRowsAtIndexPaths([NSIndexPath(forRow: indexForModelIndex(toIndex), inSection: 0)], withRowAnimation: .Automatic)
+        dispatch_async(dispatch_get_main_queue()) {[unowned self] in
+            if fromIndex != toIndex {
+                self.tableView.moveRowAtIndexPath(NSIndexPath(forRow: self.indexForModelIndex(fromIndex), inSection: 0), toIndexPath: NSIndexPath(forRow: self.indexForModelIndex(toIndex), inSection: 0))
+            } else {
+                let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: self.indexForModelIndex(fromIndex), inSection: 0)) as! TripCell
+                cell.tripTitle = trip.name
+            }
         }
     }
     
