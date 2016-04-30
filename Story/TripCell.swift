@@ -117,7 +117,7 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         horizontalMotionEffect.maximumRelativeValue = ViewConstants.parallaxDelta
         tripImageView.addMotionEffect(horizontalMotionEffect)
         
-        imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.05)
+        imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.15)
         
         tripTitleView.numberOfLines = 1
         tripTitleView.font = UIFont(name: ViewConstants.boldTextFontName, size: 35)
