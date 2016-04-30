@@ -188,6 +188,7 @@ class DayView: UIView, UITextViewDelegate {
         clipsToBounds = true
         textBackgroundView.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
+        imageView.clipsToBounds = true
         imageView.contentMode = .ScaleAspectFill
         
         livePhotoView.contentMode = .ScaleAspectFill
