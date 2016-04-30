@@ -138,18 +138,37 @@ extension TripStore {
     
     func loadDemoDataIfNeeded() {
         if trips.count == 0 {
-            let trip = Trip(name: "Lorem")
-            storeTrip(trip)
-            
-            let dayStore = dayStoreForTrip(trip)
-            
-            let image1 = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("cinque1", withExtension: "jpg")!)!
-            let day1 = Day(text: "Lorem ipsum I", image: image1)
-            dayStore.storeDay(day1)
-            
-            let image2 = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("cinque2", withExtension: "jpg")!)!
-            let day2 = Day(text: "Lorem ipsum II", image: image2)
-            dayStore.storeDay(day2)
+            dispatch_async(dispatch_get_main_queue()) {
+                let tutorialTrip = Trip(name: "The first Story")
+                
+                let dayStore = self.dayStoreForTrip(tutorialTrip)
+                
+                let image = ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw1", withExtension: "JPG")!)
+                let text = "I love to travel and to share my stories. Look above — a lonely bike. But a more important, my first moment in a new country: Norway"
+                dayStore.storeDay(Day(text: text, image: image))
+                
+                self.storeTrip(tutorialTrip)
+                
+                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw2", withExtension: "JPG")!) { image in
+                    let text = "Capturing your thoughts along with the image lets you and your friends revive the moment when you looked into the distance ..."
+                    dayStore.storeDay(Day(text: text, image: image))
+                }
+                
+                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw4", withExtension: "JPG")!) { image in
+                    let text = "... or lived on a razor-edge"
+                    dayStore.storeDay(Day(text: text, image: image))
+                }
+                
+                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw6", withExtension: "JPG")!) { image in
+                    let text = "Dive deep into your memories by pressing on the image or on the map. Try it now, jump into the waterfall!"
+                    dayStore.storeDay(Day(text: text, image: image))
+                }
+                
+                ImageStore.storeImage(NSBundle.mainBundle().URLForResource("nw7", withExtension: "JPG")!) { image in
+                    let text = "It's time to go back and build your own story. It is as simple as editing your personal Story Book"
+                    dayStore.storeDay(Day(text: text, image: image))
+                }
+            }
         }
     }
 }
