@@ -49,13 +49,11 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
                 addDay()
             }
         } else {
-            if let currentViewController = currentViewController() where viewModel.additionalViewControllers.contains(currentViewController) {
-                viewModel.additionalViewControllers.removeAll()
-                if let dayViewController = viewModel.viewControllerAtIndex(dayStore.days.count - 1) {
-                    setViewControllers([dayViewController], direction: .Reverse, animated: true, invalidate: true)
-                }
+            viewModel.additionalViewControllers.removeAll()
+            if let dayViewController = viewModel.viewControllerAtIndex(dayStore.days.count - 1) {
+                setViewControllers([dayViewController], direction: .Reverse, animated: true, invalidate: true)
             } else {
-                viewModel.additionalViewControllers.removeAll()
+                setViewControllers([viewModel.createAdditionalViewController()], direction: .Forward, animated: false, completion: nil)
             }
         }
     }
@@ -91,7 +89,7 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     }
 
     func addDay() {
-        setViewControllers([ viewModel.createAdditionalViewController()], direction: .Forward, animated: true, completion: nil)
+        setViewControllers([viewModel.createAdditionalViewController()], direction: .Forward, animated: true, completion: nil)
     }
     
     func invalidatePageViewController() {
