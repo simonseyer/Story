@@ -35,14 +35,15 @@ extension ImageStore {
         if let imageData = NSData(contentsOfURL: imageURL),
             image = UIImage(data: imageData),
             gpsInfo = getImageGPSMetadata(imageData),
-            date = getImageDate(gpsInfo),
-            location = getImageLocation(gpsInfo) {
+            date = getImageDate(gpsInfo) {
+            
+            let location = getImageLocation(gpsInfo)
             
             guard let (imageName, thumbnailName) = storeImage(image) else {
                 return nil
             }
             
-            return Image(name: imageName, thumbnailName: thumbnailName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
+            return Image(name: imageName, thumbnailName: thumbnailName, date: date, latitude: location?.latitude, longitude: location?.longitude, livePhoto: nil)
         }
         return nil
     }
@@ -53,7 +54,7 @@ extension ImageStore {
         let assetResult = PHAsset.fetchAssetsWithALAssetURLs([assetRef], options: nil)
         
         guard let asset = assetResult.firstObject as? PHAsset
-            where asset.creationDate != nil && asset.location != nil
+            where asset.creationDate != nil
             else {
                 return nil
         }
@@ -62,8 +63,8 @@ extension ImageStore {
             return nil
         }
         
-        let coordinate = asset.location!.coordinate
-        return Image(name: imageName, thumbnailName: thumbnailName, date: asset.creationDate!, latitude: coordinate.latitude, longitude: coordinate.longitude, livePhoto: livePhoto)
+        let coordinate = asset.location?.coordinate
+        return Image(name: imageName, thumbnailName: thumbnailName, date: asset.creationDate!, latitude: coordinate?.latitude, longitude: coordinate?.longitude, livePhoto: livePhoto)
     }
     
     // For images from the camera (current date and location is used)
@@ -81,11 +82,10 @@ extension ImageStore {
             
             let rotatedImage = normalizedImage(image)
             if let (imageName, thumbnailName) = storeImage(rotatedImage) {
-                if let location = location?.coordinate {
-                    let imageRef = Image(name: imageName, thumbnailName: thumbnailName, date: date, latitude: location.latitude, longitude: location.longitude, livePhoto: nil)
-                    completion(imageRef)
-                    return
-                }
+                let location = location?.coordinate
+                let imageRef = Image(name: imageName, thumbnailName: thumbnailName, date: date, latitude: location?.latitude, longitude: location?.longitude, livePhoto: nil)
+                completion(imageRef)
+                return
             }
             print(error)
             completion(nil)

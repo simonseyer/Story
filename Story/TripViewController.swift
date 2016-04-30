@@ -199,8 +199,8 @@ extension TripViewController : DayStoreObserver {
     }
     
     private func addAnnotationForDay(day: Day) {
-        if let image = day.image {
-            let annotation = DayAnnotation(image: image)
+        if let latitude = day.image?.latitude, longitude = day.image?.longitude {
+            let annotation = DayAnnotation(latitude: latitude, longitude: longitude)
             dayAnnotations[day] = annotation
             tripView?.mapView.addAnnotation(annotation)
         }
@@ -232,8 +232,8 @@ extension TripViewController : DayStoreObserver {
     }
     
     private func centerMapView(dayModel: Day, animated: Bool) {
-        if let image = dayModel.image {
-            let day = DayAnnotation(image: image)
+        if let latitude = dayModel.image?.latitude, longitude = dayModel.image?.longitude {
+            let day = DayAnnotation(latitude: latitude, longitude: longitude)
             if let mapView = tripView?.mapView {
                 let viewRegion = MKCoordinateRegionMakeWithDistance(day.coordinate, 500, 500)
                 mapView.setRegion(viewRegion, animated: animated)
@@ -269,14 +269,16 @@ extension TripViewController : DayStoreObserver {
 
 @objc class DayAnnotation : NSObject, MKAnnotation {
     
-    let image: Image
+    let latitude: Double
+    let longitude: Double
     
-    init(image: Image) {
-        self.image = image
+    init(latitude: Double, longitude: Double) {
+        self.latitude = latitude
+        self.longitude = longitude
     }
     
     internal var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2DMake(image.latitude, image.longitude)
+        return CLLocationCoordinate2DMake(latitude, longitude)
     }
 }
 

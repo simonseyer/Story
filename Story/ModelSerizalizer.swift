@@ -45,8 +45,8 @@ extension Day {
             let creationDate = dict["creationDate"] as? NSDate{
             
             var imageRef: Image? = nil
-            if let anImage = image, aThumbnail = thumbnail, aDate = date, aLatitude = latitude, aLongitude = longitude {
-                imageRef = Image(name: anImage, thumbnailName: aThumbnail, date: aDate, latitude: aLatitude, longitude: aLongitude, livePhoto: livePhoto)
+            if let anImage = image, aThumbnail = thumbnail, aDate = date {
+                imageRef = Image(name: anImage, thumbnailName: aThumbnail, date: aDate, latitude: latitude, longitude: longitude, livePhoto: livePhoto)
             }
             return Day(identifier: identifier, creationDate: creationDate, tripIdentifier: tripIdentifier, text: text, image: imageRef)
         }
@@ -62,8 +62,8 @@ extension Day {
             "image" : (image?.name == nil ? NSNull() : image!.name),
             "thumbnail" : (image?.thumbnailName == nil ? NSNull() : image!.thumbnailName),
             "text" : (text == nil ? NSNull() : text!),
-            "latitude" : (image?.latitude == nil ? NSNull() : image!.latitude),
-            "longitude" : (image?.longitude == nil ? NSNull() : image!.longitude),
+            "latitude" : (image?.latitude == nil ? NSNull() : image!.latitude!),
+            "longitude" : (image?.longitude == nil ? NSNull() : image!.longitude!),
             "livePhoto" : (image?.livePhoto == nil ? NSNull() : image!.livePhoto!)
         ]
     }
