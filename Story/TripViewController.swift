@@ -96,7 +96,7 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         
         if editing {
             navigationItem.setLeftBarButtonItem(UIBarButtonItem(title: "New", style: .Plain, target: self, action: #selector(addDay)), animated: true)
-            navigationController?.setNavigationBarHidden(false, animated: false)
+            navigationController?.setNavigationBarHidden(false, animated: true)
             updateStatusBarVisibility()
             UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: {[unowned self] in
                 self.tripView?.mapView.transform = CGAffineTransformMakeTranslation(0, TripView.mapViewHeight)
@@ -178,7 +178,7 @@ extension TripViewController: UINavigationControllerDelegate {
     }
     
     func navigationController(navigationController: UINavigationController, didShowViewController viewController: UIViewController, animated: Bool) {
-        if viewController == self {
+        if !editing && viewController == self {
             navigationController.setNavigationBarHidden(true, animated: true)
             updateStatusBarVisibility()
         }
