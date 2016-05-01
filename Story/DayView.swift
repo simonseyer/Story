@@ -161,7 +161,7 @@ class DayView: UIView, UITextViewDelegate {
         
         textBackgroundView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
         textBackgroundView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
-        textBackgroundView.topAnchor.constraintEqualToAnchor(imageView.bottomAnchor).active = true
+        textBackgroundView.topAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: -1).active = true
         textBackgroundView.bottomAnchor.constraintLessThanOrEqualToAnchor(bottomAnchor, constant: -TripView.mapViewHeight + magicPageIndicatorHeight).active = true
         keyboardConstraint = textBackgroundView.bottomAnchor.constraintLessThanOrEqualToAnchor(bottomAnchor)
         keyboardConstraint?.active = true
