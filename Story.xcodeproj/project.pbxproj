@@ -479,7 +479,7 @@
 				INFOPLIST_FILE = Story/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.Story;
+				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryBook;
 				PRODUCT_NAME = "Simon Seyer";
 				PROVISIONING_PROFILE = "";
 			};
@@ -494,7 +494,7 @@
 				INFOPLIST_FILE = Story/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.Story;
+				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryBook;
 				PRODUCT_NAME = "Simon Seyer";
 				PROVISIONING_PROFILE = "";
 			};
