@@ -135,6 +135,15 @@ extension TripListViewController {
             }
             cell.tripImage = nil
             cell.tripTitle = ""
+            cell.doneCommand = {[weak self] in
+                if let text = cell.tripTitleTextView.text where !text.isEmpty {
+                    let trip = Trip(name: text)
+                    self?.model.storeTrip(trip)
+                    cell.tripTitleTextView.text = ""
+                } else {
+                    self?.setEditing(false, animated: true)
+                }
+            }
         } else {
             let trip = model.trips[row]
             
@@ -152,6 +161,10 @@ extension TripListViewController {
                         cell?.tripImage = image
                     }
                 }
+            }
+            
+            cell.doneCommand = {[weak self] trip in
+                self?.setEditing(false, animated: true)
             }
         }
         

@@ -21,6 +21,7 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
     var trip: Trip?
     
     var changeCommand: (Trip -> Void)?
+    var doneCommand: (Void -> Void)?
     
     var tripTitle: String? {
         get {
@@ -135,6 +136,7 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
         tripTitleTextView.delegate = self
         let placeholder = NSAttributedString(string: "New Story", attributes: [NSForegroundColorAttributeName : UIColor.lightGrayColor().colorWithAlphaComponent(0.7)])
         tripTitleTextView.attributedPlaceholder = placeholder
+        tripTitleTextView.returnKeyType = .Done
         
         tripTitleBottomBorder.backgroundColor = UIColor.whiteColor()
         tripTitleBottomBorder.alpha = 0
@@ -146,6 +148,13 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
             newTrip.name = text
             changeCommand?(newTrip)
         }
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        dispatch_async(dispatch_get_main_queue()) {[unowned self] in
+            self.doneCommand?()
+        }
+        return true
     }
     
     func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
