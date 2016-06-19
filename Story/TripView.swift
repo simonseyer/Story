@@ -39,32 +39,32 @@ class TripView: UIView {
         
         LayoutUtils.fullInSuperview(dayContainerView, superView: self)
         
-        mapView.heightAnchor.constraintEqualToConstant(TripView.mapViewHeight).active = true
-        mapView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
-        mapView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
-        mapView.bottomAnchor.constraintEqualToAnchor(bottomAnchor).active = true
+        mapView.heightAnchor.constraint(equalToConstant: TripView.mapViewHeight).isActive = true
+        mapView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        mapView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        mapView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         
-        deleteButton.centerXAnchor.constraintEqualToAnchor(mapView.centerXAnchor).active = true
-        deleteButton.centerYAnchor.constraintEqualToAnchor(mapView.centerYAnchor).active = true
+        deleteButton.centerXAnchor.constraint(equalTo: mapView.centerXAnchor).isActive = true
+        deleteButton.centerYAnchor.constraint(equalTo: mapView.centerYAnchor).isActive = true
     }
     
     private func setupView() {
         backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
-        mapView.zoomEnabled = false
-        mapView.scrollEnabled = false
-        mapView.rotateEnabled = false
-        mapView.pitchEnabled = false
+        mapView.isZoomEnabled = false
+        mapView.isScrollEnabled = false
+        mapView.isRotateEnabled = false
+        mapView.isPitchEnabled = false
        
         mapView.alpha = 0.7
         
         deleteButton.titleLabel?.font = ViewConstants.textFont()
-        deleteButton.setTitleColor(UIColor(hexValue: ViewConstants.tintTextColorCode), forState: .Normal)
-        deleteButton.setTitle("Delete Moment", forState: .Normal)
+        deleteButton.setTitleColor(UIColor(hexValue: ViewConstants.tintTextColorCode), for: UIControlState())
+        deleteButton.setTitle("Delete Moment", for: UIControlState())
         deleteButton.alpha = 0
     }
     
-    func setDayView(dayView: UIView) {
+    func setDayView(_ dayView: UIView) {
         dayView.translatesAutoresizingMaskIntoConstraints = false
         
         dayContainerView.addSubview(dayView)

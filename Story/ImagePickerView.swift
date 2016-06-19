@@ -15,7 +15,7 @@ enum ImagePickerSource: String {
 }
 
 protocol ImagePickerViewDelegate: class {
-    func didSelectSource(source: ImagePickerSource)
+    func didSelectSource(_ source: ImagePickerSource)
 }
 
 class ImagePickerView: UIStackView {
@@ -27,14 +27,14 @@ class ImagePickerView: UIStackView {
     var darkMode = false {
         didSet {
             for button in sourceViews {
-                button.tintColor = darkMode ? UIColor(hexValue: ViewConstants.borderColorCode) : UIColor.whiteColor()
-                button.setTitleColor(darkMode ? UIColor(hexValue: ViewConstants.lightTextColorCode) : UIColor.whiteColor(), forState: .Normal)
+                button.tintColor = darkMode ? UIColor(hexValue: ViewConstants.borderColorCode) : UIColor.white()
+                button.setTitleColor(darkMode ? UIColor(hexValue: ViewConstants.lightTextColorCode) : UIColor.white(), for: UIControlState())
             }
         }
     }
     
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         setupView()
     }
     
@@ -43,27 +43,27 @@ class ImagePickerView: UIStackView {
     }
     
     private func setupView() {
-        axis = .Vertical
-        distribution = .EqualSpacing
+        axis = .vertical
+        distribution = .equalSpacing
         spacing = 20
-        backgroundColor = UIColor.redColor()
+        backgroundColor = UIColor.red()
     }
     
-    func addSource(source: ImagePickerSource) {
+    func addSource(_ source: ImagePickerSource) {
         let button = SourceButton(source: source)
         
         button.titleLabel?.font = ViewConstants.textFont()
-        button.setTitle(source.rawValue, forState: .Normal)
-        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        button.setTitle(source.rawValue, for: UIControlState())
+        button.setTitleColor(UIColor.white(), for: UIControlState())
         
-        button.addTarget(self, action: #selector(didPressButton), forControlEvents: .TouchUpInside)
+        button.addTarget(self, action: #selector(didPressButton), for: .touchUpInside)
         
         sourceViews.append(button)
         
         addArrangedSubview(button)
     }
     
-    func didPressButton(sender: UIButton) {
+    func didPressButton(_ sender: UIButton) {
         if let button = sender as? SourceButton {
             delegate?.didSelectSource(button.source)
         }
@@ -83,10 +83,10 @@ private class SourceButton: UIButton {
     
     init(source: ImagePickerSource) {
         self.source = source
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
         
-        borderLayer.strokeColor = UIColor.whiteColor().CGColor
-        borderLayer.fillColor = UIColor.clearColor().CGColor
+        borderLayer.strokeColor = UIColor.white().cgColor
+        borderLayer.fillColor = UIColor.clear().cgColor
         layer.addSublayer(borderLayer)
     }
     
@@ -98,10 +98,10 @@ private class SourceButton: UIButton {
         super.layoutSubviews()
         
         borderLayer.frame = bounds
-        borderLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 8).CGPath
+        borderLayer.path = UIBezierPath(roundedRect: bounds, cornerRadius: 8).cgPath
     }
     
     private override func tintColorDidChange() {
-        borderLayer.strokeColor = tintColor.CGColor
+        borderLayer.strokeColor = tintColor.cgColor
     }
 }

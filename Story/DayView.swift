@@ -17,7 +17,7 @@ class DayView: UIView, UITextViewDelegate {
     let imageSelectionView = UIView()
     let imagePickerView = ImagePickerView()
     let imageSelectionBorder = DashedBorderShapeLayer()
-    let imageProcessingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+    let imageProcessingSpinner = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
     
     let textBackgroundView = UIView()
     let textPlaceholderLabel = UILabel()
@@ -54,10 +54,10 @@ class DayView: UIView, UITextViewDelegate {
         set {
             if let text = newValue {
                 let paragrahStyle = NSMutableParagraphStyle()
-                paragrahStyle.alignment = .Justified
+                paragrahStyle.alignment = .justified
                 paragrahStyle.lineSpacing = 1.1
                 
-                let string = NSAttributedString(string: text, attributes: [
+                let string = AttributedString(string: text, attributes: [
                     NSFontAttributeName : textLabel.font,
                     NSForegroundColorAttributeName : textLabel.textColor,
                     NSParagraphStyleAttributeName : paragrahStyle,
@@ -93,7 +93,7 @@ class DayView: UIView, UITextViewDelegate {
         }
     }
     
-    var didEndEditTextCommand: (String? -> Void)?
+    var didEndEditTextCommand: ((String?) -> Void)?
     
     init() {
         super.init(frame: CGRect.zero)
@@ -136,52 +136,52 @@ class DayView: UIView, UITextViewDelegate {
         addSubview(characterCountLabel)
         addSubview(textLabel)
         
-        imageView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: -ViewConstants.parallaxDelta).active = true
-        imageView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: ViewConstants.parallaxDelta).active = true
-        imageView.topAnchor.constraintEqualToAnchor(topAnchor).active = true
-        let maxHeightConstraint = imageView.heightAnchor.constraintEqualToConstant(1000)
+        imageView.leftAnchor.constraint(equalTo: leftAnchor, constant: -ViewConstants.parallaxDelta).isActive = true
+        imageView.rightAnchor.constraint(equalTo: rightAnchor, constant: ViewConstants.parallaxDelta).isActive = true
+        imageView.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        let maxHeightConstraint = imageView.heightAnchor.constraint(equalToConstant: 1000)
         maxHeightConstraint.priority = UILayoutPriorityDefaultLow
-        maxHeightConstraint.active = true
+        maxHeightConstraint.isActive = true
         
         LayoutUtils.fullInSuperview(livePhotoView, superView: imageView)
         
         LayoutUtils.fullInSuperview(imageOverlayView, superView: imageView)
         
-        imageSelectionView.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: editViewMargin).active = true
-        imageSelectionView.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -editViewMargin).active = true
-        imageSelectionView.topAnchor.constraintEqualToAnchor(topAnchor, constant: editViewMargin + magicTopMargin).active = true
-        imageSelectionView.bottomAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: -editViewMargin).active = true
+        imageSelectionView.leftAnchor.constraint(equalTo: leftAnchor, constant: editViewMargin).isActive = true
+        imageSelectionView.rightAnchor.constraint(equalTo: rightAnchor, constant: -editViewMargin).isActive = true
+        imageSelectionView.topAnchor.constraint(equalTo: topAnchor, constant: editViewMargin + magicTopMargin).isActive = true
+        imageSelectionView.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -editViewMargin).isActive = true
         
-        imagePickerView.leftAnchor.constraintEqualToAnchor(imageSelectionView.leftAnchor, constant: 40).active = true
-        imagePickerView.rightAnchor.constraintEqualToAnchor(imageSelectionView.rightAnchor, constant: -40).active = true
-        imagePickerView.centerYAnchor.constraintEqualToAnchor(imageSelectionView.centerYAnchor).active = true
+        imagePickerView.leftAnchor.constraint(equalTo: imageSelectionView.leftAnchor, constant: 40).isActive = true
+        imagePickerView.rightAnchor.constraint(equalTo: imageSelectionView.rightAnchor, constant: -40).isActive = true
+        imagePickerView.centerYAnchor.constraint(equalTo: imageSelectionView.centerYAnchor).isActive = true
         
-        imageProcessingSpinner.centerXAnchor.constraintEqualToAnchor(imageSelectionView.centerXAnchor).active = true
-        imageProcessingSpinner.centerYAnchor.constraintEqualToAnchor(imageSelectionView.centerYAnchor).active = true
+        imageProcessingSpinner.centerXAnchor.constraint(equalTo: imageSelectionView.centerXAnchor).isActive = true
+        imageProcessingSpinner.centerYAnchor.constraint(equalTo: imageSelectionView.centerYAnchor).isActive = true
         
-        textBackgroundView.leftAnchor.constraintEqualToAnchor(leftAnchor).active = true
-        textBackgroundView.rightAnchor.constraintEqualToAnchor(rightAnchor).active = true
-        textBackgroundView.topAnchor.constraintEqualToAnchor(imageView.bottomAnchor, constant: -1).active = true
-        textBackgroundView.bottomAnchor.constraintLessThanOrEqualToAnchor(bottomAnchor, constant: -TripView.mapViewHeight + magicPageIndicatorHeight).active = true
-        keyboardConstraint = textBackgroundView.bottomAnchor.constraintLessThanOrEqualToAnchor(bottomAnchor)
-        keyboardConstraint?.active = true
+        textBackgroundView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
+        textBackgroundView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+        textBackgroundView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -1).isActive = true
+        textBackgroundView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -TripView.mapViewHeight + magicPageIndicatorHeight).isActive = true
+        keyboardConstraint = textBackgroundView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor)
+        keyboardConstraint?.isActive = true
         
-        textPlaceholderLabel.leftAnchor.constraintEqualToAnchor(editTextView.leftAnchor, constant: 6).active = true
-        textPlaceholderLabel.rightAnchor.constraintEqualToAnchor(editTextView.rightAnchor, constant: -6).active = true
-        textPlaceholderLabel.topAnchor.constraintEqualToAnchor(editTextView.topAnchor, constant: 8).active = true
+        textPlaceholderLabel.leftAnchor.constraint(equalTo: editTextView.leftAnchor, constant: 6).isActive = true
+        textPlaceholderLabel.rightAnchor.constraint(equalTo: editTextView.rightAnchor, constant: -6).isActive = true
+        textPlaceholderLabel.topAnchor.constraint(equalTo: editTextView.topAnchor, constant: 8).isActive = true
         
         LayoutUtils.fullInSuperview(textEditContainerView, superView: textBackgroundView, margin: editViewMargin)
         
         LayoutUtils.fullInSuperview(editTextView, superView: textEditContainerView, margin: editTextViewMargin)
         
-        characterCountLabel.rightAnchor.constraintEqualToAnchor(textLabel.rightAnchor).active = true
-        characterCountLabel.topAnchor.constraintEqualToAnchor(textLabel.bottomAnchor, constant: 8).active = true
+        characterCountLabel.rightAnchor.constraint(equalTo: textLabel.rightAnchor).isActive = true
+        characterCountLabel.topAnchor.constraint(equalTo: textLabel.bottomAnchor, constant: 8).isActive = true
         
-        textLabel.leftAnchor.constraintEqualToAnchor(leftAnchor, constant: textViewXMargin).active = true
-        textLabel.rightAnchor.constraintEqualToAnchor(rightAnchor, constant: -textViewXMargin).active = true
-        textLabel.topAnchor.constraintEqualToAnchor(textBackgroundView.topAnchor, constant: textViewYMargin).active = true
-        textLabel.bottomAnchor.constraintEqualToAnchor(textBackgroundView.bottomAnchor, constant: -textViewYMargin).active = true
-        textLabel.heightAnchor.constraintEqualToConstant(textViewHeight).active = true
+        textLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: textViewXMargin).isActive = true
+        textLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -textViewXMargin).isActive = true
+        textLabel.topAnchor.constraint(equalTo: textBackgroundView.topAnchor, constant: textViewYMargin).isActive = true
+        textLabel.bottomAnchor.constraint(equalTo: textBackgroundView.bottomAnchor, constant: -textViewYMargin).isActive = true
+        textLabel.heightAnchor.constraint(equalToConstant: textViewHeight).isActive = true
     }
     
     private func setupView() {
@@ -189,18 +189,18 @@ class DayView: UIView, UITextViewDelegate {
         textBackgroundView.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         imageView.clipsToBounds = true
-        imageView.contentMode = .ScaleAspectFill
+        imageView.contentMode = .scaleAspectFill
         
-        livePhotoView.contentMode = .ScaleAspectFill
-        livePhotoView.userInteractionEnabled = false
+        livePhotoView.contentMode = .scaleAspectFill
+        livePhotoView.isUserInteractionEnabled = false
         
         let horizontalMotionEffect = UIInterpolatingMotionEffect(keyPath: "center.x",
-                                                                 type: .TiltAlongHorizontalAxis)
+                                                                 type: .tiltAlongHorizontalAxis)
         horizontalMotionEffect.minimumRelativeValue = -ViewConstants.parallaxDelta
         horizontalMotionEffect.maximumRelativeValue = ViewConstants.parallaxDelta
         imageView.addMotionEffect(horizontalMotionEffect)
         
-        imageOverlayView.backgroundColor = UIColor.blackColor().colorWithAlphaComponent(0.55)
+        imageOverlayView.backgroundColor = UIColor.black().withAlphaComponent(0.55)
 
         imageOverlayView.alpha = 0
         imageSelectionView.alpha = 0
@@ -216,13 +216,13 @@ class DayView: UIView, UITextViewDelegate {
         textLabel.numberOfLines = 0
         textLabel.font = ViewConstants.textFont()
         textLabel.textColor = UIColor(hexValue: ViewConstants.textColorCode)
-        textLabel.textAlignment = .Justified
+        textLabel.textAlignment = .justified
         
         textEditContainerView.alpha = 0
         
         editTextView.font = textLabel.font
         editTextView.textColor = textLabel.textColor
-        editTextView.backgroundColor = UIColor.clearColor()
+        editTextView.backgroundColor = UIColor.clear()
         editTextView.tintColor = textLabel.textColor
         editTextView.delegate = self
         
@@ -242,9 +242,9 @@ class DayView: UIView, UITextViewDelegate {
         textEditBorder.frame = textEditContainerView.bounds
     }
     
-    func setEditing(editing: Bool, animated: Bool) {
+    func setEditing(_ editing: Bool, animated: Bool) {
         if animated {
-            UIView.animateWithDuration(0.25) {[unowned self] in
+            UIView.animate(withDuration: 0.25) {[unowned self] in
                 self.setEditing(editing)
             }
         } else {
@@ -252,7 +252,7 @@ class DayView: UIView, UITextViewDelegate {
         }
     }
     
-    func setProcessing(processing: Bool) {
+    func setProcessing(_ processing: Bool) {
         if processing {
             imageProcessingSpinner.startAnimating()
         } else {
@@ -261,7 +261,7 @@ class DayView: UIView, UITextViewDelegate {
         updateViewVisibilities()
     }
     
-    private func setEditing(editing: Bool) {
+    private func setEditing(_ editing: Bool) {
         self.editing = editing
         
         updateViewVisibilities()
@@ -278,9 +278,9 @@ class DayView: UIView, UITextViewDelegate {
         }
     }
     
-    private func updateViewVisibilities(animated: Bool = true) {
+    private func updateViewVisibilities(_ animated: Bool = true) {
         textPlaceholderLabel.alpha = (editing && editTextView.text.characters.count == 0) ? 0.5 : 0.0
-        UIView.animateWithDuration(animated ? 0.3 : 0.0) { [unowned self] in
+        UIView.animate(withDuration: animated ? 0.3 : 0.0) { [unowned self] in
             self._updateViewVisibilities()
         }
     }
@@ -301,28 +301,28 @@ class DayView: UIView, UITextViewDelegate {
         editTextView.resignFirstResponder()
     }
     
-    func textViewDidEndEditing(textView: UITextView) {
+    func textViewDidEndEditing(_ textView: UITextView) {
         didEndEditTextCommand?(textView.text)
     }
 
-    func textViewDidChange(textView: UITextView) {
+    func textViewDidChange(_ textView: UITextView) {
         self.updateViewVisibilities()
         updateCharacterCountLabel()
     }
     
-    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         guard let oldText = textView.text else {
             return true
         }
-        let newString = (oldText as NSString).stringByReplacingCharactersInRange(range, withString: text)
+        let newString = (oldText as NSString).replacingCharacters(in: range, with: text)
         let ok = newString.characters.count <= 140
         if !ok {
-            textView.text = (newString as NSString).substringToIndex(141)
+            textView.text = (newString as NSString).substring(to: 141)
 
-            dispatch_async(dispatch_get_main_queue()) {
-                self.characterCountLabel.transform = CGAffineTransformMakeTranslation(6, 0)
-                UIView.animateWithDuration(0.7, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 20, options: UIViewAnimationOptions(), animations: { () -> Void in
-                    self.characterCountLabel.transform = CGAffineTransformIdentity
+            DispatchQueue.main.async {
+                self.characterCountLabel.transform = CGAffineTransform(translationX: 6, y: 0)
+                UIView.animate(withDuration: 0.7, delay: 0.0, usingSpringWithDamping: 0.2, initialSpringVelocity: 20, options: UIViewAnimationOptions(), animations: { () -> Void in
+                    self.characterCountLabel.transform = CGAffineTransform.identity
                 }, completion: nil)
             }
         }

@@ -15,12 +15,12 @@ class TripListViewController: UITableViewController {
     
     let rowHeight = CGFloat(140)
     
-    var selectionCommand: (Trip -> Void)?
+    var selectionCommand: ((Trip) -> Void)?
     var editMode = false
     
     init(model: TripStore) {
         self.model = model
-        super.init(style: .Plain)
+        super.init(style: .plain)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -31,9 +31,9 @@ class TripListViewController: UITableViewController {
         view.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
         tableView.rowHeight = rowHeight
-        tableView.registerClass(TripCell.self, forCellReuseIdentifier: cellReuseIdentifier)
+        tableView.register(TripCell.self, forCellReuseIdentifier: cellReuseIdentifier)
         
-        tableView.separatorStyle = .None
+        tableView.separatorStyle = .none
         tableView.separatorColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         tableView.separatorInset = UIEdgeInsetsZero
         tableView.layoutMargins = UIEdgeInsetsZero
@@ -45,87 +45,87 @@ class TripListViewController: UITableViewController {
 
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
-        model.observers.addObject(self)
+        model.observers.add(self)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        model.observers.removeObject(self)
+        model.observers.remove(self)
     }
     
-    override func tableView(tableView: UITableView, shouldIndentWhileEditingRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
     
-    override func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return editing
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return isEditing
     }
     
-    override func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        let row = modelIndexForIndex(indexPath.row)
-        return row < 0 ? .Insert : .Delete
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        let row = modelIndexForIndex((indexPath as NSIndexPath).row)
+        return row < 0 ? .insert : .delete
     }
     
-    override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         switch editingStyle {
-        case .Insert:
-            let cell = tableView.cellForRowAtIndexPath(indexPath) as! TripCell
+        case .insert:
+            let cell = tableView.cellForRow(at: indexPath) as! TripCell
             if let text = cell.tripTitleTextView.text where !text.isEmpty {
                 let trip = Trip(name: text)
                 model.storeTrip(trip)
                 cell.tripTitleTextView.text = ""
             }
-        case .Delete:
-            model.removeTrip(model.trips[modelIndexForIndex(indexPath.row)])
+        case .delete:
+            model.removeTrip(model.trips[modelIndexForIndex((indexPath as NSIndexPath).row)])
         default:
             break
         }
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
-        if self.editing == editing {
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        if self.isEditing == editing {
             return
         }
         
         super.setEditing(editing, animated: animated)
         
-        let insertCellIndexPath = NSIndexPath(forRow: 0, inSection: 0)
+        let insertCellIndexPath = IndexPath(row: 0, section: 0)
         if (editing) {
             editMode = true
-            tableView.insertRowsAtIndexPaths([insertCellIndexPath], withRowAnimation: .Automatic)
+            tableView.insertRows(at: [insertCellIndexPath], with: .automatic)
         } else {
             editMode = false
-            tableView.deleteRowsAtIndexPaths([insertCellIndexPath], withRowAnimation: .Automatic)
+            tableView.deleteRows(at: [insertCellIndexPath], with: .automatic)
         }
     }
     
-    func indexForModelIndex(modelIndex: Int) -> Int {
-        return modelIndex + (editing ? 1 : 0)
+    func indexForModelIndex(_ modelIndex: Int) -> Int {
+        return modelIndex + (isEditing ? 1 : 0)
     }
     
-    func modelIndexForIndex(index: Int) -> Int {
-        return index - (editing ? 1 : 0)
+    func modelIndexForIndex(_ index: Int) -> Int {
+        return index - (isEditing ? 1 : 0)
     }
 }
 
 // TableView DataSource
 extension TripListViewController {
     
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return model.trips.count + (editMode ? 1 : 0)
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellReuseIdentifier) as! TripCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier) as! TripCell
         
-        let row = modelIndexForIndex(indexPath.row)
+        let row = modelIndexForIndex((indexPath as NSIndexPath).row)
         
         if row < 0 {
             Background.execute({[unowned self] in return self.randomDefaultImage() }) {[weak cell] image in
@@ -175,12 +175,12 @@ extension TripListViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let row = modelIndexForIndex(indexPath.row)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = modelIndexForIndex((indexPath as NSIndexPath).row)
         if row >= 0 && row < model.trips.count {
             selectionCommand?(model.trips[row])
         }
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func randomDefaultImage() -> UIImage? {
@@ -191,27 +191,27 @@ extension TripListViewController {
 
 extension TripListViewController : TripStoreObserver {
     
-    func didInsertTrip(trip: Trip, atIndex index: Int) {
-        tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: indexForModelIndex(index), inSection: 0)], withRowAnimation: .Automatic)
-        if editing {
+    func didInsertTrip(_ trip: Trip, atIndex index: Int) {
+        tableView.insertRows(at: [IndexPath(row: indexForModelIndex(index), section: 0)], with: .automatic)
+        if isEditing {
             self.selectionCommand?(trip)
             setEditing(false, animated: false)
         }
     }
     
-    func didUpdateTrip(trip: Trip, fromIndex: Int, toIndex: Int) {
-        dispatch_async(dispatch_get_main_queue()) {[unowned self] in
+    func didUpdateTrip(_ trip: Trip, fromIndex: Int, toIndex: Int) {
+        DispatchQueue.main.async {[unowned self] in
             if fromIndex != toIndex {
-                self.tableView.moveRowAtIndexPath(NSIndexPath(forRow: self.indexForModelIndex(fromIndex), inSection: 0), toIndexPath: NSIndexPath(forRow: self.indexForModelIndex(toIndex), inSection: 0))
+                self.tableView.moveRow(at: IndexPath(row: self.indexForModelIndex(fromIndex), section: 0), to: IndexPath(row: self.indexForModelIndex(toIndex), section: 0))
             } else {
-                let cell = self.tableView.cellForRowAtIndexPath(NSIndexPath(forRow: self.indexForModelIndex(fromIndex), inSection: 0)) as! TripCell
+                let cell = self.tableView.cellForRow(at: IndexPath(row: self.indexForModelIndex(fromIndex), section: 0)) as! TripCell
                 cell.tripTitle = trip.name
             }
         }
     }
     
-    func didRemoveTrip(trip: Trip, fromIndex index: Int) {
-        tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexForModelIndex(index), inSection: 0)], withRowAnimation: .Automatic)
+    func didRemoveTrip(_ trip: Trip, fromIndex index: Int) {
+        tableView.deleteRows(at: [IndexPath(row: indexForModelIndex(index), section: 0)], with: .automatic)
     }
 }
 

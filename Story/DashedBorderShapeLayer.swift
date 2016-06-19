@@ -26,14 +26,14 @@ class DashedBorderShapeLayer : CAShapeLayer {
 
     
     private func setupLayer() {
-        strokeColor = UIColor(hexValue: ViewConstants.borderColorCode).CGColor
+        strokeColor = UIColor(hexValue: ViewConstants.borderColorCode).cgColor
         fillColor = nil
         lineDashPattern = [6, 5]
     }
     
     override var frame: CGRect {
         didSet {
-            path = UIBezierPath(roundedRect: frame, cornerRadius: 8).CGPath
+            path = UIBezierPath(roundedRect: frame, cornerRadius: 8).cgPath
         }
     }
     

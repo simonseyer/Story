@@ -44,13 +44,13 @@ class MapViewController: UIViewController {
         mapView.setRegion(viewRegion, animated: false)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         configureNavigationController(true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         configureNavigationController(false)
@@ -62,7 +62,7 @@ class MapViewController: UIViewController {
     
     // TODO: copy & paste
     
-    private func configureNavigationController(configure: Bool) {
+    private func configureNavigationController(_ configure: Bool) {
         if configure {
             Background.delay(0.5) {
                 self.navigationController?.hidesBarsOnTap = configure
@@ -82,12 +82,12 @@ class MapViewController: UIViewController {
     
     func updateStatusBarVisibility() {
         if let navigationController = navigationController {
-            statusBarHidden = navigationController.navigationBarHidden
+            statusBarHidden = navigationController.isNavigationBarHidden
             let delay = statusBarHidden ? 0 : 0.05
             let animations = {[unowned self] in
                 self.setNeedsStatusBarAppearanceUpdate()
             }
-            UIView.animateWithDuration(statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
+            UIView.animate(withDuration: statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
         }
     }
     

@@ -10,11 +10,11 @@ import UIKit
 
 struct LayoutUtils {
     
-    static func fullInSuperview(view: UIView, superView: UIView, margin: CGFloat = 0) {
-        view.leftAnchor.constraintEqualToAnchor(superView.leftAnchor, constant: margin).active = true
-        view.rightAnchor.constraintEqualToAnchor(superView.rightAnchor, constant: -margin).active = true
-        view.topAnchor.constraintEqualToAnchor(superView.topAnchor, constant: margin).active = true
-        view.bottomAnchor.constraintEqualToAnchor(superView.bottomAnchor, constant: -margin).active = true
+    static func fullInSuperview(_ view: UIView, superView: UIView, margin: CGFloat = 0) {
+        view.leftAnchor.constraint(equalTo: superView.leftAnchor, constant: margin).isActive = true
+        view.rightAnchor.constraint(equalTo: superView.rightAnchor, constant: -margin).isActive = true
+        view.topAnchor.constraint(equalTo: superView.topAnchor, constant: margin).isActive = true
+        view.bottomAnchor.constraint(equalTo: superView.bottomAnchor, constant: -margin).isActive = true
     }
     
 }

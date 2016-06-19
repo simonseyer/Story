@@ -37,7 +37,7 @@ class DayViewController: UIViewController {
         }
     }
     
-    var changeCommand: (Day -> Void)?
+    var changeCommand: ((Day) -> Void)?
     private var tapGestureRec: UITapGestureRecognizer?
     
     init(model: Day) {
@@ -70,9 +70,9 @@ class DayViewController: UIViewController {
         configureImagePicker()
         
         if let dayView = dayView {
-            dayView.imageView.userInteractionEnabled = true
+            dayView.imageView.isUserInteractionEnabled = true
             imagePreviewDelegate = DayImagePreviewDelegate(dayViewController: self)
-            registerForPreviewingWithDelegate(imagePreviewDelegate!, sourceView: dayView.imageView)
+            registerForPreviewing(with: imagePreviewDelegate!, sourceView: dayView.imageView)
 
 //            tapGestureRec = UITapGestureRecognizer(target: self, action: #selector(didTouchImage))
 //            dayView.imageView.addGestureRecognizer(tapGestureRec!)
@@ -86,11 +86,11 @@ class DayViewController: UIViewController {
                 self.dayView?.livePhoto = livePhoto
             }
             dayView?.text = day.text
-            dayView?.setEditing(editing, animated: false)
+            dayView?.setEditing(isEditing, animated: false)
         }
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         dayView?.setEditing(editing, animated: animated)
     }
@@ -104,7 +104,7 @@ class DayViewController: UIViewController {
     }
     
     func preview() {
-        dayView?.livePhotoView.startPlaybackWithStyle(.Hint)
+        dayView?.livePhotoView.startPlayback(with: .hint)
     }
 }
 
@@ -112,37 +112,37 @@ class DayViewController: UIViewController {
 // Keyboard handling
 extension DayViewController {
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         isVisible = true
         updateDayView()
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default().addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default().addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         isVisible = false
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+        NotificationCenter.default().removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default().removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
-    func updateKeyboardLayoutGuide(notification: NSNotification) {
-        let userInfo = notification.userInfo!
+    func updateKeyboardLayoutGuide(_ notification: Notification) {
+        let userInfo = (notification as NSNotification).userInfo!
         
         let animationDuration = (userInfo[UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
-        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
-        let convertedKeyboardEndFrame = view.convertRect(keyboardEndFrame, fromView: view.window)
-        let rawAnimationCurve = (notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).unsignedIntValue << 16
-        let animationCurve = UIViewAnimationOptions(rawValue: UInt(rawAnimationCurve) | UIViewAnimationOptions.BeginFromCurrentState.rawValue)
+        let keyboardEndFrame = (userInfo[UIKeyboardFrameEndUserInfoKey] as! NSValue).cgRectValue()
+        let convertedKeyboardEndFrame = view.convert(keyboardEndFrame, from: view.window)
+        let rawAnimationCurve = ((notification as NSNotification).userInfo![UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).uint32Value << 16
+        let animationCurve = UIViewAnimationOptions(rawValue: UInt(rawAnimationCurve) | UIViewAnimationOptions.beginFromCurrentState.rawValue)
         
-        let keyboarConstant = -(CGRectGetMaxY(view.bounds) - CGRectGetMinY(convertedKeyboardEndFrame))
+        let keyboarConstant = -(view.bounds.maxY - convertedKeyboardEndFrame.minY)
         dayView?.keyboardConstraint?.constant = keyboarConstant - 8 // TODO: move to view
         dayView?.keyboardMode = keyboarConstant < 0
         
-        UIView.animateWithDuration(animationDuration, delay: 0.0, options: animationCurve, animations: {[unowned self] in
+        UIView.animate(withDuration: animationDuration, delay: 0.0, options: animationCurve, animations: {[unowned self] in
             self.view.layoutIfNeeded()
         }, completion: nil)
     }
@@ -154,46 +154,46 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
     
     private func configureImagePicker() {
         
-        if UIImagePickerController.isSourceTypeAvailable(.Camera) {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
             dayView?.imagePickerView.addSource(.Camera)
         }
         
-        if UIImagePickerController.isSourceTypeAvailable(.PhotoLibrary) {
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
             dayView?.imagePickerView.addSource(.PhotoLibrary)
         }
         
-        if UIImagePickerController.isSourceTypeAvailable(.SavedPhotosAlbum) {
+        if UIImagePickerController.isSourceTypeAvailable(.savedPhotosAlbum) {
             dayView?.imagePickerView.addSource(.SavedPhotos)
         }
         
         dayView?.imagePickerView.delegate = self
     }
     
-    func didSelectSource(source: ImagePickerSource) {
+    func didSelectSource(_ source: ImagePickerSource) {
         let imagePicker = UIImagePickerController()
         
         switch source {
         case .Camera:
-            imagePicker.sourceType = .Camera
+            imagePicker.sourceType = .camera
         case .PhotoLibrary:
-            imagePicker.sourceType = .PhotoLibrary
+            imagePicker.sourceType = .photoLibrary
         case .SavedPhotos:
-            imagePicker.sourceType = .SavedPhotosAlbum
+            imagePicker.sourceType = .savedPhotosAlbum
         }
         
         imagePicker.mediaTypes = [kUTTypeImage as String, kUTTypeLivePhoto as String]
         imagePicker.delegate = self
         
-        presentViewController(imagePicker, animated: true, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        dismissViewControllerAnimated(true, completion: nil)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+        dismiss(animated: true, completion: nil)
         dayView?.setProcessing(true)
         
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         let livePhoto = info[UIImagePickerControllerLivePhoto] as! PHLivePhoto?
-        let completionBlock: Image? -> Void = { [weak self] image in
+        let completionBlock: (Image?) -> Void = { [weak self] image in
             if let this = self {
                 this.day.image = image
                 this.changeCommand?(this.day)
@@ -201,7 +201,7 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
             }
         }
         
-        if let assetRef = info[UIImagePickerControllerReferenceURL] as? NSURL {
+        if let assetRef = info[UIImagePickerControllerReferenceURL] as? URL {
             ImageStore.storeImage(image, assetRef: assetRef, livePhoto: livePhoto, completion: completionBlock)
         } else {
             ImageStore.storeImage(image, completion: completionBlock)
@@ -219,7 +219,7 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
         self.dayViewController = dayViewController
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         if let dayViewController = dayViewController, dayView = dayViewController.dayView {
             previewingContext.sourceRect = dayView.imageView.frame
             
@@ -239,12 +239,12 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
         return nil
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         if let dayViewController = dayViewController {
-            if viewControllerToCommit.isKindOfClass(LivePhotoViewController) {
-                dayViewController.showViewController(viewControllerToCommit, sender: nil)
+            if viewControllerToCommit.isKind(of:LivePhotoViewController.self) {
+                dayViewController.show(viewControllerToCommit, sender: nil)
             } else if let imageViewController = viewControllerToCommit as? ImageViewController  {
-                dayViewController.showViewController(ImageViewController(image: imageViewController.fullSizeImage ?? imageViewController.imageView.image, fill: false), sender: nil)
+                dayViewController.show(ImageViewController(image: imageViewController.fullSizeImage ?? imageViewController.imageView.image, fill: false), sender: nil)
             }
         }
     }

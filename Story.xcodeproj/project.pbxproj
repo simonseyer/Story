@@ -73,7 +73,7 @@
 		C39A09E61CD50B3F00D054F6 /* nw3.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nw3.JPG; sourceTree = "<group>"; };
 		C39A09E81CD50B3F00D054F6 /* nw4.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nw4.JPG; sourceTree = "<group>"; };
 		C39A09E91CD50B3F00D054F6 /* nw5.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = nw5.JPG; sourceTree = "<group>"; };
-		C39BA0931CC6CAD200A4D3EB /* Simon Seyer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Simon Seyer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C39BA0931CC6CAD200A4D3EB /* Story Book.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Story Book.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C39BA0961CC6CAD200A4D3EB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C39BA0A11CC6CAD200A4D3EB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C39BA0A41CC6CAD200A4D3EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 		C39BA0941CC6CAD200A4D3EB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				C39BA0931CC6CAD200A4D3EB /* Simon Seyer.app */,
+				C39BA0931CC6CAD200A4D3EB /* Story Book.app */,
 				C39BA0DE1CC82D7A00A4D3EB /* StoryTests.xctest */,
 			);
 			name = Products;
@@ -236,7 +236,7 @@
 			);
 			name = Story;
 			productName = Story;
-			productReference = C39BA0931CC6CAD200A4D3EB /* Simon Seyer.app */;
+			productReference = C39BA0931CC6CAD200A4D3EB /* Story Book.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C39BA0DD1CC82D7A00A4D3EB /* StoryTests */ = {
@@ -264,11 +264,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				TargetAttributes = {
 					C39BA0921CC6CAD200A4D3EB = {
 						CreatedOnToolsVersion = 7.3;
-						DevelopmentTeam = BEBDXV5R79;
+						DevelopmentTeam = V8Y4ZV4958;
+						DevelopmentTeamName = "Simon Seyer";
+						LastSwiftMigration = 0800;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 1;
@@ -277,6 +279,7 @@
 					};
 					C39BA0DD1CC82D7A00A4D3EB = {
 						CreatedOnToolsVersion = 7.3;
+						LastSwiftMigration = 0800;
 						TestTargetID = C39BA0921CC6CAD200A4D3EB;
 					};
 				};
@@ -480,8 +483,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryBook;
-				PRODUCT_NAME = "Simon Seyer";
+				PRODUCT_MODULE_NAME = StoryBook;
+				PRODUCT_NAME = "Story Book";
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -495,8 +500,11 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryBook;
-				PRODUCT_NAME = "Simon Seyer";
+				PRODUCT_MODULE_NAME = StoryBook;
+				PRODUCT_NAME = "Story Book";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -508,7 +516,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Story.app/Story";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Story Book.app/Story Book";
 			};
 			name = Debug;
 		};
@@ -520,7 +529,9 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = seyer.simon.StoryTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Story.app/Story";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Story Book.app/Story Book";
 			};
 			name = Release;
 		};

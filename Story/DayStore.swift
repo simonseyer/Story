@@ -14,21 +14,21 @@ public class DayStore {
     public let trip: Trip
     public var days: [Day] {
         if let days = tripStore.days[trip] {
-            return Array(days.values).sort { (aDay, anotherDay) -> Bool in
+            return Array(days.values).sorted { (aDay, anotherDay) -> Bool in
                 return DayStore.isOrdered(aDay, anotherDay: anotherDay)
             }
         }
         return []
     }
-    public var observers = NSHashTable.weakObjectsHashTable()
+    public var observers = HashTable<AnyObject>.weakObjects()
     
     init(tripStore: TripStore, trip: Trip) {
         self.tripStore = tripStore
         self.trip = trip
     }
     
-    public func storeDay(day: Day) {
-        let oldIndex = days.indexOf(day)
+    public func storeDay(_ day: Day) {
+        let oldIndex = days.index(of: day)
         
         var aDay = day
         aDay.tripIdentifier = trip.identifier
@@ -40,7 +40,7 @@ public class DayStore {
         _days![day.identifier] = aDay
         tripStore.days[trip] = _days
         
-        let index = days.indexOf(day)!
+        let index = days.index(of: day)!
         if let oldIndex = oldIndex {
             notifyObserver() { $0.didUpdateDay(aDay, fromIndex: oldIndex, toIndex: index) }
         } else {
@@ -48,15 +48,15 @@ public class DayStore {
         }
     }
     
-    public func removeDay(day: Day) {
-        if var _days = tripStore.days[trip], let index = days.indexOf(day) {
-            _days.removeValueForKey(day.identifier)
+    public func removeDay(_ day: Day) {
+        if var _days = tripStore.days[trip], let index = days.index(of: day) {
+            _days.removeValue(forKey: day.identifier)
             notifyObserver() { $0.didRemoveDay(day, fromIndex: index) }
             tripStore.days[trip] = _days
         }
     }
 
-    private func notifyObserver(block: DayStoreObserver -> Void) {
+    private func notifyObserver(_ block: (DayStoreObserver) -> Void) {
         for observer in observers.copy().objectEnumerator() {
             if let anObserver = observer as? DayStoreObserver {
                 block(anObserver)
@@ -64,7 +64,7 @@ public class DayStore {
         }
     }
     
-    static func isOrdered(aDay: Day , anotherDay: Day) -> Bool {
+    static func isOrdered(_ aDay: Day , anotherDay: Day) -> Bool {
         if let aDate = aDay.image?.date {
             if let anotherDate = anotherDay.image?.date {
                 return aDate <= anotherDate
@@ -82,18 +82,18 @@ public class DayStore {
 
 }
 
-protocol DayStoreObserver {
+protocol DayStoreObserver: class {
     
-    func didInsertDay(day: Day, atIndex index: Int)
+    func didInsertDay(_ day: Day, atIndex index: Int)
     
-    func didUpdateDay(day: Day, fromIndex: Int, toIndex: Int)
+    func didUpdateDay(_ day: Day, fromIndex: Int, toIndex: Int)
     
-    func didRemoveDay(day: Day, fromIndex index: Int)
+    func didRemoveDay(_ day: Day, fromIndex index: Int)
     
 }
 
-public func <=(lhs: NSDate, rhs: NSDate) -> Bool {
+public func <=(lhs: Date, rhs: Date) -> Bool {
     let comparison = lhs.compare(rhs)
-    return comparison == .OrderedAscending || comparison == .OrderedSame
+    return comparison == .orderedAscending || comparison == .orderedSame
 }
 

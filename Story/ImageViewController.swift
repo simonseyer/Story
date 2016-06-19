@@ -50,14 +50,14 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
         
         LayoutUtils.fullInSuperview(scrollView, superView: self.view)
         
-        imageConstraintLeft = imageView.leadingAnchor.constraintEqualToAnchor(scrollView.leadingAnchor)
-        imageConstraintLeft.active = true
-        imageConstraintRight = imageView.trailingAnchor.constraintEqualToAnchor(scrollView.trailingAnchor)
-        imageConstraintRight.active = true
-        imageConstraintTop = imageView.topAnchor.constraintEqualToAnchor(scrollView.topAnchor)
-        imageConstraintTop.active = true
-        imageConstraintBottom = imageView.bottomAnchor.constraintEqualToAnchor(scrollView.bottomAnchor)
-        imageConstraintBottom.active = true
+        imageConstraintLeft = imageView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor)
+        imageConstraintLeft.isActive = true
+        imageConstraintRight = imageView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor)
+        imageConstraintRight.isActive = true
+        imageConstraintTop = imageView.topAnchor.constraint(equalTo: scrollView.topAnchor)
+        imageConstraintTop.isActive = true
+        imageConstraintBottom = imageView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor)
+        imageConstraintBottom.isActive = true
         
         view.backgroundColor = UIColor(hexValue: ViewConstants.backgroundColorCode)
         
@@ -68,7 +68,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
         doubleTapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(doubleTapped))
         doubleTapGestureRecognizer!.numberOfTapsRequired = 2
         scrollView.addGestureRecognizer(doubleTapGestureRecognizer!)
-        navigationController?.barHideOnTapGestureRecognizer.requireGestureRecognizerToFail(doubleTapGestureRecognizer!)
+        navigationController?.barHideOnTapGestureRecognizer.require(toFail: doubleTapGestureRecognizer!)
         
         updateConstraints()
         updateZoom()
@@ -77,13 +77,13 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         configureNavigationController(true)
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         configureNavigationController(false)
@@ -93,24 +93,24 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
         return statusBarHidden
     }
     
-    func doubleTapped(sender: UITapGestureRecognizer) {
+    func doubleTapped(_ sender: UITapGestureRecognizer) {
         let newScale = scrollView.zoomScale * 4.0;
         
         if (scrollView.zoomScale > scrollView.minimumZoomScale) {
             scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
         } else {
-            let rect = zoomRect(newScale, center:sender.locationInView(sender.view))
-            scrollView.zoomToRect(rect, animated: true)
+            let rect = zoomRect(newScale, center:sender.location(in: sender.view))
+            scrollView.zoom(to: rect, animated: true)
         }
     }
     
-    func zoomRect(scale: CGFloat, center: CGPoint) -> CGRect {
+    func zoomRect(_ scale: CGFloat, center: CGPoint) -> CGRect {
         var zoomRect = CGRect()
         
         zoomRect.size.height = imageView.frame.size.height / scale
         zoomRect.size.width = imageView.frame.size.width / scale
         
-        let newCenter = imageView.convertPoint(center, fromView: scrollView)
+        let newCenter = imageView.convert(center, from: scrollView)
         
         zoomRect.origin.x = newCenter.x - (zoomRect.size.width / 2.0)
         zoomRect.origin.y = newCenter.y - (zoomRect.size.height / 2.0)
@@ -119,12 +119,12 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
     }
     
     // Update zoom scale and constraints with animation.
-    override func viewWillTransitionToSize(size: CGSize,
-                                           withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(to size: CGSize,
+                                           with coordinator: UIViewControllerTransitionCoordinator) {
         
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
+        super.viewWillTransition(to: size, with: coordinator)
         
-        coordinator.animateAlongsideTransition({ [weak self] _ in
+        coordinator.animate(alongsideTransition: { [weak self] _ in
             self?.updateZoom()
         }, completion: nil)
     }
@@ -183,17 +183,17 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
     // UIScrollViewDelegate
     // -----------------------
     
-    func scrollViewDidZoom(scrollView: UIScrollView) {
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
         updateConstraints()
     }
     
-    func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         return imageView
     }
     
     // TODO: copy & paste
     
-    private func configureNavigationController(configure: Bool) {
+    private func configureNavigationController(_ configure: Bool) {
         if configure {
             Background.delay(0.5) {
                 self.navigationController?.hidesBarsOnTap = configure
@@ -213,12 +213,12 @@ class ImageViewController: UIViewController, UIScrollViewDelegate, UIGestureReco
     
     func updateStatusBarVisibility() {
         if let navigationController = navigationController {
-            statusBarHidden = navigationController.navigationBarHidden
+            statusBarHidden = navigationController.isNavigationBarHidden
             let delay = statusBarHidden ? 0 : 0.05
             let animations = {[unowned self] in
                 self.setNeedsStatusBarAppearanceUpdate()
             }
-            UIView.animateWithDuration(statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
+            UIView.animate(withDuration: statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
         }
     }
     

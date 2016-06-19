@@ -45,7 +45,7 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         super.viewDidLoad()
         
         addChildViewController(pageViewController)
-        pageViewController.didMoveToParentViewController(self)
+        pageViewController.didMove(toParentViewController: self)
         tripView?.setDayView(pageViewController.view)
         
         pageViewController.delegate = self
@@ -62,35 +62,35 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         if let tripView = tripView {
             //tripView.mapView.userInteractionEnabled = true
             mapPreviewDelegate = DayMapPreviewDelegate(baseViewController: self, tripView: tripView)
-            registerForPreviewingWithDelegate(mapPreviewDelegate!, sourceView: tripView.mapView)
+            registerForPreviewing(with: mapPreviewDelegate!, sourceView: tripView.mapView)
         }
         
         navigationItem.rightBarButtonItem = editButtonItem()
         
-        tripView?.deleteButton.addTarget(self, action: #selector(deleteDay), forControlEvents: .TouchUpInside)
+        tripView?.deleteButton.addTarget(self, action: #selector(deleteDay), for: .touchUpInside)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
         configureNavigationController(true, initial: initial)
         initial = false
-        model.observers.addObject(self)
+        model.observers.add(self)
         
         if model.days.isEmpty {
             setEditing(true, animated: false)
         }
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         configureNavigationController(false, initial: false)
-        model.observers.removeObject(self)
+        model.observers.remove(self)
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
-        if editing == self.editing {
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        if editing == self.isEditing {
             return
         }
         
@@ -99,24 +99,24 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
         navigationController?.hidesBarsOnTap = !editing
         
         if editing {
-            navigationItem.setLeftBarButtonItem(UIBarButtonItem(title: "New", style: .Plain, target: self, action: #selector(addDay)), animated: true)
+            navigationItem.setLeftBarButton(UIBarButtonItem(title: "New", style: .plain, target: self, action: #selector(addDay)), animated: true)
             navigationController?.setNavigationBarHidden(false, animated: true)
             updateStatusBarVisibility()
-            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseIn, animations: {[unowned self] in
-                self.tripView?.mapView.transform = CGAffineTransformMakeTranslation(0, TripView.mapViewHeight)
+            UIView.animate(withDuration: animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.curveEaseIn, animations: {[unowned self] in
+                self.tripView?.mapView.transform = CGAffineTransform(translationX: 0, y: TripView.mapViewHeight)
             }, completion: nil)
         } else {
-            navigationItem.setLeftBarButtonItem(nil, animated: true)
-            UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {[unowned self] in
-                self.tripView?.mapView.transform = CGAffineTransformIdentity
+            navigationItem.setLeftBarButton(nil, animated: true)
+            UIView.animate(withDuration: animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.curveEaseOut, animations: {[unowned self] in
+                self.tripView?.mapView.transform = CGAffineTransform.identity
             }, completion: nil)
         }
         updateDeleteButton(animated)
     }
     
-    func updateDeleteButton(animated: Bool) {
-        UIView.animateWithDuration(animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.CurveEaseOut, animations: {[unowned self] in
-            self.tripView?.deleteButton.alpha = self.editing && !self.model.days.isEmpty ? 1 : 0
+    func updateDeleteButton(_ animated: Bool) {
+        UIView.animate(withDuration: animated ? 0.2 : 0.0, delay: 0, options: UIViewAnimationOptions.curveEaseOut, animations: {[unowned self] in
+            self.tripView?.deleteButton.alpha = self.isEditing && !self.model.days.isEmpty ? 1 : 0
         }, completion: nil)
     }
     
@@ -125,28 +125,28 @@ class TripViewController: UIViewController, UIPageViewControllerDelegate {
     }
 
     func deleteDay() {
-        let deleteActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+        let deleteActionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         
-        let cancelActionButton: UIAlertAction = UIAlertAction(title: "Please Keep It", style: .Cancel, handler: nil)
+        let cancelActionButton: UIAlertAction = UIAlertAction(title: "Please Keep It", style: .cancel, handler: nil)
         deleteActionSheet.addAction(cancelActionButton)
         
-        let deleteActionButton: UIAlertAction = UIAlertAction(title: "Delete Moment", style: .Destructive) {[weak self] action -> Void in
+        let deleteActionButton: UIAlertAction = UIAlertAction(title: "Delete Moment", style: .destructive) {[weak self] action -> Void in
             if let dayViewController = self?.pageViewController.currentViewController() {
                 self?.model.removeDay(dayViewController.day)
             }
         }
         deleteActionSheet.addAction(deleteActionButton)
         
-        presentViewController(deleteActionSheet, animated: true, completion: nil)
+        present(deleteActionSheet, animated: true, completion: nil)
     }
 }
 
 // Status & Navigation Bar Handling
 extension TripViewController: UINavigationControllerDelegate {
     
-    private func configureNavigationController(configure: Bool, initial: Bool) {
+    private func configureNavigationController(_ configure: Bool, initial: Bool) {
         navigationController?.delegate = self
-        navigationController?.hidesBarsOnTap = configure && !editing
+        navigationController?.hidesBarsOnTap = configure && !isEditing
         
         if configure {
             navigationItem.title = model.trip.name
@@ -160,17 +160,17 @@ extension TripViewController: UINavigationControllerDelegate {
     
     func updateStatusBarVisibility() {
         if let navigationController = navigationController {
-            statusBarHidden = navigationController.navigationBarHidden
+            statusBarHidden = navigationController.isNavigationBarHidden
             let delay = statusBarHidden ? 0 : 0.05
             let animations = {[unowned self] in
                 self.setNeedsStatusBarAppearanceUpdate()
             }
-            UIView.animateWithDuration(statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
+            UIView.animate(withDuration: statusBarAnimationDuration, delay: delay, options: UIViewAnimationOptions(), animations: animations, completion: nil)
         }
     }
     
     override func preferredStatusBarUpdateAnimation() -> UIStatusBarAnimation {
-        return .Fade
+        return .fade
     }
     
     override func prefersStatusBarHidden() -> Bool {
@@ -178,11 +178,11 @@ extension TripViewController: UINavigationControllerDelegate {
     }
     
     override func preferredStatusBarStyle() -> UIStatusBarStyle {
-        return .LightContent
+        return .lightContent
     }
     
-    func navigationController(navigationController: UINavigationController, didShowViewController viewController: UIViewController, animated: Bool) {
-        if !editing && viewController == self {
+    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        if !isEditing && viewController == self {
             navigationController.setNavigationBarHidden(true, animated: true)
             updateStatusBarVisibility()
         }
@@ -198,7 +198,7 @@ extension TripViewController : DayStoreObserver {
         }
     }
     
-    private func addAnnotationForDay(day: Day) {
+    private func addAnnotationForDay(_ day: Day) {
         if let latitude = day.image?.latitude, longitude = day.image?.longitude {
             let annotation = DayAnnotation(latitude: latitude, longitude: longitude)
             dayAnnotations[day] = annotation
@@ -206,13 +206,13 @@ extension TripViewController : DayStoreObserver {
         }
     }
     
-    private func removeAnnotationForDay(day: Day) {
+    private func removeAnnotationForDay(_ day: Day) {
         if let oldAnnotation = dayAnnotations[day] {
             tripView?.mapView.removeAnnotation(oldAnnotation)
         }
     }
     
-    func pageViewController(pageViewController: UIPageViewController, willTransitionToViewControllers pendingViewControllers: [UIViewController]) {
+    @objc(pageViewController:willTransitionToViewControllers:) func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         if let dayViewController = pendingViewControllers[0] as? DayViewController {
             lastDayViewController = currentDayViewController
             currentDayViewController = dayViewController
@@ -220,7 +220,9 @@ extension TripViewController : DayStoreObserver {
         }
     }
     
-    func pageViewController(pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         if !completed {
             currentDayViewController = lastDayViewController
             if let dayViewController = currentDayViewController {
@@ -231,7 +233,7 @@ extension TripViewController : DayStoreObserver {
         }
     }
     
-    private func centerMapView(dayModel: Day, animated: Bool) {
+    private func centerMapView(_ dayModel: Day, animated: Bool) {
         if let latitude = dayModel.image?.latitude, longitude = dayModel.image?.longitude {
             let day = DayAnnotation(latitude: latitude, longitude: longitude)
             if let mapView = tripView?.mapView {
@@ -241,19 +243,19 @@ extension TripViewController : DayStoreObserver {
         }
     }
     
-    func didInsertDay(day: Day, atIndex index: Int) {
+    func didInsertDay(_ day: Day, atIndex index: Int) {
         didUpdateDay(day, fromIndex: index, toIndex:  index)
         updateDeleteButton(true)
         updateLocation()
     }
     
-    func didUpdateDay(day: Day, fromIndex: Int, toIndex: Int) {
+    func didUpdateDay(_ day: Day, fromIndex: Int, toIndex: Int) {
         removeAnnotationForDay(day)
         addAnnotationForDay(day)
         updateLocation()
     }
     
-    func didRemoveDay(day: Day, fromIndex index: Int) {
+    func didRemoveDay(_ day: Day, fromIndex index: Int) {
         removeAnnotationForDay(day)
         updateDeleteButton(true)
     }
@@ -293,7 +295,7 @@ extension TripViewController : DayStoreObserver {
         self.tripView = tripView
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
         if let tripView = tripView {
             previewingContext.sourceRect = tripView.mapView.frame
             return MapViewController(viewRegion: tripView.mapView.region, annotations: tripView.mapView.annotations)
@@ -301,9 +303,9 @@ extension TripViewController : DayStoreObserver {
         return nil
     }
     
-    func previewingContext(previewingContext: UIViewControllerPreviewing, commitViewController viewControllerToCommit: UIViewController) {
+    func previewingContext(_ previewingContext: UIViewControllerPreviewing, commit viewControllerToCommit: UIViewController) {
         if let baseViewController = baseViewController {
-            baseViewController.showViewController(viewControllerToCommit, sender: nil)
+            baseViewController.show(viewControllerToCommit, sender: nil)
         }
     }
     

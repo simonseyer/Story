@@ -21,7 +21,7 @@ public extension UIColor {
         self.init(red: r, green: g, blue: b, alpha: alpha)
     }
     
-    func colorWithBrightnessDelta(brightnessDelta: CGFloat) -> UIColor {
+    func colorWithBrightnessDelta(_ brightnessDelta: CGFloat) -> UIColor {
         var hue: CGFloat = 0.0
         var saturation: CGFloat = 0.0
         var brightness: CGFloat = 0.0

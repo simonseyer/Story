@@ -12,14 +12,14 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     
     let dayStore: DayStore
     let viewModel: TripViewModel
-    var invalidateCommand: (Void -> Void)?
+    var invalidateCommand: ((Void) -> Void)?
     
     required init(model: DayStore) {
         self.dayStore = model
         self.viewModel = TripViewModel(trip: model)
         
         let options = [UIPageViewControllerOptionInterPageSpacingKey : 1]
-        super.init(transitionStyle: .Scroll, navigationOrientation: .Horizontal, options: options)
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: options)
         
         dataSource = viewModel
         delegate = self
@@ -31,11 +31,11 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     
     override func viewDidLoad() {
         if let startingViewController = self.viewModel.viewControllerAtIndex(0) {
-            setViewControllers([startingViewController], direction: .Forward, animated: false, completion: nil)
+            setViewControllers([startingViewController], direction: .forward, animated: false, completion: nil)
         }
     }
     
-    override func setEditing(editing: Bool, animated: Bool) {
+    override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
         viewModel.editing = editing
@@ -52,9 +52,9 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
             if viewModel.additionalViewControllers.contains(currentViewController()!) {
                 viewModel.additionalViewControllers.removeAll()
                 if let dayViewController = viewModel.viewControllerAtIndex(dayStore.days.count - 1) {
-                    setViewControllers([dayViewController], direction: .Reverse, animated: dayViewController.day != currentViewController()?.day, invalidate: true)
+                    setViewControllers([dayViewController], direction: .reverse, animated: dayViewController.day != currentViewController()?.day, invalidate: true)
                 } else {
-                    setViewControllers([viewModel.createAdditionalViewController()], direction: .Forward, animated: false, completion: nil)
+                    setViewControllers([viewModel.createAdditionalViewController()], direction: .forward, animated: false, completion: nil)
                 }
             } else {
                 viewModel.additionalViewControllers.removeAll()
@@ -63,19 +63,19 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         }
     }
     
-    func setViewControllers(viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, invalidate: Bool) {
-        setViewControllers(viewControllers, direction: .Reverse, animated: animated) {[unowned self] completed in
+    func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, invalidate: Bool) {
+        setViewControllers(viewControllers, direction: .reverse, animated: animated) {[unowned self] completed in
             if animated && invalidate {
-                self.setViewControllers(viewControllers, direction: .Reverse, animated: false, completion: nil)
+                self.setViewControllers(viewControllers, direction: .reverse, animated: false, completion: nil)
             }
         }
     }
     
-    override func setViewControllers(viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, completion: ((Bool) -> Void)?) {
+    override func setViewControllers(_ viewControllers: [UIViewController]?, direction: UIPageViewControllerNavigationDirection, animated: Bool, completion: ((Bool) -> Void)?) {
         if let currentViewController = viewControllers?.first as? DayViewController {
             viewModel.currentViewController = currentViewController
         }
-        dispatch_async(dispatch_get_main_queue()) {
+        DispatchQueue.main.async {
             super.setViewControllers(viewControllers, direction: direction, animated: animated) {[weak self] finished in
                 completion?(finished)
                 self?.invalidateCommand?()
@@ -83,24 +83,24 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         }
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        dayStore.observers.addObject(self)
+        dayStore.observers.add(self)
         invalidatePageViewController()
     }
     
-    override func viewWillDisappear(animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        dayStore.observers.removeObject(self)
+        dayStore.observers.remove(self)
     }
 
     func addDay() {
-        setViewControllers([viewModel.createAdditionalViewController()], direction: .Forward, animated: true, completion: nil)
+        setViewControllers([viewModel.createAdditionalViewController()], direction: .forward, animated: true, completion: nil)
     }
     
     func invalidatePageViewController() {
         if let currentViewController = viewControllers?.first {
-            setViewControllers([currentViewController], direction: .Reverse, animated: false, completion: nil)
+            setViewControllers([currentViewController], direction: .reverse, animated: false, completion: nil)
         }
     }
     
@@ -113,7 +113,7 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
     
     let trip: DayStore
     var editing =  false
-    var viewControllers = NSHashTable.weakObjectsHashTable()
+    var viewControllers = HashTable<AnyObject>.weakObjects()
     var additionalViewControllers = [DayViewController]()
     var currentViewController: DayViewController?
     
@@ -121,52 +121,52 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         self.trip = trip
     }
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let dayViewController = viewController as? DayViewController else {
             return nil
         }
         
-        if let index = trip.days.indexOf(dayViewController.day) {
+        if let index = trip.days.index(of: dayViewController.day) {
             return viewControllerAtIndex(index - 1)
-        } else if let index = additionalViewControllers.indexOf(dayViewController), previousViewController = additionalViewControllerAtIndex(index - 1) {
+        } else if let index = additionalViewControllers.index(of: dayViewController), previousViewController = additionalViewControllerAtIndex(index - 1) {
             return previousViewController
         } else {
             return viewControllerAtIndex(trip.days.count - 1)
         }
     }
     
-    func pageViewController(pageViewController: UIPageViewController, viewControllerAfterViewController viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
         guard let dayViewController = viewController as? DayViewController else {
             return nil
         }
         
-        if let index = trip.days.indexOf(dayViewController.day), nextViewController = viewControllerAtIndex(index + 1) {
+        if let index = trip.days.index(of: dayViewController.day), nextViewController = viewControllerAtIndex(index + 1) {
             return nextViewController
-        } else if let index = additionalViewControllers.indexOf(dayViewController) {
+        } else if let index = additionalViewControllers.index(of: dayViewController) {
             return additionalViewControllerAtIndex(index + 1)
         } else {
             return additionalViewControllerAtIndex(0)
         }
     }
     
-    func viewControllerAtIndex(index: Int) -> DayViewController? {
+    func viewControllerAtIndex(_ index: Int) -> DayViewController? {
         guard index >= 0 && index < trip.days.count else {
             return nil
         }
         
         let viewController = createViewController(trip.days[index])
-        viewControllers.addObject(viewController)
+        viewControllers.add(viewController)
         return viewController
     }
     
-    func additionalViewControllerAtIndex(index: Int) -> DayViewController? {
+    func additionalViewControllerAtIndex(_ index: Int) -> DayViewController? {
         guard index >= 0 && index < additionalViewControllers.count else {
             return nil
         }
         return additionalViewControllers[index]
     }
     
-    func createViewController(day: Day) -> DayViewController {
+    func createViewController(_ day: Day) -> DayViewController {
         let viewController = DayViewController(model: day)
         viewController.setEditing(editing, animated: false)
         
@@ -183,15 +183,15 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         return additionalViewController
     }
     
-    func presentationCountForPageViewController(pageViewController: UIPageViewController) -> Int {
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
         return trip.days.count + additionalViewControllers.count
     }
     
-    func presentationIndexForPageViewController(pageViewController: UIPageViewController) -> Int {
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         if let viewController = currentViewController {
-            if let index = trip.days.indexOf(viewController.day) {
+            if let index = trip.days.index(of: viewController.day) {
                 return index
-            } else if let index = additionalViewControllers.indexOf(viewController) {
+            } else if let index = additionalViewControllers.index(of: viewController) {
                 return trip.days.count + index
             }
         }
@@ -205,9 +205,9 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
 
 extension TripPageViewController: DayStoreObserver {
     
-    func didInsertDay(day: Day, atIndex index: Int) {
+    func didInsertDay(_ day: Day, atIndex index: Int) {
         var additionalViewControllerIndex = -1
-        for (index, additionalViewController) in viewModel.additionalViewControllers.enumerate() {
+        for (index, additionalViewController) in viewModel.additionalViewControllers.enumerated() {
             if additionalViewController.day == day {
                 additionalViewControllerIndex = index
                 break
@@ -216,14 +216,14 @@ extension TripPageViewController: DayStoreObserver {
         
         if additionalViewControllerIndex >= 0 {
             let dayViewController = viewModel.additionalViewControllers[additionalViewControllerIndex]
-            viewModel.viewControllers.addObject(dayViewController)
-            viewModel.additionalViewControllers.removeAtIndex(additionalViewControllerIndex)
+            viewModel.viewControllers.add(dayViewController)
+            viewModel.additionalViewControllers.remove(at: additionalViewControllerIndex)
         }
         
         invalidatePageViewController()
     }
     
-    func didUpdateDay(day: Day, fromIndex: Int, toIndex: Int) {
+    func didUpdateDay(_ day: Day, fromIndex: Int, toIndex: Int) {
         if fromIndex != toIndex {
             invalidatePageViewController()
         }
@@ -234,14 +234,14 @@ extension TripPageViewController: DayStoreObserver {
         }
     }
     
-    func didRemoveDay(day: Day, fromIndex index: Int) {
+    func didRemoveDay(_ day: Day, fromIndex index: Int) {
         if let currentViewController = currentViewController() where currentViewController.day == day {
             if let previousViewController = viewModel.viewControllerAtIndex(index - 1) {
-                self.setViewControllers([previousViewController], direction: .Reverse, animated: true, invalidate: true)
+                self.setViewControllers([previousViewController], direction: .reverse, animated: true, invalidate: true)
             } else if let nextViewController = viewModel.viewControllerAtIndex(index + 1) {
-                self.setViewControllers([nextViewController], direction: .Forward, animated: true, invalidate: true)
+                self.setViewControllers([nextViewController], direction: .forward, animated: true, invalidate: true)
             } else {
-                self.setViewControllers([viewModel.createAdditionalViewController()], direction: .Reverse, animated: true, invalidate: true)
+                self.setViewControllers([viewModel.createAdditionalViewController()], direction: .reverse, animated: true, invalidate: true)
             }
         } else {
             invalidatePageViewController()

@@ -12,9 +12,9 @@ import CoreLocation
 
 //possible errors
 enum OneShotLocationManagerErrors: Int {
-    case AuthorizationDenied
-    case AuthorizationNotDetermined
-    case InvalidLocation
+    case authorizationDenied
+    case authorizationNotDetermined
+    case invalidLocation
 }
 
 class OneShotLocationManager: NSObject, CLLocationManagerDelegate {
@@ -32,7 +32,7 @@ class OneShotLocationManager: NSObject, CLLocationManagerDelegate {
     private var didComplete: LocationClosure?
 
     //location manager returned, call didcomplete closure
-    private func _didComplete(location: CLLocation?, error: NSError?) {
+    private func _didComplete(_ location: CLLocation?, error: NSError?) {
         locationManager?.stopUpdatingLocation()
         didComplete?(location: location, error: error)
         locationManager?.delegate = nil
@@ -40,31 +40,31 @@ class OneShotLocationManager: NSObject, CLLocationManagerDelegate {
     }
     
     //location authorization status changed
-    func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         
         switch status {
-        case .AuthorizedWhenInUse:
+        case .authorizedWhenInUse:
             self.locationManager!.startUpdatingLocation()
-        case .Denied:
+        case .denied:
             _didComplete(nil, error: NSError(domain: self.classForCoder.description(),
-                code: OneShotLocationManagerErrors.AuthorizationDenied.rawValue,
+                code: OneShotLocationManagerErrors.authorizationDenied.rawValue,
                 userInfo: nil))
         default:
             break
         }
     }
     
-    internal func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
+    internal func locationManager(_ manager: CLLocationManager, didFailWithError error: NSError) {
         _didComplete(nil, error: error)
     }
     
-    internal func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    internal func locationManager(_ manager: CLLocationManager, didUpdate locations: [CLLocation]) {
         let location = locations[0]
         _didComplete(location, error: nil)
     }
     
     //ask for location permissions, fetch 1 location, and return
-    func fetchWithCompletion(completion: LocationClosure) {
+    func fetchWithCompletion(_ completion: LocationClosure) {
         //store the completion closure
         didComplete = completion
 
@@ -73,9 +73,9 @@ class OneShotLocationManager: NSObject, CLLocationManagerDelegate {
         locationManager!.delegate = self
 
         //check for description key and ask permissions
-        if (NSBundle.mainBundle().objectForInfoDictionaryKey("NSLocationWhenInUseUsageDescription") != nil) {
+        if (Bundle.main().objectForInfoDictionaryKey("NSLocationWhenInUseUsageDescription") != nil) {
             locationManager!.requestWhenInUseAuthorization()
-        } else if (NSBundle.mainBundle().objectForInfoDictionaryKey("NSLocationAlwaysUsageDescription") != nil) {
+        } else if (Bundle.main().objectForInfoDictionaryKey("NSLocationAlwaysUsageDescription") != nil) {
             locationManager!.requestAlwaysAuthorization()
         } else {
             fatalError("To use location in iOS8 you need to define either NSLocationWhenInUseUsageDescription or NSLocationAlwaysUsageDescription in the app bundle's Info.plist file")

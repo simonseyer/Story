@@ -11,9 +11,9 @@ import Photos
 
 extension Trip {
     
-    static func fromDictionary(dict: [String : AnyObject]) -> Trip? {
+    static func fromDictionary(_ dict: [String : AnyObject]) -> Trip? {
         if  let identifier = dict["identifier"] as? String,
-            let creationDate = dict["creationDate"] as? NSDate,
+            let creationDate = dict["creationDate"] as? Date,
             let name = dict["name"] as? String {
             return Trip(identifier: identifier, creationDate: creationDate, name: name)
         }
@@ -31,8 +31,8 @@ extension Trip {
 
 extension Day {
     
-    static func fromDictionary(dict: [String : AnyObject]) -> Day? {
-        let date = dict["date"] as? NSDate
+    static func fromDictionary(_ dict: [String : AnyObject]) -> Day? {
+        let date = dict["date"] as? Date
         let image = dict["image"] as? String
         let thumbnail = dict["thumbnail"] as? String
         let text = dict["text"] as? String
@@ -42,7 +42,7 @@ extension Day {
         
         if  let identifier = dict["identifier"] as? String,
             let tripIdentifier = dict["tripIdentifier"] as? String?,
-            let creationDate = dict["creationDate"] as? NSDate{
+            let creationDate = dict["creationDate"] as? Date{
             
             var imageRef: Image? = nil
             if let anImage = image, aThumbnail = thumbnail, aDate = date {

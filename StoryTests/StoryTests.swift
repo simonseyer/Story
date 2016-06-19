@@ -8,7 +8,7 @@
 
 import XCTest
 
-@testable import Story
+@testable import StoryBook
 
 class StoryTests: XCTestCase {
     
@@ -24,8 +24,8 @@ class StoryTests: XCTestCase {
     }
     
     func testTripStore() {
-        let day = Day(text: "test", image: Image(name: "test", date: NSDate(), latitude: 0, longitude: 0, livePhoto: nil))
-        let trip = Trip(identifier: NSUUID().UUIDString, name: "Trip Test", days: [day])
+        let day = Day(text: "test", image: Image(name: "test", thumbnailName:"test_thumb", date: Date(), latitude: 0, longitude: 0, livePhoto: nil))
+        let trip = Trip(identifier: UUID().UUIDString, name: "Trip Test", days: [day])
         
         let store = TripStore()
         store.storeTrip(trip)
@@ -50,7 +50,7 @@ class StoryTests: XCTestCase {
     }
     
     func testImageStore() {
-        let imageURL = NSBundle.mainBundle().URLForResource("cinque1", withExtension: "jpg")
+        let imageURL = Bundle.main().urlForResource("cinque1", withExtension: "jpg")
         
         let imageRef = ImageStore.storeImage(imageURL!)
         print(imageRef?.date)
@@ -58,17 +58,17 @@ class StoryTests: XCTestCase {
         XCTAssertNotNil(imageRef)
         guard let ref = imageRef else { return }
         
-        let image = ImageStore.loadImage(ref)
+        let image = ImageStore.loadImage(ref, thumbnail: false)
         XCTAssertNotNil(image)
     }
     
     func testImageMetadata() {
-        let dateFormatter = NSDateFormatter()
+        let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         
         
-        let imageURL = NSBundle.mainBundle().URLForResource("cinque1", withExtension: "jpg")
-        let imageDate = dateFormatter.dateFromString("10.09.2013")
+        let imageURL = Bundle.main().urlForResource("cinque1", withExtension: "jpg")
+        let imageDate = dateFormatter.date(from: "10.09.2013")
         let imageLatitude: Float = 44.107333
         let imageLongitude: Float = 9.725500
         let imageRef = ImageStore.storeImage(imageURL!)
@@ -76,8 +76,8 @@ class StoryTests: XCTestCase {
         guard let ref = imageRef else { return }
         
         XCTAssertEqual(ref.date, imageDate)
-        XCTAssertEqualWithAccuracy(ref.latitude, imageLatitude, accuracy: FLT_EPSILON)
-        XCTAssertEqualWithAccuracy(ref.longitude, imageLongitude, accuracy: FLT_EPSILON)
+        XCTAssertEqualWithAccuracy(ref.latitude, imageLatitude, accuracy: DBL_EPSILON)
+        XCTAssertEqualWithAccuracy(ref.longitude, imageLongitude, accuracy: DBL_EPSILON)
     }
     
 }

@@ -10,21 +10,17 @@ import Foundation
 
 class Background {
     
-    static func execute<T>(block: Void -> T, completionBlock: T -> Void) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0)) {
+    static func execute<T>(_ block: (Void) -> T, completionBlock: (T) -> Void) {
+        DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUserInitiated).async {
             let result = block()
-            dispatch_async(dispatch_get_main_queue()) {
+            DispatchQueue.main.async {
                 completionBlock(result)
             }
         }
     }
     
-    static func delay(delay:Double, closure:()->()) {
-        dispatch_after(
-            dispatch_time(
-                DISPATCH_TIME_NOW,
-                Int64(delay * Double(NSEC_PER_SEC))
-            ),
-            dispatch_get_main_queue(), closure)
+    static func delay(_ delay:Double, closure:()->()) {
+        DispatchQueue.main.after(
+            when: DispatchTime.now() + Double(Int64(delay * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC), execute: closure)
     }
 }
