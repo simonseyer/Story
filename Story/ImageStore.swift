@@ -15,7 +15,7 @@ import CoreLocation
 public class ImageStore {
     
     private static let basePath = FileManager.default().urlsForDirectory(.documentDirectory, inDomains: .userDomainMask)[0]
-    private static var locationManager: OneShotLocationManager?
+    private static var locationManager: SingleLocationManager?
     
     public static func loadImage(_ image: Image, thumbnail: Bool) -> UIImage? {
         let imageURL = try! basePath.appendingPathComponent(thumbnail ? image.thumbnailName : image.name)
@@ -76,8 +76,8 @@ extension ImageStore {
             completion(nil)
         }
         
-        locationManager = OneShotLocationManager()
-        locationManager!.fetchWithCompletion { (location, error) in
+        locationManager = SingleLocationManager()
+        locationManager!.fetchLocation { (location, error) in
             locationManager = nil
             
             let rotatedImage = normalizedImage(image)
