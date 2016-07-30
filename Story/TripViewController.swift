@@ -199,7 +199,7 @@ extension TripViewController : DayStoreObserver {
     }
     
     private func addAnnotationForDay(_ day: Day) {
-        if let latitude = day.image?.latitude, longitude = day.image?.longitude {
+        if let latitude = day.image?.latitude, let longitude = day.image?.longitude {
             let annotation = DayAnnotation(latitude: latitude, longitude: longitude)
             dayAnnotations[day] = annotation
             tripView?.mapView.addAnnotation(annotation)
@@ -234,7 +234,7 @@ extension TripViewController : DayStoreObserver {
     }
     
     private func centerMapView(_ dayModel: Day, animated: Bool) {
-        if let latitude = dayModel.image?.latitude, longitude = dayModel.image?.longitude {
+        if let latitude = dayModel.image?.latitude, let longitude = dayModel.image?.longitude {
             let day = DayAnnotation(latitude: latitude, longitude: longitude)
             if let mapView = tripView?.mapView {
                 let viewRegion = MKCoordinateRegionMakeWithDistance(day.coordinate, 2000, 2000)

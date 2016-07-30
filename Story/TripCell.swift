@@ -157,7 +157,7 @@ class TripCell: UITableViewCell, UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        if let trip = trip, text = textField.text {
+        if let trip = trip, let text = textField.text {
             var newTrip = trip
             newTrip.name = text
             changeCommand?(newTrip)

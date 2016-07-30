@@ -14,7 +14,7 @@ import CoreLocation
 
 public class ImageStore {
     
-    private static let basePath = FileManager.default().urlsForDirectory(.documentDirectory, inDomains: .userDomainMask)[0]
+    private static let basePath = FileManager.default.urlsForDirectory(.documentDirectory, inDomains: .userDomainMask)[0]
     private static var locationManager: SingleLocationManager?
     
     public static func loadImage(_ image: Image, thumbnail: Bool) -> UIImage? {
@@ -33,9 +33,9 @@ extension ImageStore {
     // For images with embedded metadata (e.g. bundled images)
     public static func storeImage(_ imageURL: URL) -> Image? {
         if let imageData = try? Data(contentsOf: imageURL),
-            image = UIImage(data: imageData),
-            gpsInfo = getImageGPSMetadata(imageData),
-            date = getImageDate(gpsInfo) {
+           let image = UIImage(data: imageData),
+           let gpsInfo = getImageGPSMetadata(imageData),
+           let date = getImageDate(gpsInfo) {
             
             let location = getImageLocation(gpsInfo)
             
@@ -53,8 +53,7 @@ extension ImageStore {
     public static func storeImage(_ image: UIImage, assetRef: URL, livePhoto: PHLivePhoto? = nil) -> Image? {
         let assetResult = PHAsset.fetchAssets(withALAssetURLs: [assetRef], options: nil)
         
-        guard let asset = assetResult.firstObject
-            where asset.creationDate != nil
+        guard let asset = assetResult.firstObject, asset.creationDate != nil
             else {
                 return nil
         }

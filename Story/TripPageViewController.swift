@@ -128,7 +128,7 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
         
         if let index = trip.days.index(of: dayViewController.day) {
             return viewControllerAtIndex(index - 1)
-        } else if let index = additionalViewControllers.index(of: dayViewController), previousViewController = additionalViewControllerAtIndex(index - 1) {
+        } else if let index = additionalViewControllers.index(of: dayViewController), let previousViewController = additionalViewControllerAtIndex(index - 1) {
             return previousViewController
         } else {
             return viewControllerAtIndex(trip.days.count - 1)
@@ -140,7 +140,7 @@ class TripPageViewController : UIPageViewController, UIPageViewControllerDelegat
             return nil
         }
         
-        if let index = trip.days.index(of: dayViewController.day), nextViewController = viewControllerAtIndex(index + 1) {
+        if let index = trip.days.index(of: dayViewController.day), let nextViewController = viewControllerAtIndex(index + 1) {
             return nextViewController
         } else if let index = additionalViewControllers.index(of: dayViewController) {
             return additionalViewControllerAtIndex(index + 1)
@@ -235,7 +235,7 @@ extension TripPageViewController: DayStoreObserver {
     }
     
     func didRemoveDay(_ day: Day, fromIndex index: Int) {
-        if let currentViewController = currentViewController() where currentViewController.day == day {
+        if let currentViewController = currentViewController(), currentViewController.day == day {
             if let previousViewController = viewModel.viewControllerAtIndex(index - 1) {
                 self.setViewControllers([previousViewController], direction: .reverse, animated: true, invalidate: true)
             } else if let nextViewController = viewModel.viewControllerAtIndex(index + 1) {

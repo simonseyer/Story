@@ -73,7 +73,7 @@ class TripListViewController: UITableViewController {
         switch editingStyle {
         case .insert:
             let cell = tableView.cellForRow(at: indexPath) as! TripCell
-            if let text = cell.tripTitleTextView.text where !text.isEmpty {
+            if let text = cell.tripTitleTextView.text, !text.isEmpty {
                 let trip = Trip(name: text)
                 model.storeTrip(trip)
                 cell.tripTitleTextView.text = ""
@@ -136,7 +136,7 @@ extension TripListViewController {
             cell.tripImage = nil
             cell.tripTitle = ""
             cell.doneCommand = {[weak self] in
-                if let text = cell.tripTitleTextView.text where !text.isEmpty {
+                if let text = cell.tripTitleTextView.text, !text.isEmpty {
                     let trip = Trip(name: text)
                     self?.model.storeTrip(trip)
                     cell.tripTitleTextView.text = ""
@@ -149,7 +149,7 @@ extension TripListViewController {
             
             cell.trip = trip
             cell.tripTitle = trip.name
-            if let firstDay = model.dayStoreForTrip(trip).days.first, image = firstDay.image {
+            if let firstDay = model.dayStoreForTrip(trip).days.first, let image = firstDay.image {
                 ImageStore.loadImage(image, thumbnail: true) {[weak cell] in
                     if cell?.trip == trip {
                         cell?.tripImage = $0

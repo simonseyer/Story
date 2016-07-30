@@ -63,7 +63,7 @@ public class TripStore {
     }
     
     public func load() {
-        let data = UserDefaults.standard().object(forKey: TripStore.userDefaultsTripKey)
+        let data = UserDefaults.standard.object(forKey: TripStore.userDefaultsTripKey)
         if let data = data as? Data {
             let value = NSKeyedUnarchiver.unarchiveObject(with: data)
             
@@ -81,7 +81,7 @@ public class TripStore {
             
             if let dayList = valueDict["days"] as? [[String: AnyObject]] {
                 for dayDict in dayList {
-                    if let day = Day.fromDictionary(dayDict), tripIdentifier = day.tripIdentifier, trip = _trips[tripIdentifier] {
+                    if let day = Day.fromDictionary(dayDict), let tripIdentifier = day.tripIdentifier, let trip = _trips[tripIdentifier] {
                         if days[trip] == nil {
                             days[trip] = [:]
                         }
@@ -104,7 +104,7 @@ public class TripStore {
         }
         
         let data = NSKeyedArchiver.archivedData(withRootObject: ["trips" : tripList, "days" : dayList])
-        UserDefaults.standard().set(data, forKey: TripStore.userDefaultsTripKey)
+        UserDefaults.standard.set(data, forKey: TripStore.userDefaultsTripKey)
     }
     
     func reset() {
@@ -112,7 +112,7 @@ public class TripStore {
     }
     
     static func delete() {
-        UserDefaults.standard().setValue(nil, forKey: userDefaultsTripKey)
+        UserDefaults.standard.setValue(nil, forKey: userDefaultsTripKey)
     }
     
     private func notifyObserver(_ block: (TripStoreObserver) -> Void) {
@@ -143,28 +143,28 @@ extension TripStore {
                 
                 let dayStore = self.dayStoreForTrip(tutorialTrip)
                 
-                let image = ImageStore.storeImage(Bundle.main().urlForResource("nw1", withExtension: "JPG")!)
+                let image = ImageStore.storeImage(Bundle.main.urlForResource("nw1", withExtension: "JPG")!)
                 let text = "I love to travel and to share my stories. Look above — a lonely bike. But more important, it's my first moment in a new country: Norway"
                 dayStore.storeDay(Day(text: text, image: image))
                 
                 self.storeTrip(tutorialTrip)
                 
-                ImageStore.storeImage(Bundle.main().urlForResource("nw2", withExtension: "JPG")!) { image in
+                ImageStore.storeImage(Bundle.main.urlForResource("nw2", withExtension: "JPG")!) { image in
                     let text = "Capturing your thoughts along with the image lets you and your friends revive the moment when you looked into the distance ..."
                     dayStore.storeDay(Day(text: text, image: image))
                 }
                 
-                ImageStore.storeImage(Bundle.main().urlForResource("nw3", withExtension: "JPG")!) { image in
+                ImageStore.storeImage(Bundle.main.urlForResource("nw3", withExtension: "JPG")!) { image in
                     let text = "... or lived on a razor-edge"
                     dayStore.storeDay(Day(text: text, image: image))
                 }
                 
-                ImageStore.storeImage(Bundle.main().urlForResource("nw4", withExtension: "JPG")!) { image in
+                ImageStore.storeImage(Bundle.main.urlForResource("nw4", withExtension: "JPG")!) { image in
                     let text = "Dive deep into your memories by pressing on the image or on the map. Try it now, jump into the waterfall!"
                     dayStore.storeDay(Day(text: text, image: image))
                 }
                 
-                ImageStore.storeImage(Bundle.main().urlForResource("nw5", withExtension: "JPG")!) { image in
+                ImageStore.storeImage(Bundle.main.urlForResource("nw5", withExtension: "JPG")!) { image in
                     let text = "It's time to go back and build your own story. It is as simple as editing your personal Story Book"
                     dayStore.storeDay(Day(text: text, image: image))
                 }

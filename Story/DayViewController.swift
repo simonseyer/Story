@@ -118,15 +118,15 @@ extension DayViewController {
         isVisible = true
         updateDayView()
 
-        NotificationCenter.default().addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default().addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateKeyboardLayoutGuide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         isVisible = false
-        NotificationCenter.default().removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default().removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
     
     func updateKeyboardLayoutGuide(_ notification: Notification) {
@@ -220,7 +220,7 @@ extension DayViewController : ImagePickerViewDelegate, UIImagePickerControllerDe
     }
     
     func previewingContext(_ previewingContext: UIViewControllerPreviewing, viewControllerForLocation location: CGPoint) -> UIViewController? {
-        if let dayViewController = dayViewController, dayView = dayViewController.dayView {
+        if let dayViewController = dayViewController, let dayView = dayViewController.dayView {
             previewingContext.sourceRect = dayView.imageView.frame
             
             if let livePhoto = dayViewController.day.image?.livePhoto {

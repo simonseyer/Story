@@ -45,7 +45,7 @@ extension Day {
             let creationDate = dict["creationDate"] as? Date{
             
             var imageRef: Image? = nil
-            if let anImage = image, aThumbnail = thumbnail, aDate = date {
+            if let anImage = image, let aThumbnail = thumbnail, let aDate = date {
                 imageRef = Image(name: anImage, thumbnailName: aThumbnail, date: aDate, latitude: latitude, longitude: longitude, livePhoto: livePhoto)
             }
             return Day(identifier: identifier, creationDate: creationDate, tripIdentifier: tripIdentifier, text: text, image: imageRef)
